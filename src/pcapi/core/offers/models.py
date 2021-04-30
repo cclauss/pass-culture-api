@@ -327,6 +327,15 @@ class Offer(PcObject, Model, ExtraDataMixin, DeactivableMixin, ProvidableMixin):
 
     author = relationship("User", foreign_keys=[authorId], backref="offers")
 
+    idAtProvider = Column(
+        Text,
+        CheckConstraint(
+            '"lastProviderId" IS NULL OR "idAtProvider" IS NOT NULL',
+            name="check_providable_with_provider_has_idatprovider",
+        ),
+        nullable=True,
+    )
+
     @hybrid_property
     def isSoldOut(self):
         for stock in self.stocks:
