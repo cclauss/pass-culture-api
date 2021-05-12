@@ -108,7 +108,10 @@ def import_new_offerer_from_csv(row: dict) -> None:
         offerer = create_offerer_from_csv(row)
         create_digital_venue(offerer)
 
-    offerer.grant_access(pro)
+    offerer.append_user_has_access_attribute(user_id=pro.id, is_admin=False)
+
+    if not offerer.userHasAccess:
+        offerer.grant_access(pro)
 
     repository.save(pro)
 
@@ -125,7 +128,7 @@ def import_new_offerer_from_csv(row: dict) -> None:
 
 def import_from_csv_file(csv_file_path: str) -> None:
     with open(csv_file_path) as csv_file:
-        csv_reader = csv.dictReader(csv_file)
+        csv_reader = csv.DictReader(csv_file)
 
         for row in csv_reader:
             import_new_offerer_from_csv(row)

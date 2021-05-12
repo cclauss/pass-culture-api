@@ -7,6 +7,7 @@ import pytest
 from pcapi.core.offerers.models import Offerer
 from pcapi.core.offerers.models import Venue
 from pcapi.core.offers.factories import OffererFactory
+from pcapi.core.offers.factories import UserOffererFactory
 from pcapi.core.offers.factories import VenueFactory
 from pcapi.core.offers.factories import VenueTypeFactory
 from pcapi.core.offers.factories import VirtualVenueFactory
@@ -596,6 +597,95 @@ class CreateAnEntireOffererFromCSVRowTest:
                 ("Postal Code", "44016.0"),
                 ("City", "NANTES CEDEX 1"),
                 ("SIRET", "1"),
+                ("SIREN", "636710003"),
+                ("Département", "44"),
+                ("Name", "Fictive"),
+                ("Catégorie", "Librairie"),
+                ("Street Address", "45 RUE DU JOYEUX LURON"),
+                ("nom_structure", "SARL"),
+                ("adresse", "45 RUE DU JOYEUX LURON, 44000"),
+                ("code_postal", "44000"),
+                ("commune", "NANTES"),
+                ("geoloc", "[44.455621, -2.546101]"),
+                ("nom_lieu", "Ma librairie"),
+                ("siege_social", "45 RUE DU JOYEUX LURON, 44000"),
+                ("lieu_deja_inscrit", "0"),
+                ("structure_deja_inscrite", "0"),
+            ]
+        )
+
+        # When
+        import_new_offerer_from_csv(csv_row)
+
+        # Then
+        assert User.query.count() == 1
+        assert Offerer.query.count() == 1
+        assert UserOfferer.query.count() == 1
+        assert Venue.query.count() == 1
+
+    @pytest.mark.usefixtures("db_session")
+    def test_when_user_offerer_already_exists(self, app):
+        # Given
+        offerer = OffererFactory(siren="636710003")
+        pro_user = UserFactory(email="librairie.fictive@example.com")
+        UserOffererFactory(user=pro_user, offerer=offerer)
+        VenueTypeFactory(label="Librairie")
+        csv_row = OrderedDict(
+            [
+                ("", "104"),
+                ("Company ID", "1099515212"),
+                ("Email", "librairie.fictive@example.com"),
+                ("First Name", "Anthony"),
+                ("Last Name", "Champion"),
+                ("Phone", "01 02 34 56 78"),
+                ("Postal Code", "44016.0"),
+                ("City", "NANTES CEDEX 1"),
+                ("SIRET", "63671000300000"),
+                ("SIREN", "636710003"),
+                ("Département", "44"),
+                ("Name", "Fictive"),
+                ("Catégorie", "Librairie"),
+                ("Street Address", "45 RUE DU JOYEUX LURON"),
+                ("nom_structure", "SARL"),
+                ("adresse", "45 RUE DU JOYEUX LURON, 44000"),
+                ("code_postal", "44000"),
+                ("commune", "NANTES"),
+                ("geoloc", "[44.455621, -2.546101]"),
+                ("nom_lieu", "Ma librairie"),
+                ("siege_social", "45 RUE DU JOYEUX LURON, 44000"),
+                ("lieu_deja_inscrit", "0"),
+                ("structure_deja_inscrite", "0"),
+            ]
+        )
+
+        # When
+        import_new_offerer_from_csv(csv_row)
+
+        # Then
+        assert User.query.count() == 1
+        assert Offerer.query.count() == 1
+        assert UserOfferer.query.count() == 1
+        assert Venue.query.count() == 1
+
+    @pytest.mark.usefixtures("db_session")
+    def test_when_venue_already_exists(self, app):
+        # Given
+        offerer = OffererFactory(siren="636710003")
+        pro_user = UserFactory(email="librairie.fictive@example.com")
+        UserOffererFactory(user=pro_user, offerer=offerer)
+        VenueTypeFactory(label="Librairie")
+        VenueFactory(siret="63671000300000")
+        csv_row = OrderedDict(
+            [
+                ("", "104"),
+                ("Company ID", "1099515212"),
+                ("Email", "librairie.fictive@example.com"),
+                ("First Name", "Anthony"),
+                ("Last Name", "Champion"),
+                ("Phone", "01 02 34 56 78"),
+                ("Postal Code", "44016.0"),
+                ("City", "NANTES CEDEX 1"),
+                ("SIRET", "63671000300000"),
                 ("SIREN", "636710003"),
                 ("Département", "44"),
                 ("Name", "Fictive"),
