@@ -22,8 +22,9 @@ class VenueViewTest:
         UserFactory(email="user@example.com", isAdmin=True)
         venue = VenueFactory(siret="22222222222222")
         old_id_at_providers = "11111@22222222222222"
+        offer_id_at_provider = "11111"
         stock = StockFactory(
-            offer__venue=venue, idAtProviders=old_id_at_providers, offer__idAtProviders=old_id_at_providers
+            offer__venue=venue, idAtProviders=old_id_at_providers, offer__idAtProvider=offer_id_at_provider
         )
 
         data = dict(
@@ -49,7 +50,7 @@ class VenueViewTest:
 
         assert venue_edited.siret == "88888888888888"
         assert stock_edited.idAtProviders == "11111@88888888888888"
-        assert offer_edited.idAtProviders == "11111@88888888888888"
+        assert offer_edited.idAtProvider == "11111"
 
     @clean_database
     @patch("wtforms.csrf.session.SessionCSRF.validate_csrf_token")
@@ -57,7 +58,7 @@ class VenueViewTest:
         UserFactory(email="user@example.com", isAdmin=True)
         venue = VenueFactory(siret="22222222222222")
         id_at_providers = "id_at_provider_ne_contenant_pas_le_siret"
-        stock = StockFactory(offer__venue=venue, idAtProviders=id_at_providers, offer__idAtProviders=id_at_providers)
+        stock = StockFactory(offer__venue=venue, idAtProviders=id_at_providers, offer__idAtProvider=id_at_providers)
 
         data = dict(
             name=venue.name,
@@ -82,7 +83,7 @@ class VenueViewTest:
 
         assert venue_edited.siret == "88888888888888"
         assert stock.idAtProviders == "id_at_provider_ne_contenant_pas_le_siret"
-        assert offer.idAtProviders == "id_at_provider_ne_contenant_pas_le_siret"
+        assert offer.idAtProvider == "id_at_provider_ne_contenant_pas_le_siret"
 
     @clean_database
     @patch("wtforms.csrf.session.SessionCSRF.validate_csrf_token")

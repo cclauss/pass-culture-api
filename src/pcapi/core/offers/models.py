@@ -262,7 +262,7 @@ class OfferValidationStatus(enum.Enum):
     REJECTED = "REJECTED"
 
 
-class Offer(PcObject, Model, ExtraDataMixin, DeactivableMixin, ProvidableMixin):
+class Offer(PcObject, Model, ExtraDataMixin, DeactivableMixin):
     __tablename__ = "offer"
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
@@ -344,6 +344,14 @@ class Offer(PcObject, Model, ExtraDataMixin, DeactivableMixin, ProvidableMixin):
             name="unique_idAtOfferProvider_and_venueId",
         ),
     )
+
+    lastProviderId = Column(BigInteger, ForeignKey("provider.id"), nullable=True)
+
+    lastProvider = relationship("Provider", foreign_keys=[lastProviderId])
+
+    dateModifiedAtLastProvider = Column(DateTime, nullable=True, default=datetime.utcnow)
+
+    fieldsUpdated = Column(ARRAY(String(100)), nullable=False, default=[], server_default="{}")
 
     @hybrid_property
     def isSoldOut(self):

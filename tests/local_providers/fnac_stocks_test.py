@@ -108,9 +108,7 @@ class FnacStocksTest:
                 venue, fnac_stocks_provider, is_active=True, venue_id_at_offer_provider="12345678912345"
             )
             product = create_product_with_thing_type(id_at_providers="9780199536986")
-            offer = create_offer_with_thing_product(
-                venue, product=product, id_at_providers="9780199536986@12345678912345"
-            )
+            offer = create_offer_with_thing_product(venue, product=product, id_at_providers="9780199536986")
             stock = create_stock(id_at_providers="9780199536986@12345678912345", offer=offer, quantity=20)
 
             repository.save(product, offer, stock)
