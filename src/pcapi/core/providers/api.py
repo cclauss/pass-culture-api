@@ -154,7 +154,7 @@ def synchronize_stocks(stock_details, venue: Venue, provider_id: Optional[int] =
     ]
 
     offers_provider_references = [stock_detail["offers_provider_reference"] for stock_detail in stock_details]
-    offers_by_provider_reference = get_offers_map_by_id_at_providers(offers_provider_references)
+    offers_by_provider_reference = get_offers_map_by_id_at_providers(offers_provider_references, venue.id)
 
     new_offers = _build_new_offers_from_stock_details(
         stock_details, offers_by_provider_reference, products_by_provider_reference, venue, provider_id
@@ -163,7 +163,7 @@ def synchronize_stocks(stock_details, venue: Venue, provider_id: Optional[int] =
 
     db.session.bulk_save_objects(new_offers)
 
-    new_offers_by_provider_reference = get_offers_map_by_id_at_providers(new_offers_references)
+    new_offers_by_provider_reference = get_offers_map_by_id_at_providers(new_offers_references, venue.id)
     offers_by_provider_reference = {**offers_by_provider_reference, **new_offers_by_provider_reference}
 
     stocks_provider_references = [stock["stocks_provider_reference"] for stock in stock_details]
@@ -201,11 +201,7 @@ def _build_new_offers_from_stock_details(
 
         product = products_by_provider_reference[stock_detail["products_provider_reference"]]
         offer = _build_new_offer(
-            venue,
-            product,
-            id_at_providers=stock_detail["offers_provider_reference"],
-            id_at_provider=stock_detail["products_provider_reference"],
-            provider_id=provider_id,
+            venue, product, id_at_provider=stock_detail["products_provider_reference"], provider_id=provider_id
         )
 
         if not _validate_stock_or_offer(offer):
@@ -301,9 +297,7 @@ def _validate_stock_or_offer(model: Union[Offer, Stock]) -> bool:
     return True
 
 
-def _build_new_offer(
-    venue: Venue, product: Product, id_at_providers: str, id_at_provider: str, provider_id: str
-) -> Offer:
+def _build_new_offer(venue: Venue, product: Product, id_at_provider: str, provider_id: str) -> Offer:
     return Offer(
         bookingEmail=venue.bookingEmail,
         description=product.description,
