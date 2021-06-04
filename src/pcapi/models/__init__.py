@@ -1,4 +1,7 @@
 from pcapi.core.bookings.models import Booking
+from pcapi.core.fraud.models import BeneficiaryFraudCheck
+from pcapi.core.fraud.models import BeneficiaryFraudResult
+from pcapi.core.fraud.models import BeneficiaryFraudReview
 from pcapi.core.mails.models import Email
 from pcapi.core.offerers.models import Offerer
 from pcapi.core.offerers.models import Venue
@@ -59,6 +62,9 @@ __all__ = (
     "BankInformation",
     "BeneficiaryImport",
     "BeneficiaryImportStatus",
+    "BeneficiaryFraudCheck",
+    "BeneficiaryFraudResult",
+    "BeneficiaryFraudReview",
     "Criterion",
     "PcObject",
     "DeactivableMixin",
@@ -132,4 +138,7 @@ models = (
     IrisFrance,
     IrisVenues,
     Token,
+    BeneficiaryFraudCheck,
+    BeneficiaryFraudResult,
+    BeneficiaryFraudReview,
 )
