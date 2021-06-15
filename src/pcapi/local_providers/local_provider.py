@@ -3,10 +3,8 @@ from collections.abc import Iterator
 from datetime import datetime
 import logging
 
-from flask import current_app as app
-
-from pcapi.connectors import redis
 from pcapi.connectors.thumb_storage import create_thumb
+from pcapi.core import search
 from pcapi.core.offers.models import Offer
 from pcapi.core.offers.models import Stock
 from pcapi.core.providers.repository import get_provider_by_local_class
@@ -271,5 +269,4 @@ def _reindex_offers(created_or_updated_objects):
             offer_ids.add(obj.offerId)
         elif isinstance(obj, Offer):
             offer_ids.add(obj.id)
-    for offer_id in offer_ids:
-        redis.add_offer_id(client=app.redis_client, offer_id=offer_id)
+    search.async_index_offer_ids([offer_ids])

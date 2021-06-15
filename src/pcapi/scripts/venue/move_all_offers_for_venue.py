@@ -1,6 +1,4 @@
-from flask import current_app as app
-
-from pcapi.connectors import redis
+from pcapi.core import search
 from pcapi.models import Venue
 from pcapi.repository import repository
 
@@ -11,5 +9,4 @@ def move_all_offers_from_venue_to_other_venue(origin_venue_id: str, destination_
     for o in offers:
         o.venueId = destination_venue_id
     repository.save(*offers)
-    for o in offers:
-        redis.add_offer_id(client=app.redis_client, offer_id=o.id)
+    search.async_index_offer_ids([offer.id for offer in offers])

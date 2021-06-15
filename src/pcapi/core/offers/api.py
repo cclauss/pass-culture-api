@@ -14,6 +14,7 @@ from pcapi import settings
 from pcapi.connectors import redis
 from pcapi.connectors.thumb_storage import create_thumb
 from pcapi.connectors.thumb_storage import remove_thumb
+from pcapi.core import search
 from pcapi.core.bookings.api import cancel_bookings_when_offerer_deletes_stock
 from pcapi.core.bookings.api import mark_as_unused
 from pcapi.core.bookings.api import update_confirmation_dates
@@ -224,8 +225,7 @@ def update_offer(  # pylint: disable=redefined-builtin
         repository.save(offer.product)
         logger.info("Product has been updated", extra={"product": offer.product.id})
 
-    if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-        redis.add_offer_id(client=app.redis_client, offer_id=offer.id)
+    search.async_index_offer_ids([offer.id])
 
     return offer
 
@@ -245,9 +245,7 @@ def update_offers_active_status(query, is_active):
         query_to_update.update({"isActive": is_active}, synchronize_session=False)
         db.session.commit()
 
-        if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-            for offer_id in offer_ids_batch:
-                redis.add_offer_id(client=app.redis_client, offer_id=offer_id)
+        search.async_index_offer_ids(offer_ids_batch)
 
 
 def _create_stock(
@@ -435,8 +433,7 @@ def upsert_stocks(
         previous_beginning = edited_stocks_previous_beginnings[stock.id]
         if stock.beginningDatetime != previous_beginning:
             _notify_beneficiaries_upon_stock_edit(stock)
-    if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-        redis.add_offer_id(client=app.redis_client, offer_id=offer.id)
+    search.async_index_offer_ids([offer.id])
 
     return stocks
 
@@ -536,8 +533,7 @@ def create_mediation(
             else:
                 repository.delete(previous_mediation)
 
-        if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-            redis.add_offer_id(client=app.redis_client, offer_id=offer.id)
+        search.async_index_offer_ids([offer.id])
 
         return mediation
 
@@ -622,9 +618,7 @@ def add_criteria_to_offers(criteria: list[Criterion], isbn: Optional[str] = None
     db.session.bulk_save_objects(offer_criteria)
     db.session.commit()
 
-    if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-        for offer_id in offer_ids:
-            redis.add_offer_id(client=app.redis_client, offer_id=offer_id)
+    search.async_index_offer_ids(offer_ids)
 
     return True
 
@@ -655,9 +649,7 @@ def deactivate_inappropriate_products(isbn: str) -> bool:
         extra={"isbn": isbn, "products": [p.id for p in products], "offers": offer_ids},
     )
 
-    if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-        for offer_id in offer_ids:
-            redis.add_offer_id(client=app.redis_client, offer_id=offer_id)
+    search.async_index_offer_ids(offer_ids)
 
     return True
 
@@ -705,8 +697,7 @@ def update_pending_offer_validation(offer: Offer, validation_status: OfferValida
             extra={"offer": offer.id, "validation_status": validation_status, "exc": str(exception)},
         )
         return False
-    if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-        redis.add_offer_id(client=app.redis_client, offer_id=offer.id)
+    search.async_index_offer_ids([offer.id])
     logger.info("Offer validation status updated", extra={"offer": offer.id})
     return True
 
