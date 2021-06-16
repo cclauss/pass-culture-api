@@ -2,11 +2,11 @@ from datetime import datetime
 from datetime import time
 from datetime import timedelta
 import math
-import typing
 from typing import Optional
 
 from sqlalchemy import and_
 from sqlalchemy import func
+from sqlalchemy import or_
 from sqlalchemy.orm import Query
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
@@ -320,11 +320,13 @@ def delete_past_draft_offer() -> None:
     db.session.commit()
 
 
-def check_activation_is_bookable(activation_code: ActivationCode) -> bool:
-    return not activation_code.bookingId and (
-        not activation_code.expirationDate or activation_code.expirationDate > datetime.utcnow()
-    )
+def has_activation_codes(stock: Stock) -> bool:
+    return ActivationCode.query.filter(Stock.id == stock.id).count() > 0
 
 
-def get_available_activation_code(stock: Stock) -> typing.Union[ActivationCode]:
-    return next(filter(check_activation_is_bookable, stock.activationCodes), None)
+def get_available_activation_code(stock: Stock) -> Optional[ActivationCode]:
+    return ActivationCode.query.filter(
+        Stock.id == stock.id,
+        ActivationCode.bookingId.is_(None),
+        or_(ActivationCode.expirationDate.is_(None), ActivationCode.expirationDate > func.now()),
+    ).first()
