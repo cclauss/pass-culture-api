@@ -1,5 +1,4 @@
 from pydantic import ValidationError
-import pytest
 
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
@@ -9,7 +8,6 @@ from pcapi.routes.serialization.users import PatchProUserBodyModel
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_patch_user(app):
     pro = offers_factories.UserOffererFactory(user__isBeneficiary=False).user
     data = {"firstName": "John", "lastName": "Doe", "email": "new@example.com", "phoneNumber": "09 99 99 99 99"}
@@ -25,7 +23,6 @@ def test_patch_user(app):
     assert pro.phoneNumber == "0999999999"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_reject_beneficiary(app):
     beneficiary = users_factories.UserFactory(isBeneficiary=True)
     initial = {
@@ -45,7 +42,6 @@ def test_reject_beneficiary(app):
     assert beneficiary.publicName == initial["publicName"]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_forbid_some_attributes(app):
     pro = offers_factories.UserOffererFactory(user__isBeneficiary=False).user
     # It's tedious to test all attributes. We focus on the most sensitive ones.

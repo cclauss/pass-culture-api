@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import pandas
-import pytest
 from shapely.geometry import Point
 from shapely.geometry import Polygon
 
@@ -39,7 +38,6 @@ def test_fill_iris_from_should_return_iris(app):
     assert isinstance(iris_france, IrisFrance)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_import_iris_shape_file_to_table_should_import_shape_from_file_and_write_on_iris_table(app):
     # Given
     filepath = Path(os.path.dirname(os.path.realpath("tests/files/geolocation_data/test_guyane/test_guyane.shp")))

@@ -2,8 +2,6 @@ import copy
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.offerers.factories import VirtualVenueTypeFactory
 from pcapi.core.offerers.models import Offerer
 from pcapi.core.offers.factories import OffererFactory
@@ -23,7 +21,6 @@ DEFAULT_DIGITAL_VENUE_LABEL = "Offre numérique"
 
 class Returns201Test:
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def when_creating_a_virtual_venue(self, mock_api_entreprise, app):
         # given
         mock_api_entreprise.return_value = MagicMock(
@@ -52,7 +49,6 @@ class Returns201Test:
         assert virtual_venues[0]["venueTypeId"] == humanize(digital_venue_type.id)
 
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def when_no_address_is_provided(self, mock_api_entreprise, app):
         # given
         mock_api_entreprise.return_value = MagicMock(
@@ -72,7 +68,6 @@ class Returns201Test:
         assert response.json["name"] == "Test Offerer"
 
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def when_current_user_is_admin(self, mock_api_entreprise, app):
         # Given
         mock_api_entreprise.return_value = MagicMock(
@@ -96,7 +91,6 @@ class Returns201Test:
         assert response.status_code == 201
 
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def expect_the_current_user_to_have_access_to_new_offerer(self, mock_api_entreprise, app):
         # Given
         mock_api_entreprise.return_value = MagicMock(
@@ -123,7 +117,6 @@ class Returns201Test:
 
     @patch("pcapi.domain.admin_emails.make_validation_email_object")
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def when_offerer_already_have_user_offerer_new_user_offerer_has_validation_token(
         self, mock_api_entreprise, make_validation_email_object, app
     ):
@@ -159,7 +152,6 @@ class Returns201Test:
 
     @patch("pcapi.domain.admin_emails.make_validation_email_object")
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def expect_new_offerer_to_have_validation_token_but_user_offerer_dont(
         self, mock_api_entreprise, make_validation_email_object, app
     ):
@@ -190,7 +182,6 @@ class Returns201Test:
 
     @patch("pcapi.domain.admin_emails.make_validation_email_object")
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def when_offerer_already_in_base_just_create_user_offerer_with_validation_token(
         self, mock_api_entreprise, make_validation_email_object, app
     ):
@@ -221,7 +212,6 @@ class Returns201Test:
 
     @patch("pcapi.domain.admin_emails.make_validation_email_object")
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def expect_not_validated_offerer_to_keeps_validation_token_and_user_offerer_get_one(
         self, mock_api_entreprise, make_validation_email_object, app
     ):
@@ -254,7 +244,6 @@ class Returns201Test:
 
     @patch("pcapi.routes.pro.offerers.maybe_send_offerer_validation_email", return_value=True)
     @patch("pcapi.connectors.api_entreprises.requests.get")
-    @pytest.mark.usefixtures("db_session")
     def expect_maybe_send_offerer_validation_email_to_be_called(
         self, mock_api_entreprise, mock_maybe_send_offerer_validation_email, app
     ):

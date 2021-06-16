@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offerers.factories as offerers_factories
 import pcapi.core.offers.factories as offers_factories
 from pcapi.models import Venue
@@ -25,7 +23,6 @@ def populate_missing_data_from_venue(venue_data, venue):
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def test_should_update_venue(self, app) -> None:
         # given
         user_offerer = offers_factories.UserOffererFactory()
@@ -62,7 +59,6 @@ class Returns200Test:
         assert "validationToken" not in json
         assert venue.isValidated
 
-    @pytest.mark.usefixtures("db_session")
     def when_siret_does_not_change(self, app) -> None:
         # Given
         user_offerer = offers_factories.UserOffererFactory()

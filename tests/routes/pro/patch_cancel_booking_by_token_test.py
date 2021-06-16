@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.model_creators.generic_creators import create_booking
 from pcapi.model_creators.generic_creators import create_offerer
@@ -26,7 +24,6 @@ def create_api_key_for_offerer(offerer, token):
 
 
 class Returns204Test:
-    @pytest.mark.usefixtures("db_session")
     def test_should_returns_204_with_cancellation_allowed(self, app):
         # Given
         pro_user = create_user(email="Mr Books@example.net", public_name="Mr Books")
@@ -67,7 +64,6 @@ class Returns204Test:
             "user_ids": [user.id],
         }
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_returns_204_with_lowercase_token(self, app):
         # Given
         pro_user = create_user(email="Mr Books@example.net", public_name="Mr Books")
@@ -102,7 +98,6 @@ class Returns204Test:
 
 
 class Returns401Test:
-    @pytest.mark.usefixtures("db_session")
     def when_not_authenticated_used_api_key_or_login(self, app):
         # Given
         user = users_factories.UserFactory()
@@ -122,7 +117,6 @@ class Returns401Test:
         assert response.status_code == 401
         assert push_testing.requests == []
 
-    @pytest.mark.usefixtures("db_session")
     def when_giving_an_api_key_that_does_not_exists(self, app):
         # Given
         user = users_factories.UserFactory()
@@ -146,7 +140,6 @@ class Returns401Test:
 
 
 class Returns403Test:
-    @pytest.mark.usefixtures("db_session")
     def when_the_api_key_is_not_linked_to_the_right_offerer(self, app):
         # Given
         pro_user = create_user(email="Mr Books@example.net", public_name="Mr Books")
@@ -180,7 +173,6 @@ class Returns403Test:
         assert response.json["user"] == ["Vous n'avez pas les droits suffisants pour annuler cette réservation."]
         assert push_testing.requests == []
 
-    @pytest.mark.usefixtures("db_session")
     def when_the_logged_user_has_not_rights_on_offerer(self, app):
         # Given
         pro_user = create_user(email="mr.book@example.net", public_name="Mr Books")
@@ -218,7 +210,6 @@ class Returns403Test:
         assert push_testing.requests == []
 
     class WhenTheBookingIsUsedTest:
-        @pytest.mark.usefixtures("db_session")
         def test_should_prevent_a_used_booking_from_being_cancelled(self, app):
             # Given
             pro_user = create_user(email="Mr Books@example.net", public_name="Mr Books")
@@ -252,7 +243,6 @@ class Returns403Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_the_booking_does_not_exists(self, app):
         # Given
         user = users_factories.UserFactory()
@@ -281,7 +271,6 @@ class Returns404Test:
 
 
 class Returns410Test:
-    @pytest.mark.usefixtures("db_session")
     def test_cancel_a_booking_already_cancelled(self, app):
         # Given
         pro_user = create_user(email="Mr Books@example.net", public_name="Mr Books")

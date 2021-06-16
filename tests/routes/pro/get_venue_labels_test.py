@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offerers.factories import VenueLabelFactory
 from pcapi.core.users.factories import UserFactory
 from pcapi.utils.human_ids import humanize
@@ -8,7 +6,6 @@ from tests.conftest import TestClient
 
 
 class Returns401Test:
-    @pytest.mark.usefixtures("db_session")
     def when_the_user_is_not_authenticated(self, app):
         # When
         response = TestClient(app.test_client()).get("/venue-labels")
@@ -18,7 +15,6 @@ class Returns401Test:
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_the_user_is_authenticated(self, app):
         # Given
         user = UserFactory(isAdmin=False, isBeneficiary=False)

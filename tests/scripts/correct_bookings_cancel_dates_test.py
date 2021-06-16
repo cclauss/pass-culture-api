@@ -1,8 +1,6 @@
 from datetime import datetime
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.models import Booking
 from pcapi.repository import repository
@@ -10,7 +8,6 @@ from pcapi.scripts.booking import correct_bookings_cancel_dates
 
 
 class CorrectBookingCancelDatesFromFileTest:
-    @pytest.mark.usefixtures("db_session")
     @patch.object(correct_bookings_cancel_dates, "open")
     @patch.object(correct_bookings_cancel_dates.csv, "reader")
     def test_should_correct_booking_cancel_dates_in_csv(self, mock_reader, mock_open):

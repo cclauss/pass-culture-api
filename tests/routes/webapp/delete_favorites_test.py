@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_favorite
 from pcapi.model_creators.generic_creators import create_mediation
 from pcapi.model_creators.generic_creators import create_offerer
@@ -14,7 +12,6 @@ from tests.conftest import TestClient
 
 
 class Returns204Test:
-    @pytest.mark.usefixtures("db_session")
     def when_favorite_exists_with_offerId(self, app):
         # Given
         user = create_user(email="test@email.com")
@@ -36,7 +33,6 @@ class Returns204Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_expected_parameters_are_not_given(self, app):
         # Given
         user = create_user(email="test@email.com")
@@ -53,7 +49,6 @@ class Returns404Test:
         # Then
         assert response.status_code == 404
 
-    @pytest.mark.usefixtures("db_session")
     def when_favorite_does_not_exist(self, app):
         # Given
         user = create_user(email="test@email.com")

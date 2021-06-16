@@ -1,8 +1,6 @@
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.connectors.api_recaptcha import InvalidRecaptchaTokenException
 from pcapi.connectors.api_recaptcha import ReCaptchaException
 from pcapi.core.users.factories import IdCheckToken
@@ -16,7 +14,6 @@ token_is_wrong_mock = MagicMock(side_effect=InvalidRecaptchaTokenException())
 token_is_totaly_weird_mock = MagicMock(side_effect=ReCaptchaException())
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns200Test:
     @patch("pcapi.core.users.repository.get_id_check_token", lambda x: None)
     @patch("pcapi.routes.webapp.beneficiaries.check_webapp_recaptcha_token", token_is_valid_mock)
@@ -44,7 +41,6 @@ class Returns200Test:
         assert response.status_code == 200
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     @patch("pcapi.routes.webapp.beneficiaries.check_webapp_recaptcha_token", token_is_wrong_mock)
     def when_token_is_wrong(self, app):

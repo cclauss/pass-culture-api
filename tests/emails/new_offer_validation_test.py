@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi import settings
 import pcapi.core.offers.factories as offer_factories
 from pcapi.emails.new_offer_validation import retrieve_data_for_offer_approval_email
@@ -7,7 +5,6 @@ from pcapi.emails.new_offer_validation import retrieve_data_for_offer_rejection_
 from pcapi.utils.human_ids import humanize
 
 
-@pytest.mark.usefixtures("db_session")
 class MakeNewOfferValidationEmailTest:
     def test_approval_email(self):
         # Given

@@ -11,7 +11,6 @@ from pcapi.scripts.delete_venue_and_offers_for_venue_id import delete_venue_and_
 from pcapi.utils.human_ids import humanize
 
 
-@pytest.mark.usefixtures("db_session")
 def test_delete_venue_and_offers_should_delete_venue_and_offers_with_venue_id(app):
     # Given
     offerer1 = create_offerer(siren="123456789")
@@ -52,7 +51,6 @@ def test_delete_venue_and_offers_should_delete_venue_and_offers_with_venue_id(ap
     assert Venue.query.get(venue1.id) is None
 
 
-@pytest.mark.usefixtures("db_session")
 def test_delete_venue_and_offers_should_raise_an_attribute_error_when_at_least_one_offer_has_stocks(app):
     # Given
     offerer = create_offerer(siren="123456789")

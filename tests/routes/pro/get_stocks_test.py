@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core import testing
 import pcapi.core.bookings.factories as bookings_factories
@@ -12,7 +11,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns200Test:
     @freeze_time("2020-10-15 00:00:00")
     def test_returns_an_event_stock(self, app):
@@ -185,7 +183,6 @@ class Returns200Test:
         assert response.status_code == 200
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns403Test:
     def test_returns_an_event_stock(self, app):
         # Given

@@ -1,12 +1,9 @@
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.models import UserSession
 
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns200Test:
     def when_account_is_known(self, app):
         # given
@@ -55,7 +52,6 @@ class Returns200Test:
         assert session is not None
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns401Test:
     def when_identifier_is_missing(self, app):
         # Given

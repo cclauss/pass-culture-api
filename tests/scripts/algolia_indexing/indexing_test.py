@@ -2,7 +2,6 @@ from datetime import datetime
 from unittest import mock
 
 from freezegun import freeze_time
-import pytest
 import redis
 
 import pcapi.core.offers.factories as offers_factories
@@ -207,7 +206,6 @@ class BatchIndexingOffersInAlgoliaFromDatabaseTest:
 
 
 @freeze_time("2020-01-05 10:00:00")
-@pytest.mark.usefixtures("db_session")
 class BatchDeletingExpiredOffersInAlgoliaTest:
     @override_settings(ALGOLIA_DELETING_OFFERS_CHUNK_SIZE=2)
     @mock.patch("pcapi.scripts.algolia_indexing.indexing.delete_expired_offers")

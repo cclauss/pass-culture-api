@@ -17,7 +17,6 @@ from pcapi.repository import repository
 from . import provider_test_utils
 
 
-@pytest.mark.usefixtures("db_session")
 class UpdateObjectsTest:
     @patch("tests.local_providers.provider_test_utils.TestLocalProvider.__next__")
     def test_iterator_is_called_until_exhausted(self, next_function):
@@ -172,7 +171,6 @@ class UpdateObjectsTest:
         assert new_product.type == str(ThingType.LIVRE_EDITION)
 
 
-@pytest.mark.usefixtures("db_session")
 class CreateObjectTest:
     def test_returns_object_with_expected_attributes(self):
         # Given
@@ -208,7 +206,6 @@ class CreateObjectTest:
         assert provider_event.type == LocalProviderEventType.SyncError
 
 
-@pytest.mark.usefixtures("db_session")
 class HandleUpdateTest:
     def test_returns_object_with_expected_attributes(self):
         # Given
@@ -254,7 +251,6 @@ class HandleUpdateTest:
         assert provider_event.type == LocalProviderEventType.SyncError
 
 
-@pytest.mark.usefixtures("db_session")
 class HandleThumbTest:
     def test_call_save_thumb_should_increase_thumbCount_by_1(self):
         # Given
@@ -297,7 +293,6 @@ class HandleThumbTest:
         assert product.thumbCount == 4
 
 
-@pytest.mark.usefixtures("db_session")
 class SaveThumbFromThumbCountToIndexTest:
     def test_should_iterate_from_current_thumbCount_to_thumbIndex_when_thumbCount_is_0(self, app):
         # Given

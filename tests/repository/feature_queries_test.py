@@ -9,7 +9,6 @@ from pcapi.repository import repository
 from pcapi.repository.feature_queries import is_active
 
 
-@pytest.mark.usefixtures("db_session")
 class FeatureToggleTest:
     def test_is_active_returns_true_when_feature_is_active(self):
         # Given

@@ -21,7 +21,6 @@ from pcapi.repository.product_queries import find_active_book_product_by_isbn
 
 
 class DeleteUnwantedExistingProductTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_delete_product_when_isbn_found(self, app):
         # Given
         isbn = "1111111111111"
@@ -34,7 +33,6 @@ class DeleteUnwantedExistingProductTest:
         # Then
         assert Product.query.count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_delete_product_when_isbn_not_found(self, app):
         # Given
         isbn = "1111111111111"
@@ -47,7 +45,6 @@ class DeleteUnwantedExistingProductTest:
         # Then
         assert Product.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_delete_nothing_when_product_not_found(self, app):
         # Given
         isbn = "1111111111111"
@@ -64,7 +61,6 @@ class DeleteUnwantedExistingProductTest:
         # Then
         assert Product.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_delete_product_when_it_has_offer_and_stock_but_not_booked(self, app):
         # Given
         isbn = "1111111111111"
@@ -83,7 +79,6 @@ class DeleteUnwantedExistingProductTest:
         assert Offer.query.count() == 0
         assert Stock.query.count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_set_isGcuCompatible_at_false_in_product_and_deactivate_offer_when_bookings_related_to_offer(
         self, app
     ):
@@ -108,7 +103,6 @@ class DeleteUnwantedExistingProductTest:
         assert Product.query.one() == product
         assert not product.isGcuCompatible
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_delete_product_when_related_offer_has_mediation(self, app):
         # Given
         isbn = "1111111111111"
@@ -131,7 +125,6 @@ class DeleteUnwantedExistingProductTest:
         assert Stock.query.count() == 0
         assert Mediation.query.count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_delete_product_when_related_offer_is_on_user_favorite_list(self, app):
         # Given
         isbn = "1111111111111"
@@ -158,7 +151,6 @@ class DeleteUnwantedExistingProductTest:
 
 
 class FindActiveBookProductByIsbnTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_active_book_product_when_existing_isbn_is_given(self, app):
         # Given
         isbn = "1111111111111"
@@ -171,7 +163,6 @@ class FindActiveBookProductByIsbnTest:
         # Then
         assert existing_product == product
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_nothing_when_non_existing_isbn_is_given(self, app):
         # Given
         invalid_isbn = "99999999999"
@@ -185,7 +176,6 @@ class FindActiveBookProductByIsbnTest:
         # Then
         assert existing_product is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_not_gcu_compatible_product(self, app):
         # Given
         valid_isbn = "1111111111111"

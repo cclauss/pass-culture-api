@@ -1,14 +1,11 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 from pcapi.core.bookings.models import Booking
 from pcapi.scripts.cancel_bookings_during_quarantine import cancel_booking_status_for_events_happening_during_quarantine
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_update_booking_if_happening_during_quarantine():
     yesterday = datetime.utcnow() - timedelta(days=1)
     bookings_factories.BookingFactory(isUsed=True, stock__beginningDatetime=yesterday)
@@ -20,7 +17,6 @@ def test_should_update_booking_if_happening_during_quarantine():
     assert booking.dateUsed is None
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_update_booking_if_happened_before_quarantine():
     long_ago = datetime(2018, 1, 1)
     bookings_factories.BookingFactory(isUsed=True, dateUsed=long_ago, stock__beginningDatetime=long_ago)
@@ -37,7 +33,7 @@ def test_should_not_update_booking_if_happened_before_quarantine():
 # bug: the booking was ignored because `stock.beginningDatetime` was
 # outside of the quarantine range, not because it had a payment.
 #
-# @pytest.mark.usefixtures("db_session")
+#
 # def test_should_not_update_booking_if_a_payment_has_been_made():
 #     yesterday = datetime.utcnow() - timedelta(days=1)
 #     payments_factories.PaymentFactory(booking__stock__beginningDatetime=yesterday)

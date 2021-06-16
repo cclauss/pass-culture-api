@@ -1,7 +1,5 @@
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.users.models import User
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.models import ApiErrors
@@ -11,7 +9,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_current_user_changes_password(self, app):
         # given
         user = create_user(email="user@test.com")
@@ -33,7 +30,6 @@ class Returns200Test:
 
 
 class Returns400Test:
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.routes.shared.passwords.validate_change_password_request")
     def when_one_password_is_missing_in_the_request_body(self, validate_change_password_request, app):
         # given

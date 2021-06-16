@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
@@ -13,7 +11,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def expect_the_booking_to_be_cancelled_by_current_user(self, app):
         # Given
         in_four_days = datetime.utcnow() + timedelta(days=4)
@@ -42,7 +39,6 @@ class Returns200Test:
 
 
 class Returns400Test:
-    @pytest.mark.usefixtures("db_session")
     def when_the_booking_cannot_be_cancelled(self, app):
         # Given
         booking = bookings_factories.BookingFactory(isUsed=True)
@@ -58,7 +54,6 @@ class Returns400Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_cancelling_a_booking_of_someone_else(self, app):
         # Given
         booking = bookings_factories.BookingFactory(isUsed=True)
@@ -72,7 +67,6 @@ class Returns404Test:
         assert response.status_code == 404
         assert not Booking.query.get(booking.id).isCancelled
 
-    @pytest.mark.usefixtures("db_session")
     def when_the_booking_does_not_exist(self, app):
         # Given
         user = users_factories.UserFactory()

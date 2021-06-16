@@ -1,4 +1,3 @@
-import pytest
 from sqlalchemy import func
 
 from pcapi.model_creators.generic_creators import create_booking
@@ -23,7 +22,6 @@ from pcapi.repository.offer_queries import get_paginated_offer_ids_by_venue_id
 
 
 class FindOffersTest:
-    @pytest.mark.usefixtures("db_session")
     def test_get_offers_by_venue_id_returns_offers_matching_venue_id(self, app):
         # Given
         product = create_product_with_thing_type(thing_name="Lire un livre", is_national=True)
@@ -41,7 +39,6 @@ class FindOffersTest:
 
 
 class QueryOfferWithRemainingStocksTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_0_offer_when_there_is_no_stock(self, app):
         # Given
         thing = create_product_with_thing_type()
@@ -56,7 +53,6 @@ class QueryOfferWithRemainingStocksTest:
         # Then
         assert offers_count == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_1_offer_when_all_available_stock_is_not_booked(self, app):
         # Given
         thing = create_product_with_thing_type()
@@ -81,7 +77,6 @@ class QueryOfferWithRemainingStocksTest:
         # Then
         assert offers_count == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_0_offer_when_all_available_stock_is_booked(self, app):
         # Given
         thing = create_product_with_thing_type()
@@ -106,7 +101,6 @@ class QueryOfferWithRemainingStocksTest:
         # Then
         assert offers_count == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_1_offer_when_booking_was_cancelled(self, app):
         # Given
         user = create_user()
@@ -130,7 +124,6 @@ class QueryOfferWithRemainingStocksTest:
         # Then
         assert offers_count == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_0_offer_when_there_is_no_remaining_stock(self):
         # Given
         product = create_product_with_thing_type(thing_name="Lire un livre", is_national=True)
@@ -155,7 +148,6 @@ class QueryOfferWithRemainingStocksTest:
         # Then
         assert offers_count == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_1_offer_when_there_are_one_full_stock_and_one_empty_stock(self):
         # Given
         product = create_product_with_thing_type(thing_name="Lire un livre", is_national=True)
@@ -190,7 +182,6 @@ def _create_event_stock_and_offer_for_date(venue, date):
 
 
 class GetOffersByIdsTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_all_existing_offers_when_offer_ids_are_given(self, app):
         # Given
         offerer = create_offerer()
@@ -210,7 +201,6 @@ class GetOffersByIdsTest:
 
 
 class GetPaginatedActiveOfferIdsTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_two_offer_ids_from_first_page_when_limit_is_two_and_two_active_offers(self, app):
         # Given
         offerer = create_offerer()
@@ -231,7 +221,6 @@ class GetPaginatedActiveOfferIdsTest:
         assert (offer3.id,) not in offer_ids
         assert (offer4.id,) not in offer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_one_offer_id_from_second_page_when_limit_is_1_and_three_active_offers(self, app):
         # Given
         offerer = create_offerer()
@@ -252,7 +241,6 @@ class GetPaginatedActiveOfferIdsTest:
         assert (offer2.id,) not in offer_ids
         assert (offer4.id,) not in offer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_one_offer_id_from_third_page_when_limit_is_1_and_three_active_offers(self, app):
         # Given
         offerer = create_offerer()
@@ -275,7 +263,6 @@ class GetPaginatedActiveOfferIdsTest:
 
 
 class GetPaginatedOfferIdsByVenueIdTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_one_offer_id_in_two_offers_from_first_page_when_limit_is_one(self, app):
         # Given
         offerer = create_offerer()
@@ -292,7 +279,6 @@ class GetPaginatedOfferIdsByVenueIdTest:
         assert (offer1.id,) in offer_ids
         assert (offer2.id,) not in offer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_one_offer_id_in_two_offers_from_second_page_when_limit_is_one(self, app):
         # Given
         offerer = create_offerer()

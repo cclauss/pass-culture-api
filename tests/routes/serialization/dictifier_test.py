@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_booking
 from pcapi.model_creators.generic_creators import create_mediation
 from pcapi.model_creators.generic_creators import create_offerer
@@ -14,7 +12,6 @@ from pcapi.routes.serialization import as_dict
 
 
 class AsDictTest:
-    @pytest.mark.usefixtures("db_session")
     def test_returns_model_keys(self, app):
         # given
         user = create_user(postal_code=None)
@@ -31,7 +28,6 @@ class AsDictTest:
         assert "lastName" in dict_result
         assert "firstName" in dict_result
 
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_return_excluded_keys(self, app):
         # given
         user = create_user(postal_code=None)
@@ -46,7 +42,6 @@ class AsDictTest:
         # then
         assert "password" not in dict_result
 
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_return_properties_by_default(self, app):
         # given
         user = create_user(postal_code=None)
@@ -61,7 +56,6 @@ class AsDictTest:
         # then
         assert "hasPhysicalVenues" not in dict_result
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_included_properties(self, app):
         # given
         user = create_user(postal_code=None)
@@ -76,7 +70,6 @@ class AsDictTest:
         # then
         assert "hasPhysicalVenues" in dict_result
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_model_keys_on_joined_relationships(self, app):
         # given
         user = create_user()
@@ -93,7 +86,6 @@ class AsDictTest:
         assert "name" in dict_result["offerers"][0]
         assert "siren" in dict_result["offerers"][0]
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_included_properties_on_joined_relationships(self, app):
         # given
         offerer = create_offerer()
@@ -110,7 +102,6 @@ class AsDictTest:
         # then
         assert "thumbUrl" in dict_result["mediations"][0]
 
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_return_excluded_keys_on_joined_relationships(self, app):
         # given
         offerer = create_offerer()
@@ -127,7 +118,6 @@ class AsDictTest:
         # then
         assert "isActive" not in dict_result["mediations"][0]
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_humanized_ids_for_primary_keys(self, app):
         # given
         user = create_user(idx=12, postal_code=None)
@@ -138,7 +128,6 @@ class AsDictTest:
         # then
         assert dict_result["id"] == "BQ"
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_humanized_ids_for_foreign_keys(self, app):
         # given
         user = create_user(idx=12, postal_code=None)

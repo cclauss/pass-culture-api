@@ -13,7 +13,6 @@ from pcapi.repository import repository
 from tests.domain_creators.generic_creators import create_domain_beneficiary_pre_subcription
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_raise_exception_for_valid_beneficiary(app):
     # Given
     beneficiary_pre_subcription = create_domain_beneficiary_pre_subcription()
@@ -26,7 +25,6 @@ def test_should_not_raise_exception_for_valid_beneficiary(app):
         assert pytest.fail("Should not raise an exception when email not given")
 
 
-@pytest.mark.usefixtures("db_session")
 def test_raises_if_email_already_taken_by_beneficiary(app):
     # Given
     email = "email@example.org"
@@ -43,7 +41,6 @@ def test_raises_if_email_already_taken_by_beneficiary(app):
     assert str(error.value) == f"Email {email} is already taken."
 
 
-@pytest.mark.usefixtures("db_session")
 def test_validates_for_non_beneficiary_with_same_mail(app):
     email = "email@example.org"
     existing_user = create_user(email=email, is_beneficiary=False, is_email_validated=True)
@@ -55,7 +52,6 @@ def test_validates_for_non_beneficiary_with_same_mail(app):
     validate(beneficiary_pre_subcription, preexisting_account=existing_user)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_doesnt_raise_if_email_not_taken(app):
     # Given
     existing_user = create_user(email="email@example.org")
@@ -71,7 +67,6 @@ def test_doesnt_raise_if_email_not_taken(app):
         assert pytest.fail("Should not raise an exception when email not given")
 
 
-@pytest.mark.usefixtures("db_session")
 def test_raises_if_duplicate(app):
     # Given
     first_name = "John"
@@ -92,7 +87,6 @@ def test_raises_if_duplicate(app):
     assert str(error.value) == f"User with id {existing_user.id} is a duplicate."
 
 
-@pytest.mark.usefixtures("db_session")
 def test_doesnt_raise_if_no_exact_duplicate(app):
     # Given
     first_name = "John"
@@ -121,7 +115,6 @@ def test_doesnt_raise_if_no_exact_duplicate(app):
 
 @override_features(WHOLE_FRANCE_OPENING=False)
 @pytest.mark.parametrize("postal_code", ["36000", "36034", "97400"])
-@pytest.mark.usefixtures("db_session")
 def test_raises_if_not_eligible_legacy_behaviour(postal_code):
     # Given
     beneficiary_pre_subcription = create_domain_beneficiary_pre_subcription(postal_code=postal_code)
@@ -136,7 +129,6 @@ def test_raises_if_not_eligible_legacy_behaviour(postal_code):
 
 @override_features(WHOLE_FRANCE_OPENING=False)
 @pytest.mark.parametrize("postal_code", ["34000", "34898", "97340"])
-@pytest.mark.usefixtures("db_session")
 def test_should_not_raise_if_eligible_legacy_behaviour(postal_code):
     # Given
     beneficiary_pre_subcription = create_domain_beneficiary_pre_subcription(postal_code=postal_code)
@@ -151,7 +143,6 @@ def test_should_not_raise_if_eligible_legacy_behaviour(postal_code):
 
 @override_features(WHOLE_FRANCE_OPENING=True)
 @pytest.mark.parametrize("postal_code", ["98735", "98800", "98800"])
-@pytest.mark.usefixtures("db_session")
 def test_raises_if_not_eligible(postal_code):
     # Given
     beneficiary_pre_subcription = create_domain_beneficiary_pre_subcription(postal_code=postal_code)
@@ -166,7 +157,6 @@ def test_raises_if_not_eligible(postal_code):
 
 @override_features(WHOLE_FRANCE_OPENING=True)
 @pytest.mark.parametrize("postal_code", ["36000", "36034", "97400"])
-@pytest.mark.usefixtures("db_session")
 def test_should_not_raise_if_eligible(postal_code):
     # Given
     beneficiary_pre_subcription = create_domain_beneficiary_pre_subcription(postal_code=postal_code)

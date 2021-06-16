@@ -2,8 +2,6 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.offerers.factories import VenueTypeFactory
 from pcapi.core.offers.factories import OffererFactory
 from pcapi.core.offers.factories import VenueFactory
@@ -14,7 +12,6 @@ from pcapi.scripts.update_venue_type import update_venue_type
 
 class UpdateVenueTypeTest:
     @patch("pcapi.scripts.update_venue_type._read_venue_type_from_file")
-    @pytest.mark.usefixtures("db_session")
     def test_should_update_venue_type_whith_type_from_read_file_when_id_match(
         self, stub_read_venue_type_from_file, app, capsys
     ):
@@ -35,7 +32,6 @@ class UpdateVenueTypeTest:
         assert "1 venues have been updated" in captured.out
 
     @patch("pcapi.scripts.update_venue_type._read_venue_type_from_file")
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_be_stuck_because_of_no_siren_offerer_and_print_a_list_of_errored_venues(
         self, stub_read_venue_type_from_file, app, capsys
     ):
@@ -61,7 +57,6 @@ class UpdateVenueTypeTest:
         assert "Venues in error : 121, 99" in captured.out
 
     @patch("pcapi.scripts.update_venue_type._read_venue_type_from_file")
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_update_venue_type_whith_type_from_read_file_when_venue_id_does_not_match(
         self, stub_read_venue_type_from_file, app, capsys
     ):
@@ -83,7 +78,6 @@ class UpdateVenueTypeTest:
         assert "0 venues have been updated" in captured.out
 
     @patch("pcapi.scripts.update_venue_type._read_venue_type_from_file")
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_update_venue_type_whith_type_from_read_file_when_type_label_does_not_match(
         self, stub_read_venue_type_from_file, app, capsys
     ):

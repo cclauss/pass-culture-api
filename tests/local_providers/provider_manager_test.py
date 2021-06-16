@@ -2,8 +2,6 @@ from unittest.mock import ANY
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.offerers.factories import APIProviderFactory
 from pcapi.core.offerers.factories import AllocineProviderFactory
 from pcapi.local_providers.provider_manager import do_update
@@ -55,7 +53,6 @@ class DoUpdateTest:
 
 
 class SynchronizeVenueProviderTest:
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.local_providers.provider_manager.get_local_provider_class_by_name")
     @patch("pcapi.local_providers.provider_manager.do_update")
     def test_should_start_synchronization_with_linked_provider(self, mock_do_update, mock_get_provider_class, app):
@@ -74,7 +71,6 @@ class SynchronizeVenueProviderTest:
         # Then
         mock_do_update.assert_called_once_with(fake(TestLocalProvider), limit)
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.local_providers.provider_manager.get_local_provider_class_by_name")
     @patch("pcapi.local_providers.provider_manager.do_update")
     def test_should_init_provider_with_expected_venue_provider(self, mock_do_update, mock_get_provider_class, app):
@@ -94,7 +90,6 @@ class SynchronizeVenueProviderTest:
         # Then
         mock_provider_class.assert_called_once_with(venue_provider)
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.local_providers.provider_manager.get_local_provider_class_by_name")
     @patch("pcapi.local_providers.provider_manager.do_update")
     def test_should_init_allocine_stocks_provider_with_expected_allocine_venue_provider(
@@ -120,7 +115,6 @@ class SynchronizeVenueProviderTest:
         assert venue_provider_mock_arg == allocine_venue_provider
         assert venue_provider_mock_arg.isDuo
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.local_providers.provider_manager.build_cron_log_message")
     def test_should_log_exception_when_one_is_raised_during_provider_initialization(
         self, mock_build_cron_log_message, app
@@ -142,7 +136,6 @@ class SynchronizeVenueProviderTest:
 class SynchronizeVenueProvidersForProviderTest:
     @patch("pcapi.local_providers.provider_manager.do_update")
     @patch("pcapi.local_providers.provider_manager.get_local_provider_class_by_name")
-    @pytest.mark.usefixtures("db_session")
     def test_should_entirely_synchronize_venue_provider(self, mock_get_provider_class, mock_do_update, app):
         # Given
         provider_test = AllocineProviderFactory()
@@ -161,7 +154,6 @@ class SynchronizeVenueProvidersForProviderTest:
 
     @patch("pcapi.local_providers.provider_manager.do_update")
     @patch("pcapi.local_providers.provider_manager.get_local_provider_class_by_name")
-    @pytest.mark.usefixtures("db_session")
     def test_should_synchronize_venue_provider_with_defined_limit(self, mock_get_provider_class, mock_do_update, app):
         # Given
         provider_test = AllocineProviderFactory()
@@ -179,7 +171,6 @@ class SynchronizeVenueProvidersForProviderTest:
         mock_do_update.assert_called_once_with(fake(TestLocalProvider), 10)
 
     @patch("pcapi.local_providers.provider_manager.synchronize_venue_provider")
-    @pytest.mark.usefixtures("db_session")
     def test_should_call_synchronize_venue_provider(self, mock_synchronize_venue_provider, app):
         # Given
         provider_test = APIProviderFactory()
@@ -198,7 +189,6 @@ class SynchronizeVenueProvidersForProviderTest:
 class SynchronizeDataForProviderTest:
     @patch("pcapi.local_providers.provider_manager.do_update")
     @patch("pcapi.local_providers.provider_manager.get_local_provider_class_by_name")
-    @pytest.mark.usefixtures("db_session")
     def test_should_call_do_update_for_specified_provider(self, mock_get_provider_class, mock_do_update, app):
         # Given
         provider_test = APIProviderFactory()

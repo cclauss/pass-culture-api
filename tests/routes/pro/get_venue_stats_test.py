@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
@@ -9,7 +7,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_pro_user_has_rights_on_managing_offerer(self, app):
         # given
         booking = bookings_factories.BookingFactory()
@@ -32,7 +29,6 @@ class Returns200Test:
 
 
 class Returns403Test:
-    @pytest.mark.usefixtures("db_session")
     def when_pro_user_does_not_have_rights(self, app):
         # given
         pro_user = users_factories.UserFactory()

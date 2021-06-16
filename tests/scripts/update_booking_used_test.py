@@ -11,7 +11,6 @@ from pcapi.scripts.update_booking_used import update_booking_used_after_stock_oc
 
 
 class UpdateBookingUsedTest:
-    @pytest.mark.usefixtures("db_session")
     def test_do_not_update_if_thing_product(self):
         # Given
         stock = offers_factories.ThingStockFactory()
@@ -26,7 +25,6 @@ class UpdateBookingUsedTest:
         assert not booking.dateUsed
 
     @freeze_time("2019-10-13")
-    @pytest.mark.usefixtures("db_session")
     def test_update_booking_used_when_event_date_is_3_days_before(self):
         # Given
         beginning = datetime(2019, 10, 9, 10, 20, 0)
@@ -42,7 +40,6 @@ class UpdateBookingUsedTest:
         assert booking.dateUsed == datetime(2019, 10, 13)
 
     @freeze_time("2019-10-13")
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_update_booking_if_already_used(self):
         # Given
         beginning = datetime(2019, 10, 9, 10, 20, 0)
@@ -59,7 +56,6 @@ class UpdateBookingUsedTest:
         assert booking.dateUsed == initial_date_used
 
     @freeze_time("2019-10-10")
-    @pytest.mark.usefixtures("db_session")
     def test_update_booking_used_when_event_date_is_only_1_day_before(self):
         # Given
         beginning = datetime(2019, 10, 9, 10, 20, 0)
@@ -74,7 +70,6 @@ class UpdateBookingUsedTest:
         assert not booking.isUsed
         assert booking.dateUsed is None
 
-    @pytest.mark.usefixtures("db_session")
     @override_features(UPDATE_BOOKING_USED=False)
     def test_raise_if_feature_flag_is_deactivated(self):
         with pytest.raises(ValueError):

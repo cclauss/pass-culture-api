@@ -1,8 +1,6 @@
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 import pcapi.core.mails.testing as mails_testing
 from pcapi.core.offers.factories import OfferFactory
 from pcapi.core.offers.factories import OffererFactory
@@ -18,7 +16,6 @@ from pcapi.domain.admin_emails import send_payments_report_emails
 from pcapi.domain.admin_emails import send_wallet_balances_email
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.connectors.api_entreprises.requests.get")
 def test_maybe_send_offerer_validation_email_sends_email_to_pass_culture_when_objects_to_validate(
     mock_api_entreprise, app
@@ -43,7 +40,6 @@ def test_maybe_send_offerer_validation_email_sends_email_to_pass_culture_when_ob
     assert mails_testing.outbox[0].sent_data["To"] == "administration@example.com"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_maybe_send_offerer_validation_email_does_not_send_email_if_all_validated(app):
     # Given
     user = users_factories.UserFactory()
@@ -96,7 +92,6 @@ def test_send_payments_report_email_sends_email_to_recipients(app):
     assert mails_testing.outbox[0].sent_data["To"] == "recipient@example.com"
 
 
-@pytest.mark.usefixtures("db_session")
 class SendOfferCreationNotificationToAdministrationTest:
     def test_when_mailjet_status_code_200_sends_email_to_administration_email(self, app):
         author = users_factories.UserFactory()
@@ -110,7 +105,6 @@ class SendOfferCreationNotificationToAdministrationTest:
         assert mails_testing.outbox[0].sent_data["To"] == "administration@example.com"
 
 
-@pytest.mark.usefixtures("db_session")
 class SendOfferCreationRefusalNotificationToAdministrationTest:
     def test_when_mailjet_status_code_200_sends_email_to_administration_email(self, app):
         author = users_factories.UserFactory(email="author@email.com")
@@ -124,7 +118,6 @@ class SendOfferCreationRefusalNotificationToAdministrationTest:
         assert mails_testing.outbox[0].sent_data["To"] == "administration@example.com"
 
 
-@pytest.mark.usefixtures("db_session")
 class SendOfferNotificationToAdministrationTest:
     def test_send_refusal_notification(self, app):
         author = users_factories.UserFactory(email="author@email.com")

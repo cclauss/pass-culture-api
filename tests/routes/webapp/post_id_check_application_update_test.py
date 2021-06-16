@@ -2,7 +2,6 @@ from datetime import datetime
 from unittest.mock import patch
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.testing import override_features
 from pcapi.core.users.models import PhoneValidationStatusType
@@ -63,7 +62,6 @@ class Returns200Test:
     @patch("pcapi.domain.password.random_token")
     @patch("pcapi.connectors.beneficiaries.jouve_backend._get_raw_content")
     @freeze_time("2013-05-15 09:00:00")
-    @pytest.mark.usefixtures("db_session")
     def test_user_becomes_beneficiary(
         self,
         _get_raw_content,
@@ -151,7 +149,6 @@ class Returns200Test:
     @patch("pcapi.domain.password.random_token")
     @patch("pcapi.connectors.beneficiaries.jouve_backend._get_raw_content")
     @freeze_time("2013-05-15 09:00:00")
-    @pytest.mark.usefixtures("db_session")
     def test_user_does_not_become_beneficiary(
         self,
         _get_raw_content,

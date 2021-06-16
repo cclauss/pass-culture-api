@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.payments.factories as payments_factories
 from pcapi.core.testing import override_features
@@ -8,7 +6,6 @@ import pcapi.core.users.factories as users_factories
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_with_user_linked_to_offerers(app):
     offerer1 = offers_factories.OffererFactory()
     offerer2 = offers_factories.OffererFactory(siren="123456788")
@@ -34,7 +31,6 @@ def test_with_user_linked_to_offerers(app):
     assert len(rows) == 1 + 4  # header + payments
 
 
-@pytest.mark.usefixtures("db_session")
 def test_with_user_with_no_offerer(app):
     # Given
     user = users_factories.UserFactory()
@@ -49,7 +45,6 @@ def test_with_user_with_no_offerer(app):
     assert len(rows) == 1  # header
 
 
-@pytest.mark.usefixtures("db_session")
 @override_features(DISABLE_BOOKINGS_RECAP_FOR_SOME_PROS=True)
 def test_with_blacklisted_offerer(app):
     # Given

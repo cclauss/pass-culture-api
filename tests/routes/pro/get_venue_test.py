@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
 from pcapi.utils.date import format_into_utc_date
@@ -9,7 +7,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_on_managing_offerer(self, app):
         # given
         user_offerer = offers_factories.UserOffererFactory(user__email="user.pro@test.com")
@@ -71,7 +68,6 @@ class Returns200Test:
 
 
 class Returns403Test:
-    @pytest.mark.usefixtures("db_session")
     def when_current_user_doesnt_have_rights(self, app):
         # given
         user = users_factories.UserFactory(email="user.pro@test.com")

@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.repository import repository
 
@@ -7,7 +5,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_activation_token_exists(self, app):
         # given
         token = "U2NCXTNB2"
@@ -23,7 +20,6 @@ class Returns200Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_activation_token_does_not_exist(self, app):
         # when
         request = TestClient(app.test_client()).get("/users/token/3YU26FS")

@@ -1,13 +1,10 @@
 from unittest.mock import patch
 
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.routes.pro.validate.maybe_send_offerer_validation_email")
 def test_validate_user_token(mocked_maybe_send_offerer_validation_email, app):
     user_offerer = offers_factories.UserOffererFactory(user__validationToken="token")
@@ -22,7 +19,6 @@ def test_validate_user_token(mocked_maybe_send_offerer_validation_email, app):
     mocked_maybe_send_offerer_validation_email.assert_called_once_with(user_offerer.offerer, user_offerer)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fail_if_unknown_token(app):
     client = TestClient(app.test_client())
     response = client.patch("/validate/user/unknown-token")

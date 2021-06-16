@@ -17,7 +17,6 @@ from pcapi.repository import repository
 EVENT_AUTOMATIC_REFUND_DELAY_FOR_TEST = timedelta(hours=72)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_date_modified_should_be_updated_if_quantity_changed(app):
     # given
     offers_factories.ThingStockFactory(dateModified=datetime(2018, 2, 12), quantity=1)
@@ -32,7 +31,6 @@ def test_date_modified_should_be_updated_if_quantity_changed(app):
     assert stock.dateModified.timestamp() == approx(datetime.now().timestamp())
 
 
-@pytest.mark.usefixtures("db_session")
 def test_date_modified_should_not_be_updated_if_price_changed(app):
     # given
     stock = offers_factories.ThingStockFactory(dateModified=datetime(2018, 2, 12), price=1, quantity=1)
@@ -48,7 +46,6 @@ def test_date_modified_should_not_be_updated_if_price_changed(app):
     assert stock.dateModified == datetime(2018, 2, 12)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_queryNotSoftDeleted_should_not_return_soft_deleted(app):
     # Given
     offers_factories.EventStockFactory(isSoftDeleted=True)
@@ -60,7 +57,6 @@ def test_queryNotSoftDeleted_should_not_return_soft_deleted(app):
     assert not result
 
 
-@pytest.mark.usefixtures("db_session")
 def test_populate_dict_on_soft_deleted_object_raises_DeletedRecordException(app):
     # Given
     stock = offers_factories.EventStockFactory(isSoftDeleted=True)
@@ -70,7 +66,6 @@ def test_populate_dict_on_soft_deleted_object_raises_DeletedRecordException(app)
         stock.populate_from_dict({"quantity": 5})
 
 
-@pytest.mark.usefixtures("db_session")
 def test_stock_cannot_have_a_negative_price(app):
     # given
     stock = offers_factories.ThingStockFactory()
@@ -84,7 +79,6 @@ def test_stock_cannot_have_a_negative_price(app):
     assert e.value.errors["price"] is not None
 
 
-@pytest.mark.usefixtures("db_session")
 def test_stock_cannot_have_a_negative_quantity_stock(app):
     # given
     stock = offers_factories.ThingStockFactory()
@@ -98,7 +92,6 @@ def test_stock_cannot_have_a_negative_quantity_stock(app):
     assert e.value.errors["quantity"] == ["La quantité doit être positive."]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_stock_can_have_an_quantity_stock_equal_to_zero(app):
     # when
     stock = offers_factories.ThingStockFactory(quantity=0)
@@ -107,7 +100,6 @@ def test_stock_can_have_an_quantity_stock_equal_to_zero(app):
     assert stock.quantity == 0
 
 
-@pytest.mark.usefixtures("db_session")
 def test_quantity_stocks_can_be_changed_even_when_bookings_with_cancellations_exceed_quantity(app):
     # Given
     stock = offers_factories.ThingStockFactory(quantity=2, price=0)
@@ -128,7 +120,6 @@ def test_quantity_stocks_can_be_changed_even_when_bookings_with_cancellations_ex
     assert Stock.query.get(stock.id).quantity == 3
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_update_stock_quantity_when_value_is_more_than_sum_of_bookings_quantity(app):
     # Given
     stock = offers_factories.ThingStockFactory(quantity=2, price=0)
@@ -143,7 +134,6 @@ def test_should_update_stock_quantity_when_value_is_more_than_sum_of_bookings_qu
     assert Stock.query.get(stock.id).quantity == 3
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_update_quantity_stock_when_value_is_less_than_booking_count(app):
     # given
     user = users_factories.UserFactory()
@@ -160,7 +150,6 @@ def test_should_not_update_quantity_stock_when_value_is_less_than_booking_count(
 
 
 class IsBookableTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_booking_limit_datetime_has_passed(self):
         # Given
         limit_datetime = datetime.utcnow() - timedelta(days=2)
@@ -171,7 +160,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_offerer_is_not_validated(self):
         # When
         stock = offers_factories.ThingStockFactory(offer__venue__managingOfferer__validationToken="validation_token")
@@ -179,7 +167,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_offerer_is_not_active(self):
         # When
         stock = offers_factories.ThingStockFactory(offer__venue__managingOfferer__isActive=False)
@@ -187,7 +174,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_venue_is_not_validated(self):
         # When
         stock = offers_factories.ThingStockFactory(offer__venue__validationToken="validation_token")
@@ -195,7 +181,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_offer_is_not_active(self):
         # When
         stock = offers_factories.ThingStockFactory(offer__isActive=False)
@@ -203,7 +188,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_stock_is_soft_deleted(self):
         # When
         stock = offers_factories.ThingStockFactory(isSoftDeleted=True)
@@ -211,7 +195,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_offer_is_event_with_passed_begining_datetime(self):
         # Given
         expired_stock_date = datetime.utcnow() - timedelta(days=2)
@@ -222,7 +205,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_no_remaining_stock(self, app):
         # Given
         user = users_factories.UserFactory()
@@ -234,7 +216,6 @@ class IsBookableTest:
         # Then
         assert not stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_true_when_stock_is_unlimited(self):
         # When
         stock = offers_factories.ThingStockFactory(price=0, quantity=None)
@@ -242,7 +223,6 @@ class IsBookableTest:
         # Then
         assert stock.isBookable
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_true_when_stock_requirements_are_fulfilled(self):
         # When
         stock = offers_factories.ThingStockFactory()
@@ -252,7 +232,6 @@ class IsBookableTest:
 
 
 class IsEventExpiredTest:
-    @pytest.mark.usefixtures("db_session")
     def test_is_not_expired_when_stock_is_not_an_event(self):
         # When
         stock = offers_factories.ThingStockFactory()
@@ -260,7 +239,6 @@ class IsEventExpiredTest:
         # Then
         assert stock.isEventExpired is False
 
-    @pytest.mark.usefixtures("db_session")
     def test_is_not_expired_when_stock_is_an_event_in_the_future(self):
         # Given
         three_days_from_now = datetime.utcnow() + timedelta(hours=72)
@@ -271,7 +249,6 @@ class IsEventExpiredTest:
         # Then
         assert stock.isEventExpired is False
 
-    @pytest.mark.usefixtures("db_session")
     def test_is_expired_when_stock_is_an_event_in_the_past(self):
         # Given
         one_day_in_the_past = datetime.utcnow() - timedelta(hours=24)
@@ -284,7 +261,6 @@ class IsEventExpiredTest:
 
 
 class IsEventDeletableTest:
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offers.models.EVENT_AUTOMATIC_REFUND_DELAY", EVENT_AUTOMATIC_REFUND_DELAY_FOR_TEST)
     def test_is_deletable_when_stock_is_not_an_event(self):
         # When
@@ -293,7 +269,6 @@ class IsEventDeletableTest:
         # Then
         assert stock.isEventDeletable is True
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offers.models.EVENT_AUTOMATIC_REFUND_DELAY", EVENT_AUTOMATIC_REFUND_DELAY_FOR_TEST)
     def test_is_deletable_when_stock_is_an_event_in_the_future(self):
         # Given
@@ -305,7 +280,6 @@ class IsEventDeletableTest:
         # Then
         assert stock.isEventDeletable is True
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offers.models.EVENT_AUTOMATIC_REFUND_DELAY", EVENT_AUTOMATIC_REFUND_DELAY_FOR_TEST)
     def test_is_deletable_when_stock_is_expired_since_less_than_event_automatic_refund_delay(self):
         # Given
@@ -319,7 +293,6 @@ class IsEventDeletableTest:
         # Then
         assert stock.isEventDeletable is True
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offers.models.EVENT_AUTOMATIC_REFUND_DELAY", EVENT_AUTOMATIC_REFUND_DELAY_FOR_TEST)
     def test_is_not_deletable_when_stock_is_expired_since_more_than_event_automatic_refund_delay(self):
         # Given

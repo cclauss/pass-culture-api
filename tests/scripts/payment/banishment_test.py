@@ -33,7 +33,6 @@ class ParseRawPaymentIdsTest:
 
 
 class DoBanPaymentsTest:
-    @pytest.mark.usefixtures("db_session")
     def test_modify_statuses_on_given_payments(self, app):
         # given
         user = users_factories.UserFactory()
@@ -66,7 +65,6 @@ class DoBanPaymentsTest:
         assert payment5.currentStatus.status == TransactionStatus.BANNED
         assert payment6.currentStatus.status == TransactionStatus.RETRY
 
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_modify_statuses_on_given_payments_if_a_payment_id_is_not_found(self, app):
         # given
         user = users_factories.UserFactory()

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 import datetime
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.payments import factories
@@ -16,7 +14,6 @@ class DummyBooking:
     dateCreated: datetime.datetime
 
 
-@pytest.mark.usefixtures("db_session")
 class CustomReimbursementRuleTest:
     def test_timespan_setter(self):
         # Test the model, not the factory.

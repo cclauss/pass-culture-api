@@ -1,6 +1,5 @@
 from unittest.mock import patch
 
-import pytest
 from shapely.geometry import Polygon
 
 from pcapi.domain.iris import MAXIMUM_DISTANCE_IN_METERS
@@ -14,7 +13,6 @@ from pcapi.scripts.iris.link_iris_to_venues import link_irises_to_existing_physi
 
 
 class LinkIrisesToExistingPhysicalVenuesTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_link_existing_eligible_venue_to_existing_iris(self, app):
         # Given
         offerer = create_offerer()
@@ -29,7 +27,6 @@ class LinkIrisesToExistingPhysicalVenuesTest:
         # Then
         assert IrisVenues.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.scripts.iris.link_iris_to_venues._find_all_venue_ids_to_link")
     @patch("pcapi.scripts.iris.link_iris_to_venues.find_ids_of_irises_located_near_venue")
     @patch("pcapi.scripts.iris.link_iris_to_venues.link_irises_to_existing_physical_venues")
@@ -48,7 +45,6 @@ class LinkIrisesToExistingPhysicalVenuesTest:
         assert find_ids_of_irises_located_near_venue.call_count == 5
         find_ids_of_irises_located_near_venue.assert_called_with(5, 100000)
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.scripts.iris.link_iris_to_venues._find_all_venue_ids_to_link")
     @patch("pcapi.scripts.iris.link_iris_to_venues.find_ids_of_irises_located_near_venue")
     @patch("pcapi.scripts.iris.link_iris_to_venues.insert_venue_in_iris_venue")
@@ -70,7 +66,6 @@ class LinkIrisesToExistingPhysicalVenuesTest:
 
 
 class FindAllVenueIdsToLinkTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_ids_of_virtual_venues(self, app):
         # Given
         offerer = create_offerer()
@@ -85,7 +80,6 @@ class FindAllVenueIdsToLinkTest:
         # Then
         assert len(venues) == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_non_validated_venue_ids(self, app):
         # Given
         offerer = create_offerer()
@@ -98,7 +92,6 @@ class FindAllVenueIdsToLinkTest:
         # Then
         assert len(venues) == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_venue_ids_of_non_validated_offerers(self, app):
         # Given
         offerer = create_offerer(validation_token="1234567")
@@ -111,7 +104,6 @@ class FindAllVenueIdsToLinkTest:
         # Then
         assert len(venues) == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_validated_physical_venue_ids(self, app):
         # Given
         offerer = create_offerer()

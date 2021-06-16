@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.offers.factories import StockWithActivationCodesFactory
@@ -197,7 +196,6 @@ class SerializeBookingTest:
         assert response["phoneNumber"] == "0612345678"
 
 
-@pytest.mark.usefixtures("db_session")
 class SerializeBookingMinimalTest:
     def test_should_return_booking_with_expected_information(self):
         # Given

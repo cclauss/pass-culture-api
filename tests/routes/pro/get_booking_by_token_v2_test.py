@@ -3,7 +3,6 @@ from datetime import timedelta
 from unittest import mock
 
 from freezegun import freeze_time
-import pytest
 
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
@@ -34,7 +33,6 @@ API_KEY_VALUE = "A_MOCKED_API_KEY"
 
 class Returns200Test:
     @freeze_time("2019-11-26 18:29:20.891028")
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_and_regular_offer(self, app):
         # Given
         user = users_factories.UserFactory(email="user@example.com", publicName="John Doe")
@@ -93,7 +91,6 @@ class Returns200Test:
             "venueName": "Venue name",
         }
 
-    @pytest.mark.usefixtures("db_session")
     def when_api_key_is_provided_and_rights_and_regular_offer(self, app):
         # Given
         user = create_user(email="user@example.com", public_name="John Doe")
@@ -120,7 +117,6 @@ class Returns200Test:
         # Then
         assert response.status_code == 200
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_and_regular_offer_and_token_in_lower_case(self, app):
         # Given
         user = create_user(email="user@example.com", public_name="John Doe")
@@ -142,7 +138,6 @@ class Returns200Test:
         # Then
         assert response.status_code == 200
 
-    @pytest.mark.usefixtures("db_session")
     def when_non_standard_origin_header(self, app):
         # Given
         user = create_user()
@@ -195,7 +190,6 @@ class Returns401Test:
         # Then
         assert response.status_code == 401
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_existing_api_key_given_with_no_bearer_prefix(self, app):
         # Given
         pro = create_user(email="offerer@example.com")
@@ -216,7 +210,6 @@ class Returns401Test:
 
 
 class Returns403Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_doesnt_have_rights_and_token_exists(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -237,7 +230,6 @@ class Returns403Test:
         assert response.status_code == 403
         assert response.json["user"] == ["Vous n'avez pas les droits suffisants pour valider cette contremarque."]
 
-    @pytest.mark.usefixtures("db_session")
     def when_given_api_key_not_related_to_booking_offerer(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -266,7 +258,6 @@ class Returns403Test:
         assert response.json["user"] == ["Vous n'avez pas les droits suffisants pour valider cette contremarque."]
 
     @mock.patch("pcapi.core.bookings.validation.check_is_usable")
-    @pytest.mark.usefixtures("db_session")
     def when_booking_not_confirmed(self, mocked_check_is_usable, app):
         # Given
         next_week = datetime.utcnow() + timedelta(weeks=1)
@@ -284,7 +275,6 @@ class Returns403Test:
         assert response.status_code == 403
         assert response.json["booking"] == ["Not confirmed"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_cancelled(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -309,7 +299,6 @@ class Returns403Test:
         assert response.status_code == 403
         assert response.json["booking"] == ["Cette réservation a été annulée"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_refunded(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -337,7 +326,6 @@ class Returns403Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_not_provided_at_all(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -356,7 +344,6 @@ class Returns404Test:
         # Then
         assert response.status_code == 404
 
-    @pytest.mark.usefixtures("db_session")
     def when_token_user_has_rights_but_token_not_found(self, app):
         # Given
         admin_user = create_user(email="admin@example.com")
@@ -370,7 +357,6 @@ class Returns404Test:
         assert response.status_code == 404
         assert response.json["global"] == ["Cette contremarque n'a pas été trouvée"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_api_key_but_token_not_found(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -399,7 +385,6 @@ class Returns404Test:
 
 
 class Returns410Test:
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_already_validated(self, app):
         # Given
         user = create_user(email="user@example.com")

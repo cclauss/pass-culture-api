@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offerers.models import Offerer
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
@@ -15,7 +13,6 @@ from pcapi.repository.offerer_queries import find_new_offerer_user_email
 
 
 class OffererQueriesTest:
-    @pytest.mark.usefixtures("db_session")
     def test_find_by_id_returns_the_right_offerer(self, app):
         # Given
         offerer_id = 52325
@@ -30,7 +27,6 @@ class OffererQueriesTest:
         assert offerer.name == "My sweet offerer"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_email_of_user_offerer_should_returns_email(app):
     # Given
     offerer = create_offerer()
@@ -46,7 +42,6 @@ def test_find_email_of_user_offerer_should_returns_email(app):
     assert result == "pro@example.com"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_filtered_offerers_with_one_keyword_at_venue_public_name_level(app):
     # given
     offerer_with_only_virtual_venue_with_offer = create_offerer(siren="123456785")
@@ -112,7 +107,6 @@ def test_find_filtered_offerers_with_one_keyword_at_venue_public_name_level(app)
     assert offerer_with_both_venues_offer_on_not_virtual in offerers
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_filtered_offerers_with_one_partial_keyword_at_venue_public_name_level(app):
     # given
     offerer_with_only_virtual_venue_with_offer = create_offerer(siren="123456785")
@@ -178,7 +172,6 @@ def test_find_filtered_offerers_with_one_partial_keyword_at_venue_public_name_le
     assert offerer_with_both_venues_offer_on_not_virtual in offerers
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_filtered_offerers_with_several_keywords_at_venue_public_name_level(app):
     # given
     offerer_with_only_virtual_venue_with_offer = create_offerer(siren="123456785")
@@ -244,7 +237,6 @@ def test_find_filtered_offerers_with_several_keywords_at_venue_public_name_level
     assert offerer_with_both_venues_offer_on_not_virtual in offerers
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_filtered_offerers_with_several_partial_keywords_at_venue_public_name_level(app):
     # given
     offerer_with_only_virtual_venue_with_offer = create_offerer(siren="123456785")

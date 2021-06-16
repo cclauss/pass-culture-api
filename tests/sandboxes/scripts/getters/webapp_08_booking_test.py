@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_mediation
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_stock
@@ -16,7 +14,6 @@ from pcapi.utils.human_ids import humanize
 
 
 class GetNonFreeThingOfferWithActiveMediationTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_expected_payload_for_bookable_offer(self, app):
         # Given
         offerer = create_offerer()
@@ -75,7 +72,6 @@ class GetNonFreeThingOfferWithActiveMediationTest:
             },
         }
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_payload_when_offer_is_not_bookable(self, app):
         # Given
         offerer = create_offerer(validation_token="validation_token")
@@ -94,7 +90,6 @@ class GetNonFreeThingOfferWithActiveMediationTest:
 
 
 class GetNonFreeEventOfferTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_expected_payload_for_bookable_offer(self, app):
         # Given
         offerer = create_offerer()
@@ -153,7 +148,6 @@ class GetNonFreeEventOfferTest:
             },
         }
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_payload_when_offer_is_not_bookable(self, app):
         # Given
         offerer = create_offerer(validation_token="validation_token")

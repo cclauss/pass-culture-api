@@ -9,7 +9,6 @@ from pcapi.core.offers import factories as offers_factories
 from pcapi.core.offers.models import OfferValidationStatus
 
 
-@pytest.mark.usefixtures("db_session")
 class VenueTimezonePropertyTest:
     def test_europe_paris_is_default_timezone(self):
         venue = offers_factories.VenueFactory(postalCode="75000")
@@ -27,7 +26,6 @@ class VenueTimezonePropertyTest:
         assert venue.timezone == "America/Cayenne"
 
 
-@pytest.mark.usefixtures("db_session")
 class VenueTimezoneSqlQueryTest:
     def test_europe_paris_is_default_timezone(self):
         offers_factories.VenueFactory(postalCode="75000")
@@ -51,7 +49,6 @@ class VenueTimezoneSqlQueryTest:
         assert len(query_result) == 1
 
 
-@pytest.mark.usefixtures("db_session")
 class OffererDepartementCodePropertyTest:
     def test_metropole_postal_code(self):
         offerer = offers_factories.OffererFactory(postalCode="75000")
@@ -64,7 +61,6 @@ class OffererDepartementCodePropertyTest:
         assert offerer.departementCode == "973"
 
 
-@pytest.mark.usefixtures("db_session")
 class OffererDepartementCodeSQLExpressionTest:
     def test_metropole_postal_code(self):
         offers_factories.OffererFactory(postalCode="75000")
@@ -81,7 +77,6 @@ class OffererDepartementCodeSQLExpressionTest:
         assert len(query_result) == 1
 
 
-@pytest.mark.usefixtures("db_session")
 class OffererNValidatedOffersTest:
     def test_offerer_with_validated_offers(self):
         offerer = offers_factories.OffererFactory()
@@ -105,7 +100,6 @@ class OffererNValidatedOffersTest:
         assert offerer.nApprovedOffers == 0
 
 
-@pytest.mark.usefixtures("db_session")
 class OffererLegalCategoryTest:
     @patch("pcapi.core.offerers.models.get_offerer_legal_category")
     def test_offerer_legal_category_with_success_get_legal_category(self, mocked_get_offerer_legal_category):

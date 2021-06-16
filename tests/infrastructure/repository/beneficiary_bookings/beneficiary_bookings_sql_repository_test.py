@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 from pcapi.core.bookings import factories
 from pcapi.core.offers.factories import EventStockFactory
 from pcapi.core.users.factories import UserFactory
@@ -25,7 +23,6 @@ from pcapi.utils.human_ids import humanize
 
 
 class BeneficiaryBookingsSQLRepositoryTest:
-    @pytest.mark.usefixtures("db_session")
     def should_return_beneficiary_bookings_with_expected_information(self, app):
         # Given
         user = create_user()
@@ -72,7 +69,6 @@ class BeneficiaryBookingsSQLRepositoryTest:
         assert expected_booking.departementCode == venue.departementCode
         assert expected_booking.thumb_url == f"http://localhost/storage/thumbs/products/{humanize(offer.productId)}"
 
-    @pytest.mark.usefixtures("db_session")
     def should_return_bookings_by_beneficiary_id(self, app):
         # Given
         user1 = UserFactory()
@@ -92,7 +88,6 @@ class BeneficiaryBookingsSQLRepositoryTest:
         assert len(result.bookings) == 1
         assert result.bookings[0].id == booking1.id
 
-    @pytest.mark.usefixtures("db_session")
     def should_not_return_activation_bookings(self, app):
         # Given
         user = UserFactory()
@@ -116,7 +111,6 @@ class BeneficiaryBookingsSQLRepositoryTest:
         assert len(result.bookings) == 1
         assert result.bookings[0].id == booking3.id
 
-    @pytest.mark.usefixtures("db_session")
     def should_return_only_most_recent_booking_when_two_cancelled_on_same_stock(self, app):
         # Given
         now = datetime.utcnow()
@@ -138,7 +132,6 @@ class BeneficiaryBookingsSQLRepositoryTest:
         assert len(result.bookings) == 1
         assert result.bookings[0].id == booking1.id
 
-    @pytest.mark.usefixtures("db_session")
     def should_return_bookings(self, app):
         # Given
         now = datetime.utcnow()
@@ -179,7 +172,6 @@ class BeneficiaryBookingsSQLRepositoryTest:
 
 
 class GetStocksInformationTest:
-    @pytest.mark.usefixtures("db_session")
     def should_return_get_stocks_information(self, app):
         # Given
         offerer = create_offerer()

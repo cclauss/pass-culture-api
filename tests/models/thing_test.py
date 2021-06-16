@@ -6,7 +6,6 @@ from pcapi.models import ThingType
 from pcapi.repository import repository
 
 
-@pytest.mark.usefixtures("db_session")
 def test_thing_error_when_thing_type_is_offlineOnly_but_has_url(app):
     # Given
     thing_product = create_product_with_thing_type(thing_type=ThingType.JEUX, url="http://mygame.fr/offre")

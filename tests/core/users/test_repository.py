@@ -60,7 +60,6 @@ class CheckUserAndCredentialsTest:
         repository.check_user_and_credentials(user, factories.DEFAULT_PASSWORD)
 
 
-@pytest.mark.usefixtures("db_session")
 class GetNewlyEligibleUsersTest:
     @override_features(WHOLE_FRANCE_OPENING=False)
     @freeze_time("2018-01-01 ")
@@ -161,7 +160,6 @@ class GetNewlyEligibleUsersTest:
 
 
 class FindByBeneficiaryTest:
-    @pytest.mark.usefixtures("db_session")
     def test_returns_a_list_of_beneficiary_favorites(self, app):
         # given
         beneficiary = factories.UserFactory()
@@ -180,7 +178,6 @@ class FindByBeneficiaryTest:
         assert isinstance(favorites[0], FavoriteDomain)
         assert isinstance(favorites[1], FavoriteDomain)
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_favorites_of_other_beneficiary(self, app):
         # given
         beneficiary = factories.UserFactory()
@@ -195,7 +192,6 @@ class FindByBeneficiaryTest:
         # then
         assert len(favorites) == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_booking_when_favorite_offer_is_booked(self, app):
         # given
         beneficiary = factories.UserFactory()
@@ -217,7 +213,6 @@ class FindByBeneficiaryTest:
         assert favorite.booked_stock_identifier == stock.id
         assert favorite.booking_quantity == booking.quantity
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_booking_when_favorite_offer_booking_is_cancelled(self, app):
         # given
         beneficiary = factories.UserFactory()
@@ -239,7 +234,6 @@ class FindByBeneficiaryTest:
         assert favorite.is_booked is False
 
 
-@pytest.mark.usefixtures("db_session")
 class UserBeneficiaryImportTest:
     def test_get_beneficiary_import_for_beneficiary(self):
         """Create 'BeneficiaryImport's with different statuses and check that

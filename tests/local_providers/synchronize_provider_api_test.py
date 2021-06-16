@@ -3,7 +3,6 @@ from unittest import mock
 
 from flask import current_app as app
 from freezegun.api import freeze_time
-import pytest
 import requests_mock
 
 from pcapi.core.bookings.factories import BookingFactory
@@ -75,7 +74,6 @@ def create_stock(isbn, siret, product_price, **kwargs):
 
 
 class ProviderAPICronTest:
-    @pytest.mark.usefixtures("db_session")
     @freeze_time("2020-10-15 09:00:00")
     @override_features(SYNCHRONIZE_ALGOLIA=True)
     @mock.patch("pcapi.connectors.redis.add_offer_id")
@@ -184,7 +182,6 @@ class ProviderAPICronTest:
             )
             synchronize_provider_api.synchronize_venue_provider(venue_provider)
 
-    @pytest.mark.usefixtures("db_session")
     class BuildStocksDetailsTest:
         def test_build_stock_details_from_raw_stocks(self):
             # Given

@@ -2,8 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 from decimal import Decimal
 
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.model_creators.generic_creators import create_booking
 from pcapi.model_creators.generic_creators import create_offerer
@@ -17,7 +15,6 @@ from pcapi.repository.reimbursement_queries import find_all_offerer_payments
 
 
 class FindAllOffererPaymentsTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_one_payment_info_with_error_status(self, app):
         # Given
         user = users_factories.UserFactory(lastName="User", firstName="Plus")
@@ -61,7 +58,6 @@ class FindAllOffererPaymentsTest:
             "Iban non fourni",
         )
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_one_payment_info_with_sent_status(self, app):
         # Given
         user = users_factories.UserFactory(lastName="User", firstName="Plus")
@@ -110,7 +106,6 @@ class FindAllOffererPaymentsTest:
             "All good",
         )
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_last_matching_status_based_on_date_for_each_payment(self, app):
         # Given
         user = users_factories.UserFactory(lastName="User", firstName="Plus")

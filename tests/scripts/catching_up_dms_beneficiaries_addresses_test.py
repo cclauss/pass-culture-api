@@ -1,7 +1,5 @@
 import io
 
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.scripts.catching_up_dms_beneficiaries_addresses import _process_file
 
@@ -13,7 +11,6 @@ CSV = """,email,adresse
 """
 
 
-@pytest.mark.usefixtures("db_session")
 class CatchingUpDMSBeneficiariesAddressesTest:
     def test_catching_up_dms_beneficiaries_addresses(self):
         # Given

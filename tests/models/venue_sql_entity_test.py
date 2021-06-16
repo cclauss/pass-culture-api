@@ -10,7 +10,6 @@ from pcapi.models.bank_information import BankInformationStatus
 from pcapi.repository import repository
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_cannot_have_address_and_isVirtual(app):
     # Given
     offerer = create_offerer(
@@ -26,7 +25,6 @@ def test_offerer_cannot_have_address_and_isVirtual(app):
         repository.save(venue)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_not_isVirtual_and_has_siret_can_have_null_address(app):
     # Given
     offerer = create_offerer(
@@ -56,7 +54,6 @@ def test_offerer_not_isVirtual_and_has_siret_can_have_null_address(app):
         )
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_not_isVirtual_and_has_siret_cannot_have_null_postal_code_nor_city_nor_departement_code(app):
     # Given
     offerer = create_offerer(
@@ -81,7 +78,6 @@ def test_offerer_not_isVirtual_and_has_siret_cannot_have_null_postal_code_nor_ci
         repository.save(venue)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_not_isVirtual_and_has_no_siret_cannot_have_null_address_nor_postal_code_nor_city_nor_departement_code(
     app,
 ):
@@ -108,7 +104,6 @@ def test_offerer_not_isVirtual_and_has_no_siret_cannot_have_null_address_nor_pos
         repository.save(venue)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_not_isVirtual_and_has_no_siret_and_has_address_and_postal_code_and_city_and_departement_code(app):
     # Given
     offerer = create_offerer(
@@ -140,7 +135,6 @@ def test_offerer_not_isVirtual_and_has_no_siret_and_has_address_and_postal_code_
         )
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_cannot_create_a_second_virtual_venue(app):
     # Given
     offerer = create_offerer(
@@ -179,7 +173,6 @@ def test_offerer_cannot_create_a_second_virtual_venue(app):
     assert errors.value.errors["isVirtual"] == ["Un lieu pour les offres numériques existe déjà pour cette structure"]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_cannot_update_a_second_venue_to_be_virtual(app):
     # Given
     siren = "132547698"
@@ -208,7 +201,6 @@ def test_offerer_cannot_update_a_second_venue_to_be_virtual(app):
     assert errors.value.errors["isVirtual"] == ["Un lieu pour les offres numériques existe déjà pour cette structure"]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_raises_exception_when_is_virtual_and_has_siret(app):
     # given
     offerer = create_offerer()
@@ -219,7 +211,6 @@ def test_venue_raises_exception_when_is_virtual_and_has_siret(app):
         repository.save(venue)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_raises_exception_when_no_siret_and_no_comment(app):
     # given
     offerer = create_offerer()
@@ -230,7 +221,6 @@ def test_venue_raises_exception_when_no_siret_and_no_comment(app):
         repository.save(venue)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_raises_exception_when_siret_and_comment_but_virtual(app):
     # given
     offerer = create_offerer()
@@ -241,7 +231,6 @@ def test_venue_raises_exception_when_siret_and_comment_but_virtual(app):
         repository.save(venue)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_should_not_raise_exception_when_siret_and_comment(app):
     # given
     offerer = create_offerer()
@@ -258,7 +247,6 @@ def test_venue_should_not_raise_exception_when_siret_and_comment(app):
         assert pytest.fail("Should not fail with comment and siret but not virtual")
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_should_not_raise_exception_when_no_siret_but_comment(app):
     # given
     offerer = create_offerer()
@@ -273,7 +261,6 @@ def test_venue_should_not_raise_exception_when_no_siret_but_comment(app):
         assert pytest.fail("Should not fail with comment but not virtual nor siret")
 
 
-@pytest.mark.usefixtures("db_session")
 def test_nOffers(app):
     offerer = create_offerer()
     venue = create_venue(offerer)
@@ -291,7 +278,6 @@ def test_nOffers(app):
 
 
 class DepartementCodeTest:
-    @pytest.mark.usefixtures("db_session")
     def test_venue_in_overseas_department_has_a_three_digit_departement_code(self, app):
         # Given
         offerer = create_offerer(
@@ -317,7 +303,6 @@ class DepartementCodeTest:
 
 
 class VenueBankInformationTest:
-    @pytest.mark.usefixtures("db_session")
     def test_bic_property_returns_bank_information_bic_when_venue_has_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -331,7 +316,6 @@ class VenueBankInformationTest:
         # Then
         assert bic == "BDFEFR2LCCB"
 
-    @pytest.mark.usefixtures("db_session")
     def test_bic_property_returns_none_when_does_not_have_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -344,7 +328,6 @@ class VenueBankInformationTest:
         # Then
         assert bic is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_iban_property_returns_bank_information_iban_when_venue_has_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -358,7 +341,6 @@ class VenueBankInformationTest:
         # Then
         assert iban == "FR7630007000111234567890144"
 
-    @pytest.mark.usefixtures("db_session")
     def test_iban_property_returns_none_when_venue_has_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -371,7 +353,6 @@ class VenueBankInformationTest:
         # Then
         assert iban is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_demarchesSimplifieesApplicationId_returns_id_if_status_is_draft(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -387,7 +368,6 @@ class VenueBankInformationTest:
         # Then
         assert field == 12345
 
-    @pytest.mark.usefixtures("db_session")
     def test_demarchesSimplifieesApplicationId_returns_none_if_status_is_rejected(self, app):
         # Given
         offerer = create_offerer(siren="123456789")

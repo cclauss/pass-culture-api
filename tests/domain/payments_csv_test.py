@@ -1,8 +1,6 @@
 import datetime
 from decimal import Decimal
 
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.payments.factories as payments_factories
 from pcapi.core.testing import assert_num_queries
@@ -14,7 +12,6 @@ from pcapi.models.wallet_balance import WalletBalance
 from pcapi.utils.human_ids import humanize
 
 
-@pytest.mark.usefixtures("db_session")
 class GeneratePaymentDetailsCsvTest:
     def test_generate_csv(self):
         creation_date = datetime.datetime(2020, 1, 1)

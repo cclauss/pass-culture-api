@@ -3,7 +3,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.providers.repository import get_provider_by_local_class
 from pcapi.local_providers import AllocineStocks
@@ -27,7 +26,6 @@ class AllocineStocksTest:
     class InitTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_call_allocine_api(self, mock_call_allocine_api, app):
             # Given
             theater_token = "test"
@@ -53,7 +51,6 @@ class AllocineStocksTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
         @freeze_time("2019-10-15 09:00:00")
-        @pytest.mark.usefixtures("db_session")
         def test_should_return_providable_infos_for_each_movie(self, mock_call_allocine_api, app):
             # Given
             mock_call_allocine_api.return_value = iter(
@@ -160,7 +157,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_one_product_and_one_local_version_offer_with_movie_info(
         self, mock_call_allocine_api, mock_api_poster
     ):
@@ -269,7 +265,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_one_product_and_one_original_version_offer_and_one_dubbed_version_offer_with_movie_info(
         self, mock_call_allocine_api, mock_api_poster
     ):
@@ -405,7 +400,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_only_one_original_version_offer_when_only_original_showtimes_exist(
         self, mock_call_allocine_api, mock_api_poster
     ):
@@ -502,7 +496,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_update_existing_product_duration_and_update_matching_offers(
         self, mock_call_allocine_api, mock_api_poster
     ):
@@ -624,7 +617,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_update_existing_product_duration_and_create_new_offer_when_no_offer_exists(
         self, mock_call_allocine_api, mock_api_poster
     ):
@@ -722,7 +714,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_product_and_new_offer_with_missing_visa_and_stage_director(
         self, mock_call_allocine_api, mock_api_poster
     ):
@@ -800,7 +791,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_create_product_and_offer_when_missing_required_information_in_api_response(
         self, mock_call_allocine_api, mock_api_poster
     ):
@@ -868,7 +858,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.local_providers.allocine.allocine_stocks.AllocineStocks.get_object_thumb")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_product_with_correct_thumb_and_increase_thumbCount_by_1(
         self, mock_get_object_thumb, mock_call_allocine_api, mock_api_poster
     ):
@@ -954,7 +943,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.local_providers.allocine.allocine_stocks.AllocineStocks.get_object_thumb")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_replace_product_thumb_when_product_has_already_one_thumb(
         self, mock_get_object_thumb, mock_call_allocine_api, mock_api_poster
     ):
@@ -1053,7 +1041,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_one_product_and_one_offer_and_associated_stocks(
         self, mock_api_poster, mock_call_allocine_api
     ):
@@ -1178,7 +1165,6 @@ class UpdateObjectsTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_one_product_and_two_offers_and_associated_stocks(
         self, mock_poster_get_allocine, mock_call_allocine_api
     ):
@@ -1326,7 +1312,6 @@ class UpdateObjectsTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_update_stocks_based_on_stock_date(self, mock_poster_get_allocine, mock_call_allocine_api, app):
             # Given
             mock_poster_get_allocine.return_value = bytes()
@@ -1495,7 +1480,6 @@ class UpdateObjectsTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_create_one_different_offer_and_stock_for_different_venues(
             self, mock_poster_get_allocine, mock_call_allocine_api
         ):
@@ -1605,7 +1589,6 @@ class UpdateObjectsTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_update_stocks_info_after_pro_user_modification(
             self, mock_poster_get_allocine, mock_call_allocine_api, app
         ):
@@ -1791,7 +1774,6 @@ class UpdateObjectsTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_preserve_manual_modification(self, mock_poster_get_allocine, mock_call_allocine_api, app):
             # Given
             mock_poster_get_allocine.return_value = bytes()
@@ -1961,7 +1943,6 @@ class UpdateObjectsTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_preserve_deletion(self, mock_poster_get_allocine, mock_call_allocine_api, app):
             # Given
             mock_poster_get_allocine.return_value = bytes()
@@ -2115,7 +2096,6 @@ class UpdateObjectsTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_preserve_is_duo_default_value(self, mock_poster_get_allocine, mock_call_allocine_api, app):
             # Given
             mock_poster_get_allocine.return_value = bytes()
@@ -2275,7 +2255,6 @@ class UpdateObjectsTest:
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
         @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
         @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-        @pytest.mark.usefixtures("db_session")
         def test_should_preserve_quantity_default_value(self, mock_poster_get_allocine, mock_call_allocine_api, app):
             # Given
             mock_poster_get_allocine.return_value = bytes()
@@ -2366,7 +2345,6 @@ class GetObjectThumbTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_get_movie_poster_if_poster_url_exist(self, mock_poster_get_allocine, mock_call_allocine_api, app):
         # Given
         mock_poster_get_allocine.return_value = "poster_thumb"
@@ -2390,7 +2368,6 @@ class GetObjectThumbTest:
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movies_showtimes")
     @patch("pcapi.local_providers.allocine.allocine_stocks.get_movie_poster")
     @patch("pcapi.settings.ALLOCINE_API_KEY", "token")
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_empty_thumb_if_poster_does_not_exist(
         self, mock_poster_get_allocine, mock_call_allocine_api, app
     ):

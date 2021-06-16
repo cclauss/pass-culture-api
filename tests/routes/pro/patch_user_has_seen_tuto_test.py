@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.core.users.models import User
 from pcapi.utils.human_ids import humanize
@@ -7,7 +5,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_mark_as_seen(app):
     user = users_factories.UserFactory(hasSeenProTutorials=False)
 
@@ -19,7 +16,6 @@ def test_mark_as_seen(app):
 
 
 class LegacyRouteTest:
-    @pytest.mark.usefixtures("db_session")
     class Returns204Test:
         def when_user_is_logged_in(self, app):
             # given
@@ -34,7 +30,6 @@ class LegacyRouteTest:
             assert response.status_code == 204
             assert updated_user.hasSeenProTutorials == True
 
-    @pytest.mark.usefixtures("db_session")
     class Returns404Test:
         def when_user_does_not_exist(self, app):
             # given
@@ -47,7 +42,6 @@ class LegacyRouteTest:
             # then
             assert response.status_code == 404
 
-    @pytest.mark.usefixtures("db_session")
     class Returns403Test:
         def when_user_is_not_logged_in(self, app):
             # given

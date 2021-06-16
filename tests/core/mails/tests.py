@@ -2,7 +2,6 @@ import copy
 import datetime
 from unittest.mock import patch
 
-import pytest
 import requests.exceptions
 import requests_mock
 
@@ -13,7 +12,6 @@ from pcapi.core.mails.models import EmailStatus
 from pcapi.core.testing import override_settings
 
 
-@pytest.mark.usefixtures("db_session")
 class SendTest:
 
     recipients = ["recipient1@example.com", "recipient2@example.com"]

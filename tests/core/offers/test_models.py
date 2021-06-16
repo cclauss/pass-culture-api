@@ -1,7 +1,5 @@
 import datetime
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 import pcapi.core.offerers.factories as providers_factories
 from pcapi.core.offers import factories
@@ -14,7 +12,6 @@ from pcapi.models.offer_type import ThingType
 from pcapi.utils.date import DateTimes
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferDateRangeTest:
     def test_thing_offer(self):
         offer = factories.ThingOfferFactory()
@@ -74,7 +71,6 @@ class OfferTypeTest:
         }
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferHasBookingLimitDatetimesPassedTest:
     def test_with_stock_with_no_booking_limit_datetime(self):
         stock = factories.StockFactory(bookingLimitDatetime=None)
@@ -126,7 +122,6 @@ class OfferHasBookingLimitDatetimesPassedTest:
         assert Offer.query.filter(Offer.hasBookingLimitDatetimesPassed.is_(False)).all() == [offer]
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferActiveMediationTest:
     def test_active_mediation(self):
         mediation1 = factories.MediationFactory()
@@ -139,7 +134,6 @@ class OfferActiveMediationTest:
         assert mediation.offer.activeMediation is None
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferIsEditableTest:
     def test_editable_if_not_from_provider(self):
         offer = factories.OfferFactory()
@@ -156,7 +150,6 @@ class OfferIsEditableTest:
         assert not offer.isEditable
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferThumbUrlTest:
     def test_use_mediation(self):
         mediation = factories.MediationFactory(thumbCount=1)
@@ -181,14 +174,12 @@ class OfferCategoryNameForAppTest:
         assert offer.offer_category_name_for_app == "JEUX_VIDEO"
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferValidationTest:
     def test_factory_object_defaults_to_approved(self):
         offer = factories.OfferFactory()
         assert offer.validation == OfferValidationStatus.APPROVED
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferStatusTest:
     def test_rejected(self):
         rejected_offer = factories.OfferFactory(validation=OfferValidationStatus.REJECTED, isActive=False)
@@ -296,7 +287,6 @@ class OfferStatusTest:
         assert Offer.query.filter(Offer.status != OfferStatus.SOLD_OUT.name).count() == 0
 
 
-@pytest.mark.usefixtures("db_session")
 class StockBookingsQuantityTest:
     def test_bookings_quantity_without_bookings(self):
         offer = factories.OfferFactory()
@@ -321,7 +311,6 @@ class StockBookingsQuantityTest:
         assert Stock.query.filter(Stock.dnBookedQuantity == 1).one() == stock
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferIsSoldOutTest:
     def test_offer_with_stock_quantity_is_not_sold_out(self):
         offer = factories.OfferFactory()
@@ -373,7 +362,6 @@ class OfferIsSoldOutTest:
         assert Offer.query.filter(Offer.isSoldOut.is_(False)).count() == 0
 
 
-@pytest.mark.usefixtures("db_session")
 class StockRemainingQuantityTest:
     def test_stock_with_unlimited_remaining_quantity(self):
         offer = factories.OfferFactory()

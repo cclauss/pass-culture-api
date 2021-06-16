@@ -2,8 +2,6 @@ from unittest.mock import MagicMock
 from unittest.mock import call
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.testing import override_features
 from pcapi.models.feature import FeatureToggle
 from pcapi.scheduled_tasks.decorators import cron_context
@@ -30,7 +28,6 @@ class CronContextTest:
         application.app_context.assert_called_once()
 
 
-@pytest.mark.usefixtures("db_session")
 class CronRequireFeatureTest:
     @override_features(UPDATE_BOOKING_USED=True)
     def test_cron_require_feature(self):

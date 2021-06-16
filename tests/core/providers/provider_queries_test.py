@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offerers.factories as offerers_factories
 from pcapi.core.providers.models import Provider
 from pcapi.core.providers.repository import get_enabled_providers_for_pro
@@ -11,7 +9,6 @@ from pcapi.repository import repository
 
 
 class GetEnabledProvidersForProTest:
-    @pytest.mark.usefixtures("db_session")
     def test_get_enabled_providers_for_pro(self, app):
         # Given
         Provider.query.delete()  # remove automatically added providers
@@ -29,7 +26,6 @@ class GetEnabledProvidersForProTest:
 
 
 class GetProvidersEnabledForProExcludingSpecificProviderTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_get_actives_and_enabled_providers_for_pro(self, app):
         # Given
         Provider.query.delete()  # remove automatically added providers
@@ -46,7 +42,6 @@ class GetProvidersEnabledForProExcludingSpecificProviderTest:
 
 
 class GetProviderEnabledForProByIdTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_no_provider_when_provider_is_not_active(self, app):
         # Given
         provider = create_provider(local_class="OpenAgenda", is_active=False, is_enable_for_pro=True)
@@ -58,7 +53,6 @@ class GetProviderEnabledForProByIdTest:
         # Then
         assert provider is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_no_provider_when_provider_is_not_enabled_for_pro(self, app):
         # Given
         provider = create_provider(local_class="OpenAgenda", is_active=True, is_enable_for_pro=False)
@@ -70,7 +64,6 @@ class GetProviderEnabledForProByIdTest:
         # Then
         assert provider is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_provider_when_provider_is_enabled_for_pro_and_active(self, app):
         # Given
         existing_provider = create_provider(local_class="OpenAgenda", is_active=True, is_enable_for_pro=True)
@@ -84,7 +77,6 @@ class GetProviderEnabledForProByIdTest:
 
 
 class GetProviderByLocalClassTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_provider_matching_local_class(self, app):
         # Given
         existing_provider = create_provider(local_class="OpenAgenda", is_active=True, is_enable_for_pro=True)
@@ -96,7 +88,6 @@ class GetProviderByLocalClassTest:
         # Then
         assert provider == existing_provider
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_provider_when_no_local_class_matches(self, app):
         # When
         provider = get_provider_by_local_class("NonExistingProvider")

@@ -18,7 +18,6 @@ import tests
 IMAGES_DIR = pathlib.Path(tests.__path__[0]) / "files"
 
 
-@pytest.mark.usefixtures("db_session")
 class CheckOfferExistingStocksAreEditableTest:
     def test_approved_offer(self):
         offer = factories.OfferFactory()
@@ -51,7 +50,6 @@ class CheckOfferExistingStocksAreEditableTest:
         assert error.value.errors["global"] == ["Les offres importées ne sont pas modifiables"]
 
 
-@pytest.mark.usefixtures("db_session")
 class CheckRequiredDatesForStockTest:
     def test_thing_offer_must_not_have_beginning(self):
         offer = factories.ThingOfferFactory()
@@ -117,7 +115,6 @@ class CheckRequiredDatesForStockTest:
         )
 
 
-@pytest.mark.usefixtures("db_session")
 class CheckStockCanBeCreatedForOfferTest:
     def test_approved_offer_not_from_provider(self):
         offer = factories.OfferFactory(lastProvider=None)
@@ -144,7 +141,6 @@ class CheckStockCanBeCreatedForOfferTest:
         ]
 
 
-@pytest.mark.usefixtures("db_session")
 class CheckStockIsDeletableTest:
     def test_approved_offer(self):
         offer = factories.OfferFactory()
@@ -198,7 +194,6 @@ class CheckStockIsDeletableTest:
         ]
 
 
-@pytest.mark.usefixtures("db_session")
 class CheckStockIsUpdatableTest:
     def test_approved_offer(self):
         offer = factories.OfferFactory()
@@ -380,7 +375,6 @@ class CheckImageTest:
             )
 
 
-@pytest.mark.usefixtures("db_session")
 class CheckValidationStatusTest:
     def test_approved_offer(self):
         approved_offer = factories.OfferFactory()
@@ -413,7 +407,6 @@ class CheckValidationStatusTest:
         ]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_check_stock_has_no_custom_reimbursement_rule():
     stock = factories.StockFactory()
     validation.check_stock_has_no_custom_reimbursement_rule(stock)  # should not raise

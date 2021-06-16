@@ -1,7 +1,5 @@
 import secrets
 
-import pytest
-
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.model_creators.generic_creators import create_user_offerer
@@ -12,7 +10,6 @@ from tests.conftest import TestClient
 
 
 class Returns202Test:
-    @pytest.mark.usefixtures("db_session")
     def expect_user_offerer_attachment_to_be_validated(self, app):
         # Given
         user_offerer_token = secrets.token_urlsafe(20)
@@ -44,7 +41,6 @@ class Returns202Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def expect_user_offerer_attachment_not_to_be_validated_with_unknown_token(self, app):
         # when
         response = TestClient(app.test_client()).with_auth(email="bobby@example.net").get("/validate/user-offerer/123")
@@ -52,7 +48,6 @@ class Returns404Test:
         # then
         assert response.status_code == 404
 
-    @pytest.mark.usefixtures("db_session")
     def expect_user_offerer_attachment_not_to_be_validated_with_same_token(self, app):
         user_offerer_token = secrets.token_urlsafe(20)
         offerer_token = secrets.token_urlsafe(20)

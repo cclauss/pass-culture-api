@@ -1,7 +1,5 @@
 import datetime
 
-import pytest
-
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.model_creators.generic_creators import create_user_offerer
@@ -16,7 +14,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_is_logged_in_and_has_no_deposit(self, app):
         # Given
         user = create_user(
@@ -67,7 +64,6 @@ class Returns200Test:
             "publicName": "Toto",
         }
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_has_physical_venues_and_has_offers(self, app):
         # Given
         user = create_user(email="test@email.com")
@@ -93,7 +89,6 @@ class Returns200Test:
 
 
 class Returns401Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_is_not_logged_in(self, app):
         # When
         response = TestClient(app.test_client()).get("/users/current")

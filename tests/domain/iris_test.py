@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
 from shapely.geometry import Polygon
 
 from pcapi.domain.iris import _link_venue_to_irises
@@ -25,7 +24,6 @@ class LinkVenueToIrisesTest:
         # Then
         assert IrisVenues.query.count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.domain.iris.find_ids_of_irises_located_near_venue")
     def test_should_link_venue_to_iris_venues(self, mock_find_iris_near_venue, app):
         # Given

@@ -20,7 +20,6 @@ class BankInformationsSQLRepositoryTest:
     def setup_method(self):
         self.bank_informations_sql_repository = BankInformationsSQLRepository()
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_bank_informations_when_offerer_has_bank_informations(self, app):
         # given
         offerer = create_offerer()
@@ -39,7 +38,6 @@ class BankInformationsSQLRepositoryTest:
         assert bank_informations.bic == expected_bank_informations.bic
         assert bank_informations.date_modified == expected_bank_informations.date_modified
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_none_when_offerer_has_no_bank_informations(self, app):
         # given
         offerer = create_offerer()
@@ -52,7 +50,6 @@ class BankInformationsSQLRepositoryTest:
         # then
         assert bank_informations is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_bank_informations_when_venue_has_bank_informations(self, app):
         # given
         offerer = create_offerer()
@@ -71,7 +68,6 @@ class BankInformationsSQLRepositoryTest:
         assert bank_informations.iban == expected_bank_informations.iban
         assert bank_informations.bic == expected_bank_informations.bic
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_none_when_venue_has_no_bank_informations(self, app):
         # given
         offerer = create_offerer()
@@ -85,7 +81,6 @@ class BankInformationsSQLRepositoryTest:
         # then
         assert bank_informations is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_bank_informations_when_there_is_bank_informations_associated_with_this_application_id(self, app):
         # given
         offerer = create_offerer()
@@ -104,7 +99,6 @@ class BankInformationsSQLRepositoryTest:
         assert bank_informations.iban == expected_bank_informations.iban
         assert bank_informations.bic == expected_bank_informations.bic
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_none_when_there_is_no_bank_informations_associated_with_this_application_id(self, app):
         # given
         offerer = create_offerer()
@@ -117,7 +111,6 @@ class BankInformationsSQLRepositoryTest:
         # then
         assert bank_informations is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_bank_informations_on_save_when_bank_informations_does_not_exist(self, app):
         # given
         offerer = create_offerer()
@@ -149,7 +142,6 @@ class BankInformationsSQLRepositoryTest:
         assert bank_informations_saved.iban == bank_informations_to_save.iban
         assert bank_informations_saved.bic == bank_informations_to_save.bic
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_create_bank_informations_on_save_when_no_offerer_associated_in_database(self, app):
         # given
         bank_informations_to_save = BankInformations(offerer_id=9, status="ACCEPTED", application_id=8)
@@ -164,7 +156,6 @@ class BankInformationsSQLRepositoryTest:
             "Aucun objet ne correspond \u00e0 cet identifiant dans notre base de donn\u00e9es"
         ]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_create_bank_informations_on_save_when_bank_infos_is_already_associated_to_an_offerer_in_database(
         self, app
     ):
@@ -184,7 +175,6 @@ class BankInformationsSQLRepositoryTest:
             "Une entrée avec cet identifiant existe déjà dans notre base de données"
         ]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_update_bank_informations_when_bank_informations_already_exist_for_offerer(self, app):
         # given
         offerer = create_offerer()
@@ -220,7 +210,6 @@ class BankInformationsSQLRepositoryTest:
         assert bank_informations_saved.iban == bank_informations_to_save.iban
         assert bank_informations_saved.bic == bank_informations_to_save.bic
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_update_bank_informations_when_bank_informations_do_not_exist_for_offerer(self, app):
         # given
         bank_informations_to_save = BankInformations(
@@ -240,7 +229,6 @@ class BankInformationsSQLRepositoryTest:
         assert BankInformationsSQLEntity.query.count() == 0
         assert bank_informations_updated is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_update_bank_informations_when_bank_informations_already_exist_for_application(self, app):
         # given
         offerer = create_offerer()
@@ -278,7 +266,6 @@ class BankInformationsSQLRepositoryTest:
         assert bank_informations_saved.iban == bank_informations_to_save.iban
         assert bank_informations_saved.bic == bank_informations_to_save.bic
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_update_bank_informations_when_bank_informations_do_not_exist_for_this_application(self, app):
         # given
         bank_informations_to_save = BankInformations(
@@ -298,7 +285,6 @@ class BankInformationsSQLRepositoryTest:
         assert BankInformationsSQLEntity.query.count() == 0
         assert bank_informations_updated is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_update_bank_informations_when_bank_informations_already_exist_for_venue(self, app):
         # given
         offerer = create_offerer()
@@ -335,7 +321,6 @@ class BankInformationsSQLRepositoryTest:
         assert bank_informations_saved.iban == bank_informations_to_save.iban
         assert bank_informations_saved.bic == bank_informations_to_save.bic
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_update_bank_informations_when_bank_informations_do_not_exist_for_venue(self, app):
         # given
         bank_informations_to_save = BankInformations(

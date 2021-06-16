@@ -3,7 +3,6 @@ from datetime import timezone
 from unittest.mock import patch
 
 from dateutil.tz import tz
-import pytest
 
 from pcapi.core import testing
 import pcapi.core.bookings.factories as bookings_factories
@@ -20,7 +19,6 @@ from tests.conftest import TestClient
 
 
 class GetAllBookingsTest:
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.bookings.repository.find_by_pro_user_id")
     def test_call_repository_with_user_and_page(self, find_by_pro_user_id, app):
         user = users_factories.UserFactory()
@@ -34,7 +32,6 @@ class GetAllBookingsTest:
             page=3,
         )
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.bookings.repository.find_by_pro_user_id")
     def test_call_repository_with_page_1(self, find_by_pro_user_id, app):
         user = users_factories.UserFactory()
@@ -48,7 +45,6 @@ class GetAllBookingsTest:
             page=1,
         )
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.bookings.repository.find_by_pro_user_id")
     def test_call_repository_with_venue_id(self, find_by_pro_user_id, app):
         # Given
@@ -69,7 +65,6 @@ class GetAllBookingsTest:
         )
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns200Test:
     def when_user_is_linked_to_a_valid_offerer(self, app):
         booking = bookings_factories.BookingFactory(
@@ -188,7 +183,6 @@ class Returns200Test:
         assert response.json["total"] == 1
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     def when_page_number_is_not_a_number(self, app):
         user = users_factories.UserFactory()
@@ -200,7 +194,6 @@ class Returns400Test:
         assert response.json["global"] == ["L'argument 'page' not-a-number n'est pas valide"]
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns401Test:
     def when_user_is_admin(self, app):
         user = users_factories.UserFactory(isAdmin=True)

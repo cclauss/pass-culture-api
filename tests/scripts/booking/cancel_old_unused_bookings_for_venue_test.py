@@ -11,7 +11,6 @@ from pcapi.scripts.booking.cancel_old_unused_bookings_for_venue import cancel_ol
 from pcapi.utils.human_ids import humanize
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_cancel_old_unused_bookings_for_venue():
     venue = offers_factories.VenueFactory()
     other_venue = offers_factories.VenueFactory()

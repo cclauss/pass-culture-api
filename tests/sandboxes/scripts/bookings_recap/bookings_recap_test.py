@@ -1,4 +1,3 @@
-import pytest
 from pytest import fixture
 
 from pcapi.core.users.models import User
@@ -10,7 +9,6 @@ from pcapi.sandboxes.scripts.creators.bookings_recap.bookings_recap import save_
 
 
 class BookingsRecapTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_create_bookings_recap_sandbox(self, app: fixture):
         # When
         save_bookings_recap_sandbox()

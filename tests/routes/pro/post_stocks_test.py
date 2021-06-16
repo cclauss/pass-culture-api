@@ -1,7 +1,5 @@
 from datetime import datetime
 
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.offers.models import OfferValidationStatus
 import pcapi.core.users.factories as users_factories
@@ -13,7 +11,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns201Test:
     def test_create_one_stock(self, app):
         # Given
@@ -153,7 +150,6 @@ class Returns201Test:
             assert result_stock.bookingLimitDatetime == booking_limit_datetime
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     def when_missing_offer_id(self, app):
         # Given
@@ -330,7 +326,6 @@ class Returns400Test:
         assert response.json["global"] == ["Impossible de créer des codes d'activation sur une offre non-numérique"]
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns403Test:
     def when_user_has_no_rights_and_creating_stock_from_offer_id(self, app, db_session):
         # Given

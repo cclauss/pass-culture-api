@@ -1,7 +1,5 @@
 from datetime import datetime
 
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.offers.models import OfferValidationStatus
 import pcapi.core.users.factories as users_factories
@@ -12,7 +10,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns200Test:
     def test_patch_offer(self, app):
         # Given
@@ -42,7 +39,6 @@ class Returns200Test:
         assert updated_offer.mentalDisabilityCompliant
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     def when_trying_to_patch_forbidden_attributes(self, app):
         # Given
@@ -181,7 +177,6 @@ class Returns400Test:
         assert response.json["global"] == ["Les offres refusées ou en attente de validation ne sont pas modifiables"]
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns403Test:
     def when_user_is_not_attached_to_offerer(self, app):
         # Given

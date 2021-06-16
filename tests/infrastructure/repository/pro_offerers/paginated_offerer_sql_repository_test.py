@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.domain.pro_offerers.paginated_offerers import PaginatedOfferers
 from pcapi.infrastructure.repository.pro_offerers.paginated_offerers_sql_repository import (
     PaginatedOfferersSQLRepository,
@@ -12,7 +10,6 @@ from pcapi.repository import repository
 
 
 class PaginatedOffererSQLRepositoryTest:
-    @pytest.mark.usefixtures("db_session")
     def should_only_return_offerers_linked_to_user(self, app):
         # Given
         user = create_user()
@@ -38,7 +35,6 @@ class PaginatedOffererSQLRepositoryTest:
         assert len(paginated_offerers.offerers) == 1
         assert paginated_offerers.offerers[0].userHasAccess == True
 
-    @pytest.mark.usefixtures("db_session")
     def should_return_linked_offerers_with_matching_keywords_in_name(self, app):
         # Given
         user = create_user()
@@ -66,7 +62,6 @@ class PaginatedOffererSQLRepositoryTest:
         assert paginated_offerers.total == 1
         assert len(paginated_offerers.offerers) == 1
 
-    @pytest.mark.usefixtures("db_session")
     def should_return_linked_offerers_with_matching_keywords_in_venue_name(self, app):
         # Given
         user = create_user()
@@ -94,7 +89,6 @@ class PaginatedOffererSQLRepositoryTest:
         assert paginated_offerers.total == 1
         assert len(paginated_offerers.offerers) == 1
 
-    @pytest.mark.usefixtures("db_session")
     def should_return_only_one_offerers_when_it_has_multiple_venues(self, app):
         # Given
         user = create_user()
@@ -120,7 +114,6 @@ class PaginatedOffererSQLRepositoryTest:
         assert paginated_offerers.total == 1
         assert len(paginated_offerers.offerers) == 1
 
-    @pytest.mark.usefixtures("db_session")
     def should_filter_out_non_validated_offerers(self, app):
         # Given
         user = create_user()

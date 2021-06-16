@@ -4,7 +4,6 @@ from datetime import timezone
 from unittest.mock import patch
 
 from bs4 import BeautifulSoup
-import pytest
 
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
@@ -17,7 +16,6 @@ from pcapi.utils.mailing import make_offerer_driven_cancellation_email_for_offer
 
 
 class MakeOffererDrivenCancellationEmailForOffererTest:
-    @pytest.mark.usefixtures("db_session")
     def test_make_offerer_driven_cancellation_email_for_offerer_event_when_no_other_booking(self, app):
         # Given
         beginning_datetime = datetime(2019, 7, 20, 12, 0, 0, tzinfo=timezone.utc)
@@ -54,7 +52,6 @@ class MakeOffererDrivenCancellationEmailForOffererTest:
             == f"Confirmation de votre annulation de réservation pour {stock.offer.name}, proposé par {venue.name}"
         )
 
-    @pytest.mark.usefixtures("db_session")
     def test_make_offerer_driven_cancellation_email_for_offerer_event_when_other_booking(self, app):
         # Given
         user1 = users_factories.UserFactory()
@@ -80,7 +77,6 @@ class MakeOffererDrivenCancellationEmailForOffererTest:
         assert user2.email in html_recap_table
         assert booking2.token in html_recap_table
 
-    @pytest.mark.usefixtures("db_session")
     def test_make_offerer_driven_cancellation_email_for_offerer_thing_and_already_existing_booking(self, app):
         # Given
         user1 = users_factories.UserFactory()
@@ -120,7 +116,6 @@ class MakeOffererDrivenCancellationEmailForOffererTest:
 
 
 class MakeOffererBookingRecapEmailAfterUserCancellationWithMailjetTemplateTest:
-    @pytest.mark.usefixtures("db_session")
     @patch(
         "pcapi.emails.beneficiary_offer_cancellation.build_pc_pro_offer_link",
         return_value="http://pc_pro.com/offer_link",
@@ -160,7 +155,6 @@ class MakeOffererBookingRecapEmailAfterUserCancellationWithMailjetTemplateTest:
             },
         }
 
-    @pytest.mark.usefixtures("db_session")
     @patch(
         "pcapi.emails.beneficiary_offer_cancellation.build_pc_pro_offer_link",
         return_value="http://pc_pro.com/offer_link",
@@ -209,7 +203,6 @@ class MakeOffererBookingRecapEmailAfterUserCancellationWithMailjetTemplateTest:
             },
         }
 
-    @pytest.mark.usefixtures("db_session")
     @patch(
         "pcapi.emails.beneficiary_offer_cancellation.build_pc_pro_offer_link",
         return_value="http://pc_pro.com/offer_link",
@@ -258,7 +251,6 @@ class MakeOffererBookingRecapEmailAfterUserCancellationWithMailjetTemplateTest:
             },
         }
 
-    @pytest.mark.usefixtures("db_session")
     @patch(
         "pcapi.emails.beneficiary_offer_cancellation.build_pc_pro_offer_link",
         return_value="http://pc_pro.com/offer_link",
@@ -309,7 +301,6 @@ class MakeOffererBookingRecapEmailAfterUserCancellationWithMailjetTemplateTest:
 
 
 class IsOfferActiveForRecapTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_true_when_offer_is_active_and_stock_still_bookable(self, app):
         # Given
         event_date = datetime.now() + timedelta(days=6)
@@ -323,7 +314,6 @@ class IsOfferActiveForRecapTest:
         # Then
         assert is_active
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_offer_is_not_active(self, app):
         # Given
         event_date = datetime.now() + timedelta(days=6)
@@ -337,7 +327,6 @@ class IsOfferActiveForRecapTest:
         # Then
         assert not is_active
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_stock_has_no_remaining_quantity(self, app):
         # Given
         user = users_factories.UserFactory()
@@ -353,7 +342,6 @@ class IsOfferActiveForRecapTest:
         # Then
         assert not is_active
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_stock_booking_limit_is_past(self, app):
         # Given
         user = users_factories.UserFactory()
@@ -368,7 +356,6 @@ class IsOfferActiveForRecapTest:
         # Then
         assert not is_active
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_true_when_stock_is_unlimited(self, app):
         # Given
         user = users_factories.UserFactory()
@@ -381,7 +368,6 @@ class IsOfferActiveForRecapTest:
         # Then
         assert is_active
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_stock_is_unlimited_but_booking_date_is_past(self, app):
         # Given
         user = users_factories.UserFactory()

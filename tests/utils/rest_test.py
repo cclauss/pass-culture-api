@@ -13,7 +13,6 @@ from pcapi.utils.rest import load_or_raise_error
 
 
 class TestLoadOrRaiseErrorTest:
-    @pytest.mark.usefixtures("db_session")
     def test_returns_object_if_found(self, app):
         # When
         with pytest.raises(ApiErrors) as error:
@@ -23,7 +22,6 @@ class TestLoadOrRaiseErrorTest:
             "Aucun objet ne correspond à cet identifiant dans notre base de données"
         ]
 
-    @pytest.mark.usefixtures("db_session")
     def test_raises_api_error_if_no_object(self, app):
         # Given
         offerer = create_offerer()

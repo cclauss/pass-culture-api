@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import jwt
-import pytest
 
 from pcapi import settings
 from pcapi.core.users.factories import UserFactory
@@ -32,7 +31,6 @@ class EncodeJWTPayloadTest:
         assert "exp" not in decoded
 
 
-@pytest.mark.usefixtures("db_session")
 class FormatPhoneNumberTest:
     def test_format_phone_number(self):
         user = UserFactory(phoneNumber="0602030405")

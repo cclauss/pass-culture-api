@@ -1,15 +1,12 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.offers.factories import EventStockFactory
 from pcapi.notifications.push import testing
 from pcapi.scheduled_tasks.clock import pc_send_tomorrow_events_notifications
 
 
-@pytest.mark.usefixtures("db_session")
 def test_pc_send_tomorrow_events_notifications(app):
     """
     Test that each stock that is linked to an offer that occurs tomorrow and

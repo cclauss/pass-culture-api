@@ -1,12 +1,9 @@
-import pytest
-
 from pcapi.core.users.factories import UserFactory
 import pcapi.notifications.push.testing as push_testing
 from pcapi.scripts.batch_update_users_attributes import get_users_chunks
 from pcapi.scripts.batch_update_users_attributes import run
 
 
-@pytest.mark.usefixtures("db_session")
 def test_get_users_chunks(app):
     """
     Test that the correct number of chunks have been fetched, that each one
@@ -24,7 +21,6 @@ def test_get_users_chunks(app):
     assert found_ids == expected_ids
 
 
-@pytest.mark.usefixtures("db_session")
 def test_run(app):
     """
     Test that two chunks of users are used and therefore two requests are sent.

@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offerers.factories import ProviderFactory
 from pcapi.core.offers.factories import VenueFactory
 from pcapi.core.providers.factories import AllocinePivotFactory
@@ -9,7 +7,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_has_known_allocine_id(app):
     # Given
     user = UserFactory()
@@ -45,7 +42,6 @@ def test_venue_has_known_allocine_id(app):
     ]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_has_no_allocine_id(app):
     # Given
     user = UserFactory(email="user@test.com")
@@ -72,7 +68,6 @@ def test_venue_has_no_allocine_id(app):
     assert humanize(allocine_provider.id) not in [p["id"] for p in returned_providers]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_venue_does_not_exist(app):
     user = UserFactory()
 
@@ -82,7 +77,6 @@ def test_venue_does_not_exist(app):
     assert response.status_code == 404
 
 
-@pytest.mark.usefixtures("db_session")
 def test_user_is_not_logged_in(app):
     client = TestClient(app.test_client())
     response = client.get("/providers/AZER")

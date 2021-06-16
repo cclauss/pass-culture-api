@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.model_creators.generic_creators import create_booking
 from pcapi.model_creators.generic_creators import create_payment
@@ -96,7 +94,6 @@ class PaymentDateTest:
             assert payment_sent_date is None
 
     class InSQLContextTest:
-        @pytest.mark.usefixtures("db_session")
         def test_payment_date_should_return_payment_date_for_status_sent(self, app):
             # Given
             user = users_factories.UserFactory()
@@ -115,7 +112,6 @@ class PaymentDateTest:
             # Then
             assert payment_from_query.payment_date == today
 
-        @pytest.mark.usefixtures("db_session")
         def test_payment_date_should_return_oldest_payment_date_for_status_sent_if_several(self, app):
             # Given
             user = users_factories.UserFactory()
@@ -136,7 +132,6 @@ class PaymentDateTest:
             # Then
             assert payment_from_query.payment_date == yesterday
 
-        @pytest.mark.usefixtures("db_session")
         def test_payment_date_should_return_no_payment_date_for_status_pending(self, app):
             # Given
             user = users_factories.UserFactory()

@@ -32,7 +32,6 @@ def offerer_fixture(offer):
     return an_offerer
 
 
-@pytest.mark.usefixtures("db_session")
 class CreateThumbnailWithoutImageTest:
     def test_no_image(self, app, offer, offerer):
         # given
@@ -50,7 +49,6 @@ class CreateThumbnailWithoutImageTest:
         assert response.json == {"errors": ["Nous n'avons pas réceptionné l'image, merci d'essayer à nouveau."]}
 
 
-@pytest.mark.usefixtures("db_session")
 class CreateThumbnailFromUrlTest:
     def test_import_from_url(self, app, offer, offerer):
         # given
@@ -167,7 +165,6 @@ class CreateThumbnailFromUrlTest:
         assert response.json == {"errors": ["Utilisez une image dont le poids est inférieur à 10.0 MB"]}
 
 
-@pytest.mark.usefixtures("db_session")
 class CreateThumbnailFromFileTest:
     def test_import_from_file(self, app, offer, offerer):
         # given

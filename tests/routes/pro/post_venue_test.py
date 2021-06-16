@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offerers.factories as offerers_factories
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.users.factories import UserFactory
@@ -11,7 +9,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_register_new_venue(app):
     # given
     offerer = offers_factories.OffererFactory(siren="302559178")
@@ -52,7 +49,6 @@ def test_should_register_new_venue(app):
     assert venue.venueLabelId == venue_label.id
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_consider_the_venue_to_be_permanent(app):
     # given
     offerer = offers_factories.OffererFactory(siren="302559178")
@@ -85,7 +81,6 @@ def test_should_consider_the_venue_to_be_permanent(app):
     assert venue.isPermanent == True
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_return_401_when_latitude_out_of_range_and_longitude_wrong_format(app):
     # given
     offerer = offers_factories.OffererFactory(siren="302559178")
@@ -116,7 +111,6 @@ def test_should_return_401_when_latitude_out_of_range_and_longitude_wrong_format
     assert response.json["longitude"] == ["Format incorrect"]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_return_401_when_longitude_out_of_range_and_latitude_wrong_format(app):
     # given
     offerer = offers_factories.OffererFactory(siren="302559178")

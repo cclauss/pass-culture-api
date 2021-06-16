@@ -15,7 +15,6 @@ from pcapi.validation.routes.users_authorizations import check_user_can_validate
 
 
 class CheckUserCanValidateBookingTest:
-    @pytest.mark.usefixtures("db_session")
     def test_check_user_can_validate_bookings_returns_true_when_user_is_authenticated_and_has_editor_rights_on_booking(
         self, app
     ):
@@ -57,7 +56,6 @@ class CheckUserCanValidateBookingTest:
 
 
 class CheckUserCanValidateBookingV2Test:
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_raise_error_when_user_has_editor_rights_on_booking(self, app):
         # Given
         user = create_user()
@@ -85,7 +83,6 @@ class CheckUserCanValidateBookingV2Test:
 
 
 class CheckApiKeyAllowsToValidateBookingTest:
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_raise_error_when_api_key_is_provided_and_is_related_to_offerer_id(self, app):
         # Given
         user = create_user()

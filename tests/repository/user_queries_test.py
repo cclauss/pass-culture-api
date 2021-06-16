@@ -2,8 +2,6 @@ from datetime import MINYEAR
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
@@ -19,7 +17,6 @@ from pcapi.repository.user_queries import get_all_users_wallet_balances
 
 
 class GetAllUsersWalletBalancesTest:
-    @pytest.mark.usefixtures("db_session")
     def test_users_are_sorted_by_user_id(self):
         # given
         user1 = users_factories.UserFactory()
@@ -32,7 +29,6 @@ class GetAllUsersWalletBalancesTest:
         assert len(balances) == 2
         assert [b.user_id for b in balances] == [user1.id, user2.id]
 
-    @pytest.mark.usefixtures("db_session")
     def test_users_with_no_deposits_are_ignored(self):
         # given
         user1 = users_factories.UserFactory()
@@ -46,7 +42,6 @@ class GetAllUsersWalletBalancesTest:
         assert len(balances) == 1
         assert balances[0].user_id == user1.id
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_both_current_and_real_balances(self):
         # given
         offer = offers_factories.OfferFactory()
@@ -69,7 +64,6 @@ class GetAllUsersWalletBalancesTest:
 
 
 class FindProUsersByEmailProviderTest:
-    @pytest.mark.usefixtures("db_session")
     def test_returns_pro_users_with_matching_email_provider(self):
         pro_user_with_matching_email = users_factories.UserFactory(
             email="pro_user@suspect.com", isBeneficiary=False, isActive=True
@@ -88,7 +82,6 @@ class FindProUsersByEmailProviderTest:
         assert len(users) == 1
         assert users[0] == pro_user_with_matching_email
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_only_pro_users_with_matching_email_provider(self):
         pro_user_with_matching_email = users_factories.UserFactory(
             email="pro_user_with_matching_email@suspect.com", isBeneficiary=False, isActive=True
@@ -105,7 +98,6 @@ class FindProUsersByEmailProviderTest:
 
 
 class FindByCivilityTest:
-    @pytest.mark.usefixtures("db_session")
     def test_returns_users_with_matching_criteria_ignoring_case(self, app):
         # given
         user1 = create_user(
@@ -123,7 +115,6 @@ class FindByCivilityTest:
         assert len(users) == 1
         assert users[0].email == "john@example.com"
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_users_with_matching_criteria_ignoring_dash(self, app):
         # given
         user2 = create_user(
@@ -141,7 +132,6 @@ class FindByCivilityTest:
         assert len(users) == 1
         assert users[0].email == "john.b@example.com"
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_users_with_matching_criteria_ignoring_spaces(self, app):
         # given
         user2 = create_user(
@@ -159,7 +149,6 @@ class FindByCivilityTest:
         assert len(users) == 1
         assert users[0].email == "john.b@example.com"
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_users_with_matching_criteria_ignoring_accents(self, app):
         # given
         user2 = create_user(
@@ -177,7 +166,6 @@ class FindByCivilityTest:
         assert len(users) == 1
         assert users[0].email == "john.b@example.com"
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_nothing_if_one_criteria_does_not_match(self, app):
         # given
         user = create_user(date_of_birth=datetime(2000, 5, 1), first_name="Jean", last_name="DOe")
@@ -189,7 +177,6 @@ class FindByCivilityTest:
         # then
         assert not users
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_users_with_matching_criteria_first_and_last_names_and_birthdate_and_invalid_email(self, app):
         # given
         user1 = create_user(
@@ -209,7 +196,6 @@ class FindByCivilityTest:
 
 
 class FindMostRecentBeneficiaryCreationDateByProcedureIdTest:
-    @pytest.mark.usefixtures("db_session")
     def test_returns_created_at_date_of_most_recent_beneficiary_import_with_created_status_for_one_procedure(self, app):
         # given
         source_id = 1
@@ -240,7 +226,6 @@ class FindMostRecentBeneficiaryCreationDateByProcedureIdTest:
         # then
         assert most_recent_creation_date == three_days_ago
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_min_year_if_no_beneficiary_import_exist_for_given_source_id(self, app):
         # given
         old_source_id = 1
@@ -263,7 +248,6 @@ class FindMostRecentBeneficiaryCreationDateByProcedureIdTest:
         # then
         assert most_recent_creation_date == datetime(MINYEAR, 1, 1)
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_min_year_if_no_beneficiary_import_exist(self, app):
         # given
         yesterday = datetime.utcnow() - timedelta(days=1)

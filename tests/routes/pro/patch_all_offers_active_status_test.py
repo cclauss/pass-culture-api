@@ -1,7 +1,5 @@
 from datetime import datetime
 
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.offers.models import OfferValidationStatus
 from pcapi.models import Offer
@@ -10,7 +8,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns204Test:
     def when_activating_all_existing_offers(self, app):
         # Given

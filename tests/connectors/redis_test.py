@@ -1,6 +1,5 @@
 from unittest.mock import MagicMock
 
-import pytest
 import redis
 
 from pcapi import settings
@@ -110,7 +109,6 @@ class AddToIndexedOffersTest:
 
 
 class DeleteIndexedOffersTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_delete_indexed_offers(self, app):
         # Given
         client = MagicMock()

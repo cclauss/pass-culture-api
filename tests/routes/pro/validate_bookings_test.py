@@ -3,8 +3,6 @@ from datetime import timedelta
 from unittest import mock
 import urllib.parse
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 import pcapi.core.bookings.models as bookings_models
 import pcapi.core.offers.factories as offers_factories
@@ -30,7 +28,6 @@ tomorrow = datetime.utcnow() + timedelta(days=1)
 tomorrow_minus_one_hour = tomorrow - timedelta(hours=1)
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns204Test:  # No Content
     def when_user_has_rights(self, app):
         booking = BookingFactory(token="ABCDEF")
@@ -82,7 +79,6 @@ class Returns204Test:  # No Content
 
 
 class Returns403Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_editor_and_valid_email(self, app):
         # Given
         user = create_user()
@@ -108,7 +104,6 @@ class Returns403Test:
         assert not Booking.query.get(booking_id).isUsed
 
     @mock.patch("pcapi.core.bookings.validation.check_is_usable")
-    @pytest.mark.usefixtures("db_session")
     def when_booking_not_confirmed(self, mocked_check_is_usable, app):
         # Given
         next_week = datetime.utcnow() + timedelta(weeks=1)
@@ -126,7 +121,6 @@ class Returns403Test:
         assert response.status_code == 403
         assert response.json["booking"] == ["Not confirmed"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_cancelled(self, app):
         # Given
         admin = UserFactory(isAdmin=True)
@@ -143,7 +137,6 @@ class Returns403Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_editor_and_invalid_email(self, app):
         # Given
         user = create_user()
@@ -165,7 +158,6 @@ class Returns404Test:
         assert response.status_code == 404
         assert not Booking.query.get(booking_id).isUsed
 
-    @pytest.mark.usefixtures("db_session")
     def when_booking_user_email_with_special_character_not_url_encoded(self, app):
         # Given
         user = create_user(email="user+plus@email.fr")
@@ -189,7 +181,6 @@ class Returns404Test:
         # Then
         assert response.status_code == 404
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_editor_and_valid_email_but_invalid_offer_id(self, app):
         # Given
         user = create_user()

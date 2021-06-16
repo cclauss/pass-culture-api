@@ -3,8 +3,6 @@ from datetime import timedelta
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_stock
 from pcapi.model_creators.generic_creators import create_venue
@@ -42,7 +40,6 @@ class GetOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
 
 
 class BuildQueryOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_get_offers_with_dates_only_before_today(self, app):
         # Given
         yesterday = TODAY - timedelta(days=1)
@@ -62,7 +59,6 @@ class BuildQueryOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
         # Then
         assert offers == []
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_get_offer_with_a_date_between_today_and_15_04(self, app):
         # Given
         offerer = create_offerer()
@@ -80,7 +76,6 @@ class BuildQueryOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
         # Then
         assert offers == [offer]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_get_offer_with_a_date_after_15_04(self, app):
         # Given
         offerer = create_offerer()
@@ -98,7 +93,6 @@ class BuildQueryOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
         # Then
         assert offers == []
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_get_offer_with_a_date_between_today_and_the_15_04_and_another_after_15_04(self, app):
         # Given
         offerer = create_offerer()
@@ -117,7 +111,6 @@ class BuildQueryOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
         # Then
         assert offers == []
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_get_offers_on_things(self, app):
         # Given
         offerer = create_offerer()
@@ -137,7 +130,6 @@ class BuildQueryOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
 
 
 class DeactivateOffersTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_deactivate_given_offers(self, app):
         # Given
         offerer = create_offerer()
@@ -157,7 +149,6 @@ class DeactivateOffersTest:
 
 
 class DeactivateOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_deactivate_offers(self, app):
         # Given
         offerer = create_offerer()
@@ -178,7 +169,6 @@ class DeactivateOffersWithMaxStockDateBetweenTodayAndEndOfQuarantineTest:
         assert offer_to_deactivate.isActive is False
         assert offer_not_to_deactivate.isActive is True
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.scripts.deactivate_offers_during_quarantine.deactivate_offers.delete_expired_offers")
     def test_should_unindex_offers(self, mocked_delete_expired_offers):
         # Given

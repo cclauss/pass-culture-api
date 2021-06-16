@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.models import UserSession
 from pcapi.repository import repository
@@ -8,7 +6,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def expect_the_existing_user_session_to_be_deleted_deleted(self, app):
         # given
         user = create_user(email="test@mail.com")

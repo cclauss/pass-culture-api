@@ -13,7 +13,6 @@ from pcapi.repository import repository
 
 
 class AllocineVenueProviderPriceRuleTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_add_price_rules_to_venue_provider(self, app):
         # Given
         offerer = create_offerer()
@@ -31,7 +30,6 @@ class AllocineVenueProviderPriceRuleTest:
         # Then
         assert len(allocine_venue_provider.priceRules) == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_raise_error_when_price_is_negative(self, app):
         # Given
         offerer = create_offerer()
@@ -50,7 +48,6 @@ class AllocineVenueProviderPriceRuleTest:
         # Then
         assert error.value.errors["global"] == ["Vous ne pouvez renseigner un prix négatif"]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_raise_error_when_saving_existing_rule_price(self, app):
         # Given
         offerer = create_offerer()
@@ -72,7 +69,6 @@ class AllocineVenueProviderPriceRuleTest:
         # Then
         assert error.value.errors["global"] == ["Vous ne pouvez avoir qu''un seul prix par catégorie"]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_raise_error_when_saving_wrong_format_price(self, app):
         # Given
         offerer = create_offerer()
@@ -93,7 +89,6 @@ class AllocineVenueProviderPriceRuleTest:
 
 
 class SaveAllocineVenueProviderPriceRuleTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_save_new_venue_provider_price_rule(self, app):
         # Given
         offerer = create_offerer()

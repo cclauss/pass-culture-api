@@ -1,4 +1,3 @@
-import pytest
 from sqlalchemy import Sequence
 
 from pcapi.local_providers.chunk_manager import save_chunks
@@ -14,7 +13,6 @@ from pcapi.repository import repository
 
 
 class SaveChunksTest:
-    @pytest.mark.usefixtures("db_session")
     def test_save_chunks_insert_1_offer_in_chunk(self, app):
         # Given
         offerer = create_offerer()
@@ -35,7 +33,6 @@ class SaveChunksTest:
         # Then
         assert Offer.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_save_chunks_insert_1_offer_and_1_stock_in_chunk(self, app):
         # Given
         offerer = create_offerer()
@@ -67,7 +64,6 @@ class SaveChunksTest:
         assert Offer.query.count() == 1
         assert Stock.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_save_chunks_update_1_offer_in_chunk(self, app):
         # Given
         offerer = create_offerer()
@@ -91,7 +87,6 @@ class SaveChunksTest:
         # Then
         assert Offer.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_save_chunks_update_2_offers_and_1_stock_in_chunk(self, app):
         # Given
         offerer = create_offerer()

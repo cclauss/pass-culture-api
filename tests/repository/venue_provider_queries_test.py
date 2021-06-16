@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offerers.factories import APIProviderFactory
 from pcapi.core.providers.models import AllocineVenueProvider
 from pcapi.core.providers.models import VenueProvider
@@ -14,7 +12,6 @@ from pcapi.repository.venue_provider_queries import get_venue_provider_by_id
 
 
 class GetActiveVenueProvidersForSpecificProviderTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_all_venue_provider_matching_provider_id(self, app):
         # Given
         offerer = create_offerer()
@@ -32,7 +29,6 @@ class GetActiveVenueProvidersForSpecificProviderTest:
         # Then
         assert venue_providers == [venue_provider1]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_all_active_venue_providers_matching_provider_id(self, app):
         # Given
         offerer = create_offerer()
@@ -51,7 +47,6 @@ class GetActiveVenueProvidersForSpecificProviderTest:
 
 
 class GetVenueProviderByIdTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_matching_venue_provider(self):
         # Given
         offerer = create_offerer()
@@ -67,7 +62,6 @@ class GetVenueProviderByIdTest:
         assert existing_venue_provider == venue_provider
         assert isinstance(venue_provider, VenueProvider)
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_matching_venue_provider_with_allocine_attributes(self):
         # Given
         offerer = create_offerer()

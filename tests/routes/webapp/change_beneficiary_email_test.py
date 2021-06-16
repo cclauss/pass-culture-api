@@ -3,7 +3,6 @@ from datetime import timedelta
 
 from freezegun import freeze_time
 import jwt
-import pytest
 
 from pcapi import settings
 import pcapi.core.mails.testing as mails_testing
@@ -14,7 +13,6 @@ from pcapi.core.users.utils import ALGORITHM_HS_256
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns204Test:
     @freeze_time("2020-10-15 09:00:00")
     def when_account_is_known(self, app):
@@ -92,7 +90,6 @@ class Returns204Test:
         assert new_email_user.id == user.id
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     def when_password_is_missing(self, app):
         # Given
@@ -121,7 +118,6 @@ class Returns400Test:
         assert response.json["new_email"] == ["Ce champ est obligatoire"]
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns401Test:
     def when_password_is_incorrect(self, app):
         # Given

@@ -1,7 +1,5 @@
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_venue
 from pcapi.model_creators.specific_creators import create_offer_with_thing_product
@@ -12,7 +10,6 @@ from pcapi.scripts.venue.move_all_offers_for_venue import move_all_offers_from_v
 
 class MoveAllOffersFromVenueToOtherVenueTest:
     @patch("pcapi.scripts.venue.move_all_offers_for_venue.redis")
-    @pytest.mark.usefixtures("db_session")
     def should_change_venue_id_to_destination_id_for_offers_linked_to_origin_venue(self, mocked_redis, app):
         # Given
         offerer = create_offerer()

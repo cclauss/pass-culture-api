@@ -1,11 +1,8 @@
-import pytest
-
 from pcapi.model_creators.specific_creators import create_product_with_thing_type
 from pcapi.repository import repository
 from pcapi.utils.human_ids import humanize
 
 
-@pytest.mark.usefixtures("db_session")
 def when_product_has_one_thumb(app):
     # Given
     product = create_product_with_thing_type(thumb_count=1)
@@ -19,7 +16,6 @@ def when_product_has_one_thumb(app):
     assert thumb_url == f"http://localhost/storage/thumbs/products/{product_id}"
 
 
-@pytest.mark.usefixtures("db_session")
 def when_product_has_no_thumb(app):
     # Given
     product = create_product_with_thing_type(thumb_count=0)

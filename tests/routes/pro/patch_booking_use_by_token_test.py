@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.users.factories import UserFactory
@@ -23,7 +21,6 @@ from tests.conftest import TestClient
 API_KEY_VALUE = random_token(64)
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns204Test:
     class WithApiKeyAuthTest:
         def when_api_key_is_provided_and_rights_and_regular_offer(self, app):
@@ -91,7 +88,6 @@ class Returns204Test:
 
 
 class Returns401Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_doesnt_give_api_key(self, app):
         # Given
         user = create_user(email="user@email.fr")
@@ -109,7 +105,6 @@ class Returns401Test:
         # Then
         assert response.status_code == 401
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_not_existing_api_key_given(self, app):
         # Given
         user = create_user(email="user@email.fr")
@@ -134,7 +129,6 @@ class Returns401Test:
 
 class Returns403Test:
     class WithApiKeyAuthTest:
-        @pytest.mark.usefixtures("db_session")
         def when_api_key_given_not_related_to_booking_offerer(self, app):
             # Given
             user = create_user(email="user@email.fr")
@@ -163,7 +157,6 @@ class Returns403Test:
             assert response.status_code == 403
             assert response.json["user"] == ["Vous n'avez pas les droits suffisants pour valider cette contremarque."]
 
-        @pytest.mark.usefixtures("db_session")
         def when_api_key_is_provided_and_booking_has_been_cancelled_already(self, app):
             # Given
             user = create_user()
@@ -185,7 +178,6 @@ class Returns403Test:
             assert Booking.query.get(booking.id).isUsed is False
 
     class WithBasicAuthTest:
-        @pytest.mark.usefixtures("db_session")
         def when_user_is_not_attached_to_linked_offerer(self, app):
             # Given
             user = create_user()
@@ -206,7 +198,6 @@ class Returns403Test:
             assert response.json["user"] == ["Vous n'avez pas les droits suffisants pour valider cette contremarque."]
             assert Booking.query.get(booking_id).isUsed is False
 
-        @pytest.mark.usefixtures("db_session")
         def when_user_is_logged_in_and_booking_has_been_cancelled_already(self, app):
             # Given
             admin = UserFactory(isAdmin=True)
@@ -223,7 +214,6 @@ class Returns403Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_not_provided_at_all(self, app):
         # Given
         user = create_user(email="user@email.fr")
@@ -242,7 +232,6 @@ class Returns404Test:
         assert response.status_code == 404
 
     class WithApiKeyAuthTest:
-        @pytest.mark.usefixtures("db_session")
         def when_api_key_is_provided_and_booking_does_not_exist(self, app):
             # Given
             user = create_user()
@@ -268,7 +257,6 @@ class Returns404Test:
             assert response.json["global"] == ["Cette contremarque n'a pas été trouvée"]
 
     class WithBasicAuthTest:
-        @pytest.mark.usefixtures("db_session")
         def when_user_is_logged_in_and_booking_does_not_exist(self, app):
             # Given
             user = create_user()

@@ -2,8 +2,6 @@ from datetime import date
 from datetime import timedelta
 from unittest import mock
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.offers.factories import ProductFactory
 from pcapi.models import offer_type
@@ -11,7 +9,6 @@ from pcapi.repository import repository
 from pcapi.scripts.booking.notify_soon_to_be_expired_bookings import notify_users_of_soon_to_be_expired_bookings
 
 
-@pytest.mark.usefixtures("db_session")
 class NotifyUsersOfSoonToBeExpiredBookingsTest:
     @mock.patch(
         "pcapi.scripts.booking.notify_soon_to_be_expired_bookings.send_soon_to_be_expired_bookings_recap_email_to_beneficiary"

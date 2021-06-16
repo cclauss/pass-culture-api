@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.domain.offers import update_is_active_status
 from pcapi.model_creators.generic_creators import create_booking
 from pcapi.model_creators.generic_creators import create_offerer
@@ -10,7 +8,6 @@ from pcapi.model_creators.specific_creators import create_offer_with_event_produ
 
 
 class UpdateIsActiveStatusTest:
-    @pytest.mark.usefixtures("db_session")
     def test_activate_offer(self, app):
         # given
         offerer = create_offerer()
@@ -28,7 +25,6 @@ class UpdateIsActiveStatusTest:
         for updated_offer in updated_offers:
             assert updated_offer.isActive
 
-    @pytest.mark.usefixtures("db_session")
     def test_deactivate_offer(self, app):
         # given
         offerer = create_offerer()
@@ -46,7 +42,6 @@ class UpdateIsActiveStatusTest:
         for updated_offer in updated_offers:
             assert not updated_offer.isActive
 
-    @pytest.mark.usefixtures("db_session")
     def test_deactivate_offer_should_keep_booking_state(self, app):
         # given
         user = create_user()

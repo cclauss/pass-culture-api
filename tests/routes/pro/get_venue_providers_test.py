@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offerers import factories as offerers_factories
 from pcapi.core.providers.repository import get_provider_by_local_class
 from pcapi.core.users import factories as users_factories
@@ -9,7 +7,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def test_get_list_with_valid_venue_id(self, app):
         # given
         user = users_factories.UserFactory(isAdmin=False, isBeneficiary=False)
@@ -28,7 +25,6 @@ class Returns200Test:
         assert response.json["venue_providers"][0].get("id") == humanize(venue_provider.id)
         assert response.json["venue_providers"][0].get("venueId") == humanize(venue_provider.venue.id)
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_list_that_include_allocine_with_valid_venue_id(self, app):
         # given
         user = users_factories.UserFactory(isAdmin=False, isBeneficiary=False)
@@ -49,7 +45,6 @@ class Returns200Test:
 
 
 class Returns400Test:
-    @pytest.mark.usefixtures("db_session")
     def when_listing_all_venues_without_venue_id_argument(self, app):
         # given
         user = users_factories.UserFactory(isAdmin=False, isBeneficiary=False)

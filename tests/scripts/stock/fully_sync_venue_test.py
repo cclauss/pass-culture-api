@@ -1,4 +1,3 @@
-import pytest
 import requests_mock
 
 import pcapi.core.bookings.factories as bookings_factories
@@ -9,7 +8,6 @@ from pcapi.models.offer_type import ThingType
 from pcapi.scripts.stock import fully_sync_venue
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fully_sync_venue():
     api_url = "https://example.com/provider/api"
     provider = offerers_factories.APIProviderFactory(apiUrl=api_url)
@@ -38,7 +36,6 @@ def test_fully_sync_venue():
     assert offer2.stocks[0].quantity == 5
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fully_sync_venue_with_new_provider():
     api_url = "https://example.com/provider/api"
     provider = offerers_factories.APIProviderFactory()
@@ -73,7 +70,6 @@ def test_fully_sync_venue_with_new_provider():
     assert offer2.lastProviderId == new_provider.id
 
 
-@pytest.mark.usefixtures("db_session")
 def test_reset_stock_quantity():
     offer = offers_factories.OfferFactory(idAtProviders="1")
     venue = offer.venue

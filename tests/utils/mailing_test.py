@@ -3,8 +3,6 @@ from datetime import timezone
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.model_creators.generic_creators import create_booking
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
@@ -99,7 +97,6 @@ class GetUsersInformationFromStockBookingsTest:
 
 class BuildPcProOfferLinkTest:
     @patch("pcapi.settings.PRO_URL", "http://pcpro.com")
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_pc_pro_offer_link(self, app):
         # Given
         offerer = create_offerer()

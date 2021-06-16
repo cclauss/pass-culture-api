@@ -58,7 +58,6 @@ class IterateRowForUserOfferersTest:
         assert len(user_offerers) == 2
 
 
-@pytest.mark.usefixtures("db_session")
 class CreateActivatedUserOffererTest:
     def setup_method(self):
         self.csv_row = [
@@ -97,7 +96,6 @@ class CreateActivatedUserOffererTest:
         assert user_offerer.offererId == 234
 
 
-@pytest.mark.usefixtures("db_session")
 class FillUserOffererFromTest:
     def setup_method(self):
         self.csv_row = [
@@ -142,7 +140,6 @@ class FillUserOffererFromTest:
             fill_user_offerer_from(UserOfferer(), blake, blakes_company)
 
 
-@pytest.mark.usefixtures("db_session")
 class FillUserFromTest:
     def setup_method(self):
         self.csv_row = [
@@ -213,7 +210,6 @@ class FillUserFromTest:
         # TODO: why do we want to check the token here ?
 
 
-@pytest.mark.usefixtures("db_session")
 class FillOffererFromTest:
     def setup_method(self):
         self.csv_row = [

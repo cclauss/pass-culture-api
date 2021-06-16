@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timezone
 
-import pytest
-
 from pcapi import models
 import pcapi.core.bookings.factories as bookings_factories
 from pcapi.core.offers.factories import ActivationCodeFactory
@@ -67,7 +65,6 @@ def get_expected_base_email_data(booking, **overrides):
     return email_data
 
 
-@pytest.mark.usefixtures("db_session")
 def test_with_event():
     booking = make_booking()
 
@@ -77,7 +74,6 @@ def test_with_event():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_with_book():
     booking = make_booking(
         stock__offer__name="Le récit de voyage",
@@ -108,7 +104,6 @@ def test_with_book():
 
 
 @override_features(AUTO_ACTIVATE_DIGITAL_BOOKINGS=True)
-@pytest.mark.usefixtures("db_session")
 def test_non_digital_bookings_can_expire_after_30_days():
     booking = make_booking(
         stock__offer__name="Le récit de voyage",
@@ -138,7 +133,6 @@ def test_non_digital_bookings_can_expire_after_30_days():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_with_book_with_missing_isbn():
     booking = make_booking(
         stock__offer__name="Le récit de voyage",
@@ -169,7 +163,6 @@ def test_with_book_with_missing_isbn():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_a_digital_booking_expires_after_30_days():
     # Given
     booking = make_booking(
@@ -199,7 +192,6 @@ def test_a_digital_booking_expires_after_30_days():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_when_use_token_for_payment():
     # Given
     booking = make_booking(
@@ -214,7 +206,6 @@ def test_when_use_token_for_payment():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_no_need_when_price_is_free():
     # Given
     booking = make_booking(
@@ -229,7 +220,6 @@ def test_no_need_when_price_is_free():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_no_need_when_using_activation_code():
     # Given
     booking = make_booking()
@@ -244,7 +234,6 @@ def test_no_need_when_using_activation_code():
 
 
 @override_features(AUTO_ACTIVATE_DIGITAL_BOOKINGS=True)
-@pytest.mark.usefixtures("db_session")
 def test_no_need_when_booking_is_autovalidated():
     # Given
     booking = make_booking(
@@ -269,7 +258,6 @@ def test_no_need_when_booking_is_autovalidated():
 
 
 @override_features(AUTO_ACTIVATE_DIGITAL_BOOKINGS=True)
-@pytest.mark.usefixtures("db_session")
 def test_a_digital_booking_is_automatically_used():
     # Given
     booking = make_booking(
@@ -300,7 +288,6 @@ def test_a_digital_booking_is_automatically_used():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_truncate_price():
     booking = make_booking(stock__price=5.86)
 
@@ -310,7 +297,6 @@ def test_should_not_truncate_price():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_use_venue_public_name_when_available():
     booking = make_booking(
         stock__offer__venue__name="Legal name",
@@ -323,7 +309,6 @@ def test_should_use_venue_public_name_when_available():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_add_user_phone_number_to_vars():
     # given
     booking = make_booking(user__phoneNumber="0123456789")
@@ -336,7 +321,6 @@ def test_should_add_user_phone_number_to_vars():
     assert template_vars["user_phoneNumber"] == "0123456789"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_add_reply_to_header_with_beneficiary_email():
     # given
     booking = make_booking(user__email="beneficiary@example.com")

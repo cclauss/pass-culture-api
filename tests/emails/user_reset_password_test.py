@@ -1,7 +1,5 @@
 from datetime import datetime
 
-import pytest
-
 from pcapi.emails.user_reset_password import retrieve_data_for_reset_password_native_app_email
 from pcapi.emails.user_reset_password import retrieve_data_for_reset_password_user_email
 from pcapi.model_creators.generic_creators import create_offerer
@@ -10,7 +8,6 @@ from pcapi.model_creators.generic_creators import create_user_offerer
 from pcapi.repository import repository
 
 
-@pytest.mark.usefixtures("db_session")
 class MakeUserResetPasswordEmailDataTest:
     def test_email(self):
         # Given

@@ -1,12 +1,9 @@
-import pytest
-
 from pcapi.core.offers.factories import OfferFactory
 from pcapi.scripts.batch_update_offer_withdrawal_details_for_offerer import (
     batch_update_offer_withdrawal_details_for_offerer,
 )
 
 
-@pytest.mark.usefixtures("db_session")
 class BatchUpdateOfferWithdrawalDetailsForOffererTest:
     def should_update_offer_withdrawal_details(self):
         # Given

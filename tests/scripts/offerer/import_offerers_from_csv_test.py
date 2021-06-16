@@ -2,7 +2,6 @@ from collections import OrderedDict
 from datetime import datetime
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.offerers.factories import VenueTypeFactory
 from pcapi.core.offerers.factories import VirtualVenueTypeFactory
@@ -100,7 +99,6 @@ class CreateOffererFromCSVTest:
 
 
 class CreateVenueFromCSVTest:
-    @pytest.mark.usefixtures("db_session")
     def test_map_a_venue_from_ordered_dict(self, app):
         # given
         offerer = OffererFactory(siren="828768000")
@@ -136,7 +134,6 @@ class CreateVenueFromCSVTest:
         assert venue.longitude == 12.360398
         assert venue.bookingEmail == "librairie.fictive@example.com"
 
-    @pytest.mark.usefixtures("db_session")
     def test_use_Postal_code_when_no_SIRENE_code_postal(self, app):
         # given
         offerer = OffererFactory(siren="828768000")
@@ -164,7 +161,6 @@ class CreateVenueFromCSVTest:
         assert isinstance(venue, Venue)
         assert venue.postalCode == "92240"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_have_a_venue_type(self, app):
         # given
         offerer = OffererFactory(siren="828768000")
@@ -192,7 +188,6 @@ class CreateVenueFromCSVTest:
         assert venue.venueType is not None
         assert venue.venueType.label == "Librairie"
 
-    @pytest.mark.usefixtures("db_session")
     def test_create_venue_name_when_information_missing(self, app):
         # given
         offerer = OffererFactory(siren="828768000")
@@ -220,7 +215,6 @@ class CreateVenueFromCSVTest:
         # then
         assert venue.name == "Lieu 1 - Ma structure"
 
-    @pytest.mark.usefixtures("db_session")
     def test_when_geolocation_is_missing(self, app):
         # given
         offerer = OffererFactory(siren="828768000")
@@ -323,7 +317,6 @@ class CreateProUserFromCSVTest:
 
 class CreateAnEntireOffererFromCSVRowTest:
     @freeze_time("2021-05-04 00:00:00")
-    @pytest.mark.usefixtures("db_session")
     def test_created_pro_is_activated_with_90_days_reset_password(self, app):
         # Given
         VirtualVenueTypeFactory()
@@ -370,7 +363,6 @@ class CreateAnEntireOffererFromCSVRowTest:
         assert token.user == user
         assert token.expirationDate == datetime(2021, 8, 2)
 
-    @pytest.mark.usefixtures("db_session")
     def test_when_is_a_new_offerer(self, app):
         # Given
         VenueTypeFactory(label="Librairie")
@@ -412,7 +404,6 @@ class CreateAnEntireOffererFromCSVRowTest:
         assert UserOfferer.query.count() == 1
         assert Venue.query.count() == 2
 
-    @pytest.mark.usefixtures("db_session")
     def test_when_is_already_existing_offerer(self, app):
         # Given
         VirtualVenueTypeFactory()
@@ -455,7 +446,6 @@ class CreateAnEntireOffererFromCSVRowTest:
         assert Offerer.query.count() == 1
         assert Venue.query.count() == 3
 
-    @pytest.mark.usefixtures("db_session")
     def test_when_no_siret_for_venue_creation(self, app):
         # Given
         VirtualVenueTypeFactory()
@@ -496,7 +486,6 @@ class CreateAnEntireOffererFromCSVRowTest:
         assert UserOfferer.query.count() == 1
         assert Venue.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_when_user_already_exists(self, app):
         # Given
         VirtualVenueTypeFactory()
@@ -538,7 +527,6 @@ class CreateAnEntireOffererFromCSVRowTest:
         assert UserOfferer.query.count() == 1
         assert Venue.query.count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_ignore_when_user_has_no_postal(self, app):
         # Given
         VirtualVenueTypeFactory()
@@ -579,7 +567,6 @@ class CreateAnEntireOffererFromCSVRowTest:
         assert UserOfferer.query.count() == 0
         assert Venue.query.count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_when_siret_wrong(self, app):
         # Given
         VenueTypeFactory(label="Librairie")

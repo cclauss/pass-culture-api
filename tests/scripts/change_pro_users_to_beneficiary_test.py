@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.testing import override_features
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
@@ -9,7 +7,6 @@ from pcapi.repository import repository
 from pcapi.scripts.change_some_pro_users_to_beneficiary import change_pro_users_to_beneficiary
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_change_pro_users_to_beneficiary(app):
     # given
     offerer_1 = create_offerer(siren="987654321")
@@ -37,7 +34,6 @@ def test_should_change_pro_users_to_beneficiary(app):
     assert UserOfferer.query.count() == 1
 
 
-@pytest.mark.usefixtures("db_session")
 @override_features(APPLY_BOOKING_LIMITS_V2=False)
 def test_should_change_pro_users_to_beneficiary_with_v1_deposit(app):
     # given

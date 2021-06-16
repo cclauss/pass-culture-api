@@ -18,7 +18,6 @@ from pcapi.repository.user_offerer_queries import filter_query_where_user_is_use
 from pcapi.repository.user_offerer_queries import find_one_or_none_by_user_id
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_one_or_none_by_user_id_should_return_one_user_offerer_with_same_user_id(app):
     # Given
     user = create_user(email="offerer@email.com")
@@ -34,7 +33,6 @@ def test_find_one_or_none_by_user_id_should_return_one_user_offerer_with_same_us
     assert first_user_offerer.id == user_offerer.id
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_one_or_none_by_user_id_raises_exception_when_several_are_found(app):
     # Given
     user = create_user(email="offerer@email.com")
@@ -49,7 +47,6 @@ def test_find_one_or_none_by_user_id_raises_exception_when_several_are_found(app
         find_one_or_none_by_user_id(user.id)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_find_one_or_none_by_user_id_should_return_none_user_offerer_when_none_are_found(app):
     # Given
     user = create_user(email="offerer@email.com")
@@ -63,7 +60,6 @@ def test_find_one_or_none_by_user_id_should_return_none_user_offerer_when_none_a
     assert first_user_offerer is None
 
 
-@pytest.mark.usefixtures("db_session")
 def test_filter_query_where_user_is_user_offerer_and_is_validated(app):
     # Given
     user = create_user(email="offerer@email.com")

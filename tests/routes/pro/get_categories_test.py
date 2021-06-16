@@ -1,12 +1,9 @@
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 
 from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def should_return_categories_and_sub_categories(self, app):
         # Given
         venue = offers_factories.VirtualVenueFactory()

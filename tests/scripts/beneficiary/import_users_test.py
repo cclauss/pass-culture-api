@@ -1,8 +1,6 @@
 import datetime
 import io
 
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.core.users.models import User
 from pcapi.scripts.beneficiary import import_users
@@ -14,7 +12,6 @@ Smisse,Jean,jean.smisse@example.com,0102030406,44,44000,2000-01-02
 """
 
 
-@pytest.mark.usefixtures("db_session")
 class ReadFileTest:
     def test_read_file(self):
         jean = users_factories.UserFactory(email="jean.smisse@example.com", lastName="Old name")

@@ -2,7 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.bookings import factories
 from pcapi.core.offers.factories import EventStockFactory
@@ -11,7 +10,6 @@ from pcapi.core.users.factories import UserFactory
 from pcapi.emails.beneficiary_booking_cancellation import make_beneficiary_booking_cancellation_email_data
 
 
-@pytest.mark.usefixtures("db_session")
 class MakeBeneficiaryBookingCancellationEmailDataTest:
     def test_should_return_thing_data_when_booking_is_a_thing(self):
         # Given

@@ -1,14 +1,11 @@
 import itertools
 import types
 
-import pytest
-
 import pcapi.core.users.factories as users_factories
 import pcapi.core.users.models as users_models
 import pcapi.utils.db as db_utils
 
 
-@pytest.mark.usefixtures("db_session")
 class GetBatchesTest:
     def test_basics(self):
         users = users_factories.UserFactory.create_batch(11)

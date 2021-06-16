@@ -20,7 +20,6 @@ from pcapi.routes.serialization.venue_provider_serialize import PostVenueProvide
 
 
 class CreateVenueProviderTest:
-    @pytest.mark.usefixtures("db_session")
     def test_prevent_creation_for_non_existing_provider(self):
         # Given
         providerId = "AE"
@@ -53,7 +52,6 @@ def create_stock(isbn, siret, **kwargs):
 
 
 class SynchronizeStocksTest:
-    @pytest.mark.usefixtures("db_session")
     @freeze_time("2020-10-15 09:00:00")
     @override_features(SYNCHRONIZE_ALGOLIA=True)
     @mock.patch("pcapi.connectors.redis.add_offer_id")

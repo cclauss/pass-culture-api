@@ -3,7 +3,6 @@ from datetime import timedelta
 from decimal import Decimal
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.algolia.infrastructure.builder import build_object
 from pcapi.model_creators.generic_creators import create_criterion
@@ -18,7 +17,6 @@ from pcapi.utils.human_ids import humanize
 
 
 class BuildObjectTest:
-    @pytest.mark.usefixtures("db_session")
     @freeze_time("2020-10-15 09:00:00")
     def test_should_return_algolia_object_with_required_information(self, app):
         # Given
@@ -137,7 +135,6 @@ class BuildObjectTest:
             "_geoloc": {"lat": 48.86387, "lng": 2.33802},
         }
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_an_author_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -153,7 +150,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["author"] == "MEFA"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_stage_director_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -169,7 +165,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["stageDirector"] == "MEFA"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_visa_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -186,7 +181,6 @@ class BuildObjectTest:
         assert result["offer"]["visa"] == "123456"
         assert result["offer"]["isbn"] == "123456"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_an_isbn_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -203,7 +197,6 @@ class BuildObjectTest:
         assert result["offer"]["isbn"] == "123456987"
         assert result["offer"]["visa"] == "123654"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_speaker_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -219,7 +212,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["speaker"] == "MEFA"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_performer_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -235,7 +227,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["performer"] == "MEFA"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_show_type_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -251,7 +242,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["showType"] == "dance"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_show_sub_type_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -267,7 +257,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["showSubType"] == "urbaine"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_music_type_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -283,7 +272,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["musicType"] == "jazz"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_a_music_sub_type_when_exists(self, app):
         # Given
         offerer = create_offerer()
@@ -299,7 +287,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["musicSubType"] == "fusion"
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_the_first_stock_price(self, app):
         # Given
         offerer = create_offerer()
@@ -316,7 +303,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["prices"] == [Decimal("5.00"), Decimal("7.00"), Decimal("10.30")]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_default_coordinates_when_one_coordinate_is_missing(self, app):
         # Given
         offerer = create_offerer()
@@ -333,7 +319,6 @@ class BuildObjectTest:
         assert result["_geoloc"]["lng"] == 2.409289
 
     @freeze_time("2020-10-15 09:00:00")
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_event_beginning_datetimes_as_timestamp_sorted_from_oldest_to_newest_when_event(self, app):
         # Given
         in_three_days = datetime.utcnow() + timedelta(days=3)
@@ -355,7 +340,6 @@ class BuildObjectTest:
         # Then
         assert result["offer"]["dates"] == [1603011600.0, 1603098000.0, 1603184400.0, 1603616400.0]
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_event_beginning_datetimes_as_timestamp_when_thing(self, app):
         # Given
         offerer = create_offerer()
@@ -372,7 +356,6 @@ class BuildObjectTest:
         assert result["offer"]["dates"] == []
 
     @freeze_time("2020-10-15 18:30:00")
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_event_beginning_times_in_seconds(self, app):
         # Given
         in_three_days_at_eighteen_thirty = datetime.utcnow() + timedelta(days=3)
@@ -394,7 +377,6 @@ class BuildObjectTest:
         twenty_one_thirty_in_seconds = 77418
         assert sorted(result["offer"]["times"]) == sorted([eighteen_thirty_in_seconds, twenty_one_thirty_in_seconds])
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_default_coordinates_when_offer_is_numeric(self, app):
         # Given
         offerer = create_offerer()
@@ -410,7 +392,6 @@ class BuildObjectTest:
         assert result["_geoloc"]["lat"] == 47.158459
         assert result["_geoloc"]["lng"] == 2.409289
 
-    @pytest.mark.usefixtures("db_session")
     @freeze_time("2020-10-15 09:00:00")
     def test_should_return_algolia_object_with_one_tag_when_one_criterion(self, app):
         # Given
@@ -500,7 +481,6 @@ class BuildObjectTest:
             "_geoloc": {"lat": 48.86387, "lng": 2.33802},
         }
 
-    @pytest.mark.usefixtures("db_session")
     @freeze_time("2020-10-15 09:00:00")
     def test_should_return_algolia_object_with_two_tags_when_two_criterion(self, app):
         # Given

@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.bookings.models as bookings_models
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.testing import override_features
@@ -9,7 +7,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns201Test:
     def test_booking_creation(self, app):
         user = users_factories.UserFactory()
@@ -64,7 +61,6 @@ class Returns201Test:
         }
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     def when_use_case_raise_stock_is_not_bookable_exception(self, app):
         user = users_factories.UserFactory()

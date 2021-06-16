@@ -2,8 +2,6 @@ import secrets
 from unittest.mock import call
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.offerers.models import Offerer
 from pcapi.core.testing import override_features
 from pcapi.model_creators.generic_creators import create_offerer
@@ -16,7 +14,6 @@ from tests.conftest import TestClient
 
 
 class Returns202Test:
-    @pytest.mark.usefixtures("db_session")
     def expect_offerer_to_be_validated(self, app):
         # Given
         offerer_token = secrets.token_urlsafe(20)
@@ -36,7 +33,6 @@ class Returns202Test:
         assert offerer.isValidated is True
 
     @patch("pcapi.routes.pro.validate.link_valid_venue_to_irises")
-    @pytest.mark.usefixtures("db_session")
     def expect_link_venue_to_iris_if_valid_to_have_been_called_for_every_venue(
         self, mocked_link_venue_to_iris_if_valid, app
     ):
@@ -60,7 +56,6 @@ class Returns202Test:
         assert mocked_link_venue_to_iris_if_valid.call_count == 3
 
     @patch("pcapi.routes.pro.validate.redis.add_venue_id")
-    @pytest.mark.usefixtures("db_session")
     def expect_offerer_managed_venues_to_be_added_to_redis_when_feature_is_active(self, mocked_redis, app):
         # Given
         offerer_token = secrets.token_urlsafe(20)
@@ -86,7 +81,6 @@ class Returns202Test:
             call(client=app.redis_client, venue_id=3),
         ]
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.routes.pro.validate.redis.add_venue_id")
     @override_features(SYNCHRONIZE_ALGOLIA=False)
     def expect_offerer_managed_venues_not_to_be_added_to_redis_when_feature_is_not_active(self, mocked_redis, app):
@@ -111,7 +105,6 @@ class Returns202Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def expect_offerer_not_to_be_validated_with_unknown_token(self, app):
         # When
         response = TestClient(app.test_client()).with_auth(email="pro@example.com").get("/validate/offerer/123")

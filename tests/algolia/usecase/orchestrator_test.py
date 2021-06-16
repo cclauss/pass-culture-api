@@ -5,7 +5,6 @@ from unittest.mock import call
 from unittest.mock import patch
 
 from algoliasearch.exceptions import AlgoliaException
-import pytest
 
 from pcapi.algolia.usecase.orchestrator import delete_expired_offers
 from pcapi.algolia.usecase.orchestrator import process_eligible_offers
@@ -20,7 +19,6 @@ TOMORROW = datetime.now() + timedelta(days=1)
 
 
 class ProcessEligibleOffersTest:
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.algolia.usecase.orchestrator.add_offer_ids_in_error")
     @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
     @patch("pcapi.algolia.usecase.orchestrator.add_to_indexed_offers")
@@ -80,7 +78,6 @@ class ProcessEligibleOffersTest:
         mock_pipeline.reset.assert_called_once()
         mock_add_offer_ids_in_error.assert_not_called()
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.algolia.usecase.orchestrator.add_offer_ids_in_error")
     @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
     @patch("pcapi.algolia.usecase.orchestrator.check_offer_exists")
@@ -130,7 +127,6 @@ class ProcessEligibleOffersTest:
         mock_pipeline.reset.assert_not_called()
         mock_add_offer_ids_in_error.assert_not_called()
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
     @patch("pcapi.algolia.usecase.orchestrator.check_offer_exists")
     @patch("pcapi.algolia.usecase.orchestrator.add_to_indexed_offers")
@@ -175,7 +171,6 @@ class ProcessEligibleOffersTest:
         mock_pipeline.execute.assert_not_called()
         mock_pipeline.reset.assert_not_called()
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.algolia.usecase.orchestrator.add_offer_ids_in_error")
     @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
     @patch("pcapi.algolia.usecase.orchestrator.check_offer_exists")
@@ -231,7 +226,6 @@ class ProcessEligibleOffersTest:
     @patch("pcapi.algolia.usecase.orchestrator.delete_objects")
     @patch("pcapi.algolia.usecase.orchestrator.build_object")
     @patch("pcapi.algolia.usecase.orchestrator.add_objects")
-    @pytest.mark.usefixtures("db_session")
     def test_should_delete_offers_that_are_already_indexed(
         self,
         mock_add_objects,
@@ -281,7 +275,6 @@ class ProcessEligibleOffersTest:
     @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
     @patch("pcapi.algolia.usecase.orchestrator.check_offer_exists")
     @patch("pcapi.algolia.usecase.orchestrator.delete_objects")
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_delete_offers_that_are_not_already_indexed(
         self, mock_delete_objects, mock_check_offer_exists, mock_delete_indexed_offers, app
     ):
@@ -310,7 +303,6 @@ class ProcessEligibleOffersTest:
         assert mock_delete_objects.call_count == 0
         assert mock_delete_indexed_offers.call_count == 0
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.algolia.usecase.orchestrator.add_offer_ids_in_error")
     @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
     @patch("pcapi.algolia.usecase.orchestrator.add_to_indexed_offers")

@@ -36,7 +36,6 @@ from pcapi.utils.human_ids import humanize
 
 
 @freeze_time("2021-01-01 12:00:00")
-@pytest.mark.usefixtures("db_session")
 class CreatePaymentForBookingTest:
     def test_basics(self):
         offerer = offers_factories.OffererFactory(name="offerer", siren="123456")
@@ -308,7 +307,6 @@ class CreatePaymentDetailsTest:
         assert details.offer_type == "Audiovisuel - films sur supports physiques et VOD"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_generate_venues_csv():
     venue1 = offers_factories.VenueFactory(
         name="Venue 1",
@@ -480,7 +478,6 @@ class ApplyBanishmentTest:
         assert e.value.payment_ids == {333}
 
 
-@pytest.mark.usefixtures("db_session")
 def test_set_end_to_end_id_and_group_into_transactions():
     batch_date = datetime.now()
     transaction_label = "remboursement 1ère quinzaine 09-2018"

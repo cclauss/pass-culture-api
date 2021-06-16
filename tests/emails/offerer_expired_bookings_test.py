@@ -2,8 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.bookings.models import BookingCancellationReasons
 from pcapi.core.offers.factories import OffererFactory
@@ -12,7 +10,6 @@ from pcapi.emails.offerer_expired_bookings import build_expired_bookings_recap_e
 from pcapi.models import offer_type
 
 
-@pytest.mark.usefixtures("db_session")
 @patch(
     "pcapi.emails.offerer_expired_bookings.build_pc_pro_offer_link",
     return_value="http://pc_pro.com/offer_link",

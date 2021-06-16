@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.bookings.models import BookingCancellationReasons
 from pcapi.core.offers.factories import ProductFactory
@@ -11,7 +9,6 @@ from pcapi.emails.beneficiary_expired_bookings import build_expired_bookings_rec
 from pcapi.models import offer_type
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_send_email_to_offerer_when_expired_bookings_cancelled():
     now = datetime.utcnow()
     amnesiac_user = users_factories.UserFactory(email="dory@example.com", firstName="Dory")

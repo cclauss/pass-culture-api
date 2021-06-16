@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timezone
 
-import pytest
-
 from pcapi import models
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
@@ -67,7 +65,6 @@ def get_expected_base_email_data(booking, mediation, **overrides):
     return email_data
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_return_event_specific_data_for_email_when_offer_is_an_event():
     booking = make_booking()
     mediation = offers_factories.MediationFactory(offer=booking.stock.offer)
@@ -78,7 +75,6 @@ def test_should_return_event_specific_data_for_email_when_offer_is_an_event():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_return_event_specific_data_for_email_when_offer_is_a_duo_event():
     booking = make_booking(quantity=2)
     mediation = offers_factories.MediationFactory(offer=booking.stock.offer)
@@ -95,7 +91,6 @@ def test_should_return_event_specific_data_for_email_when_offer_is_a_duo_event()
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_return_thing_specific_data_for_email_when_offer_is_a_thing():
     booking = make_booking(
         stock__offer__product__type=str(models.ThingType.AUDIOVISUEL),
@@ -119,7 +114,6 @@ def test_should_return_thing_specific_data_for_email_when_offer_is_a_thing():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_use_public_name_when_available():
     booking = make_booking(
         stock__offer__venue__name="LIBRAIRIE GENERALE UNIVERSITAIRE COLBERT",
@@ -137,7 +131,6 @@ def test_should_use_public_name_when_available():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_return_withdrawal_details_when_available():
     withdrawal_details = "Conditions de retrait spécifiques."
     booking = make_booking(
@@ -156,7 +149,6 @@ def test_should_return_withdrawal_details_when_available():
 
 
 class DigitalOffersTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_digital_thing_specific_data_for_email_when_offer_is_a_digital_thing(self):
         booking = make_booking(
             quantity=10,
@@ -187,7 +179,6 @@ class DigitalOffersTest:
         assert email_data == expected
 
     @override_features(AUTO_ACTIVATE_DIGITAL_BOOKINGS=True)
-    @pytest.mark.usefixtures("db_session")
     def test_hide_cancellation_policy_when_auto_validation_activated(self):
         booking = make_booking(
             quantity=10,
@@ -218,7 +209,6 @@ class DigitalOffersTest:
         assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_use_activation_code_instead_of_token_if_possible():
     booking = make_booking(
         user__email="used-email@example.com",
@@ -253,7 +243,6 @@ def test_use_activation_code_instead_of_token_if_possible():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_add_expiration_date_from_activation_code():
     booking = make_booking(
         quantity=10,
@@ -290,7 +279,6 @@ def test_add_expiration_date_from_activation_code():
     assert email_data == expected
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_return_total_price_for_duo_offers():
     booking = bookings_factories.BookingFactory(quantity=2, stock__price=10)
     email_data = retrieve_data_for_beneficiary_booking_confirmation_email(booking)

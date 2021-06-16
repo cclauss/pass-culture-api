@@ -1,15 +1,12 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 from pcapi.core.users import factories as users_factories
 from pcapi.core.users.models import TokenType
 
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_change_password(app):
     user = users_factories.UserFactory()
     token = users_factories.TokenFactory(user=user, type=TokenType.RESET_PASSWORD)
@@ -23,7 +20,6 @@ def test_change_password(app):
     assert len(user.tokens) == 0
 
 
-@pytest.mark.usefixtures("db_session")
 def test_change_password_with_legacy_reset_token(app):
     user = users_factories.UserFactory(
         resetPasswordToken="TOKEN",
@@ -39,7 +35,6 @@ def test_change_password_with_legacy_reset_token(app):
     assert len(user.tokens) == 0
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fail_if_token_has_expired(app):
     user = users_factories.UserFactory(password="Old_P4ssword")
     token = users_factories.TokenFactory(
@@ -57,7 +52,6 @@ def test_fail_if_token_has_expired(app):
     assert user.checkPassword("Old_P4ssword")
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fail_if_token_has_expired_with_legacy_reset_token(app):
     user = users_factories.UserFactory(
         password="Old_P4ssword",
@@ -74,7 +68,6 @@ def test_fail_if_token_has_expired_with_legacy_reset_token(app):
     assert user.checkPassword("Old_P4ssword")
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fail_if_token_is_unknown(app):
     users_factories.UserFactory(resetPasswordToken="TOKEN")
     data = {"token": "OTHER TOKEN", "newPassword": "N3W_p4ssw0rd"}
@@ -96,7 +89,6 @@ def test_fail_if_token_is_missing(app):
     assert response.json["token"] == ["Votre lien de changement de mot de passe est invalide."]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fail_if_new_password_is_missing(app):
     data = {"token": "KL89PBNG51"}
 
@@ -107,7 +99,6 @@ def test_fail_if_new_password_is_missing(app):
     assert response.json["newPassword"] == ["Vous devez renseigner un nouveau mot de passe."]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_fail_if_new_password_is_not_strong_enough(app):
     data = {"token": "TOKEN", "newPassword": "weak_password"}
 

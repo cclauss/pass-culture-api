@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.repository import repository
 
@@ -7,7 +5,6 @@ from tests.conftest import TestClient
 
 
 class Returns401Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_is_anonymous(self, app):
         # when
         response = TestClient(app.test_client()).get("/types")
@@ -17,7 +14,6 @@ class Returns401Test:
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_is_logged(self, app):
         # given
         user = create_user(email="test@email.com")
@@ -36,7 +32,6 @@ class Returns200Test:
         assert "ThingType.INSTRUMENT" in types_values
         assert "ThingType.LIVRE_AUDIO" in types_values
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_is_admin(self, app):
         # given
         admin_user = create_user(is_beneficiary=False, email="pctest.admin93.0@example.com", is_admin=True)
@@ -52,7 +47,6 @@ class Returns200Test:
         assert "ThingType.ACTIVATION" not in types_values
         assert "EventType.ACTIVATION" not in types_values
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_returns_types_labels(self, app):
         # given
         user = create_user(email="test@email.com")

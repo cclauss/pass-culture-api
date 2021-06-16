@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.payments import api
 from pcapi.core.payments import factories
@@ -14,7 +13,6 @@ from pcapi.repository import repository
 
 class CreateDepositTest:
     @freeze_time("2021-02-05 09:00:00")
-    @pytest.mark.usefixtures("db_session")
     def test_deposit_created_with_an_expiration_date(self, app):
         # Given
         beneficiary = UserFactory(email="beneficiary@example.com")
@@ -27,7 +25,6 @@ class CreateDepositTest:
         assert deposit.expirationDate == datetime(2023, 2, 5, 9, 0, 0)
 
 
-@pytest.mark.usefixtures("db_session")
 class BulkCreatePaymentStatusesTest:
     def test_without_detail(self):
         p1 = factories.PaymentFactory(statuses=[])

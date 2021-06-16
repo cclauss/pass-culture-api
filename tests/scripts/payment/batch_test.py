@@ -3,7 +3,6 @@ import datetime
 import io
 import zipfile
 
-import pytest
 from sqlalchemy import func
 
 import pcapi.core.bookings.factories as bookings_factories
@@ -17,7 +16,6 @@ from pcapi.models.payment_status import TransactionStatus
 from pcapi.scripts.payment.batch import generate_and_send_payments
 
 
-@pytest.mark.usefixtures("db_session")
 def test_generate_and_send_payments():
     # Comments below indicate what `generate_and_send_payments()` will
     # do, no what the setup does.

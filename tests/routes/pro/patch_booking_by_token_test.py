@@ -1,7 +1,5 @@
 import urllib.parse
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 import pcapi.core.offers.factories as offers_factories
 from pcapi.core.users.factories import UserFactory
@@ -21,7 +19,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns204Test:
     class WhenUserIsAnonymousTest:
         def expect_booking_to_be_used(self, app):
@@ -96,7 +93,6 @@ class Returns204Test:
             assert booking.isUsed
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     class WhenUserIsAnonymousTest:
         def when_email_is_missing(self, app):
@@ -156,7 +152,6 @@ class Returns400Test:
             ]
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns403Test:  # Forbidden
     def when_user_is_not_attached_to_linked_offerer(self, app):
         # Given
@@ -195,7 +190,6 @@ class Returns403Test:  # Forbidden
         assert Booking.query.get(booking.id).isUsed is False
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns404Test:
     class WhenUserIsAnonymousTest:
         def when_booking_does_not_exist(self, app):

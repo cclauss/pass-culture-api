@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
 from pcapi.utils.human_ids import humanize
@@ -42,7 +40,6 @@ class Returns200ForProUserTest:
             "other_offerer_not_validated": other_offerer_not_validated,
         }
 
-    @pytest.mark.usefixtures("db_session")
     def test_response_serializer(self, app):
         # given
         pro_user = users_factories.UserFactory(isBeneficiary=False)
@@ -56,7 +53,6 @@ class Returns200ForProUserTest:
         assert response.status_code == 200
         assert response.json == {"offerersNames": [{"id": humanize(offerer.id), "name": offerer.name}]}
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_offerers_names(self, app):
         # given
         pro_user = users_factories.UserFactory(isBeneficiary=False)
@@ -76,7 +72,6 @@ class Returns200ForProUserTest:
         assert humanize(offerers["owned_offerer_validated_for_user"].id) in offerer_ids
         assert humanize(offerers["owned_offerer_not_validated_for_user"].id) in offerer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_validated_offerers_names(self, app):
         # given
         pro_user = users_factories.UserFactory(isBeneficiary=False)
@@ -95,7 +90,6 @@ class Returns200ForProUserTest:
         assert humanize(offerers["owned_offerer_validated_for_user"].id) in offerer_ids
         assert humanize(offerers["owned_offerer_not_validated_for_user"].id) in offerer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_not_validated_offerers_names(self, app):
         # given
         pro_user = users_factories.UserFactory(isBeneficiary=False)
@@ -112,7 +106,6 @@ class Returns200ForProUserTest:
         offerer_ids = [offererName["id"] for offererName in response.json["offerersNames"]]
         assert humanize(offerers["owned_offerer_not_validated"].id) in offerer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_validated_for_user_offerers_names(self, app):
         # given
         pro_user = users_factories.UserFactory(isBeneficiary=False)
@@ -133,7 +126,6 @@ class Returns200ForProUserTest:
         assert humanize(offerers["owned_offerer_not_validated"].id) in offerer_ids
         assert humanize(offerers["owned_offerer_validated_for_user"].id) in offerer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_not_validated_for_user_offerers_names(self, app):
         # given
         pro_user = users_factories.UserFactory(isBeneficiary=False)
@@ -173,7 +165,6 @@ class Returns200ForAdminTest:
             "other_offerer_not_validated": other_offerer_not_validated,
         }
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_offerers_names(self, app):
         # given
         admin = users_factories.UserFactory(isBeneficiary=False, isAdmin=True)
@@ -193,7 +184,6 @@ class Returns200ForAdminTest:
         assert humanize(offerers["other_offerer"].id) in offerer_ids
         assert humanize(offerers["other_offerer_not_validated"].id) in offerer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_validated_offerers(self, app):
         # given
         admin = users_factories.UserFactory(isBeneficiary=False, isAdmin=True)
@@ -211,7 +201,6 @@ class Returns200ForAdminTest:
         assert humanize(offerers["offerer"].id) in offerer_ids
         assert humanize(offerers["other_offerer"].id) in offerer_ids
 
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_not_validated_offerers(self, app):
         # given
         admin = users_factories.UserFactory(isBeneficiary=False, isAdmin=True)

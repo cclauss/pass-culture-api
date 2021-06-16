@@ -17,13 +17,11 @@ from pcapi.repository import repository
 from pcapi.utils.human_ids import humanize
 
 
-@pytest.mark.usefixtures("db_session")
 def test_total_amount():
     booking = factories.BookingFactory(amount=1.2, quantity=2)
     assert booking.total_amount == Decimal("2.4")
 
 
-@pytest.mark.usefixtures("db_session")
 def test_save_cancellation_date_postgresql_function():
     # In this test, we manually COMMIT so that save_cancellation_date
     # PotsgreSQL function is triggered.
@@ -45,7 +43,6 @@ def test_save_cancellation_date_postgresql_function():
     assert booking.cancellationDate is None
 
 
-@pytest.mark.usefixtures("db_session")
 def test_booking_completed_url_gets_normalized():
     booking = factories.BookingFactory(
         token="ABCDEF",
@@ -55,7 +52,6 @@ def test_booking_completed_url_gets_normalized():
     assert booking.completedUrl == "http://example.com?token=ABCDEF&email=1@example.com"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_too_many_bookings_postgresql_exception():
     booking1 = factories.BookingFactory(stock__quantity=1)
     with db.session.no_autoflush:
@@ -70,7 +66,6 @@ def test_too_many_bookings_postgresql_exception():
         assert exc.value.errors["global"] == ["La quantité disponible pour cette offre est atteinte."]
 
 
-@pytest.mark.usefixtures("db_session")
 class BookingThumbUrlTest:
     def test_thumb_url_use_mediation_if_exists(self):
         mediation = MediationFactory(thumbCount=1)
@@ -97,7 +92,6 @@ class BookingThumbUrlTest:
         assert booking.thumbUrl is None
 
 
-@pytest.mark.usefixtures("db_session")
 class BookingQrCodeTest:
     def test_event_return_qr_code_if_event_is_not_expired_nor_cancelled(self):
         booking = factories.BookingFactory(
@@ -140,7 +134,6 @@ class BookingQrCodeTest:
         assert booking.qrCode is None
 
 
-@pytest.mark.usefixtures("db_session")
 class BookingIsConfirmedPropertyTest:
     def test_booking_is_confirmed_when_confirmation_date_is_in_the_past(self):
         yesterday = datetime.utcnow() - timedelta(days=1)
@@ -160,7 +153,6 @@ class BookingIsConfirmedPropertyTest:
         assert booking.isConfirmed is False
 
 
-@pytest.mark.usefixtures("db_session")
 class BookingIsConfirmedSqlQueryTest:
     def test_booking_is_confirmed_when_confirmation_date_is_in_the_past(self):
         yesterday = datetime.utcnow() - timedelta(days=1)

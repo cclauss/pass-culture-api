@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offerers.factories import VirtualVenueTypeFactory
 from pcapi.core.offerers.models import Offerer
 from pcapi.core.offers.factories import OffererFactory
@@ -26,7 +24,6 @@ BASE_DATA_PRO = {
 }
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns204Test:
     def when_user_data_is_valid(self, app):
         # Given
@@ -147,7 +144,6 @@ class Returns204Test:
         assert user.needsToFillCulturalSurvey == False
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns400Test:
     def when_email_is_missing(self, app):
         # Given

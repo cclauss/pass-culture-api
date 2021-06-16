@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.domain.venue.venue_with_basic_information.venue_with_basic_information import VenueWithBasicInformation
 from pcapi.infrastructure.repository.venue.venue_with_basic_information import (
     venue_with_basic_information_domain_converter,
@@ -16,7 +14,6 @@ class VenueWithBasicInformationSQLRepositoryTest:
     def setup_method(self):
         self.venue_sql_repository = VenueWithBasicInformationSQLRepository()
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_a_venue_when_venue_with_siret_is_found(self, app: object):
         # given
         siret = "12345678912345"
@@ -35,7 +32,6 @@ class VenueWithBasicInformationSQLRepositoryTest:
         assert found_venue.siret == expected_venue.siret
         assert found_venue.identifier == expected_venue.identifier
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_none_when_no_venue_with_siret_was_found(self, app: object):
         # given
         siret = "12345678912345"
@@ -49,7 +45,6 @@ class VenueWithBasicInformationSQLRepositoryTest:
         # then
         assert found_venue is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_a_venue_when_venue_with_name_is_found(self, app: object):
         # given
         name = "VENUE NAME"
@@ -71,7 +66,6 @@ class VenueWithBasicInformationSQLRepositoryTest:
         assert found_venue.identifier == expected_venue.identifier
         assert found_venue.siret is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_none_when_venue_with_name_was_found_but_in_another_offerer(self, app: object):
         # given
         name = "Venue name"
@@ -86,7 +80,6 @@ class VenueWithBasicInformationSQLRepositoryTest:
         # then
         assert found_venue == []
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_none_when_no_venue_with_name_was_found(self, app: object):
         # given
         name = "Venue name"

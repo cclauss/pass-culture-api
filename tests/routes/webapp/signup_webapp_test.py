@@ -2,7 +2,6 @@ from datetime import datetime
 from unittest.mock import patch
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.testing import override_features
 from pcapi.core.users.models import User
@@ -28,7 +27,6 @@ BASE_DATA = {
 class Returns201Test:
     @freeze_time("2019-01-01 01:00:00")
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
-    @pytest.mark.usefixtures("db_session")
     def when_data_is_accurate(self, get_authorized_emails_and_dept_codes, app):
         # Given
         data = BASE_DATA.copy()
@@ -66,7 +64,6 @@ class Returns201Test:
         assert user.needsToFillCulturalSurvey is False
 
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
-    @pytest.mark.usefixtures("db_session")
     def test_created_user_does_not_have_validation_token_and_cannot_book_free_offers(
         self, get_authorized_emails_and_dept_codes, app
     ):
@@ -88,7 +85,6 @@ class Returns201Test:
         assert not push_testing.requests[0]["attribute_values"]["u.is_beneficiary"]
 
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
-    @pytest.mark.usefixtures("db_session")
     def test_does_not_allow_the_creation_of_admins(self, get_authorized_emails_and_dept_codes, app):
         # Given
         user_json = {
@@ -116,7 +112,6 @@ class Returns201Test:
 
 
 class Returns400Test:
-    @pytest.mark.usefixtures("db_session")
     def when_email_missing(self, app):
         # Given
         data = BASE_DATA.copy()
@@ -134,7 +129,6 @@ class Returns400Test:
         assert len(push_testing.requests) == 0
 
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
-    @pytest.mark.usefixtures("db_session")
     def when_email_with_invalid_format(self, get_authorized_emails_and_dept_codes, app):
         # Given
         get_authorized_emails_and_dept_codes.return_value = (["toto@example.com"], ["93"])
@@ -152,7 +146,6 @@ class Returns400Test:
         assert "email" in error
 
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
-    @pytest.mark.usefixtures("db_session")
     def when_email_is_already_used(self, get_authorized_emails_and_dept_codes, app):
         # Given
         get_authorized_emails_and_dept_codes.return_value = (["toto@example.com"], ["93"])
@@ -172,7 +165,6 @@ class Returns400Test:
         assert "email" in error
 
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
-    @pytest.mark.usefixtures("db_session")
     def when_public_name_is_missing(self, get_authorized_emails_and_dept_codes, app):
         # Given
         get_authorized_emails_and_dept_codes.return_value = (["toto@example.com"], ["93"])
@@ -190,7 +182,6 @@ class Returns400Test:
         assert "publicName" in error
 
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
-    @pytest.mark.usefixtures("db_session")
     def when_public_name_is_too_long(self, get_authorized_emails_and_dept_codes, app):
         # Given
         get_authorized_emails_and_dept_codes.return_value = (["toto@example.com"], ["93"])
@@ -207,7 +198,6 @@ class Returns400Test:
         error = response.json
         assert "publicName" in error
 
-    @pytest.mark.usefixtures("db_session")
     def when_password_is_missing(self, app):
         # Given
         data = BASE_DATA.copy()
@@ -223,7 +213,6 @@ class Returns400Test:
         error = response.json
         assert "password" in error
 
-    @pytest.mark.usefixtures("db_session")
     def when_password_is_invalid(self, app):
         # Given
         data = BASE_DATA.copy()
@@ -239,7 +228,6 @@ class Returns400Test:
         response = response.json
         assert "password" in response
 
-    @pytest.mark.usefixtures("db_session")
     def when_missing_contact_ok(self, app):
         data = BASE_DATA.copy()
         del data["contact_ok"]
@@ -254,7 +242,6 @@ class Returns400Test:
         error = response.json
         assert "contact_ok" in error
 
-    @pytest.mark.usefixtures("db_session")
     def when_wrong_format_on_contact_ok(self, app):
         data = BASE_DATA.copy()
         data["contact_ok"] = "t"
@@ -269,7 +256,6 @@ class Returns400Test:
         error = response.json
         assert "contact_ok" in error
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.routes.webapp.signup.get_authorized_emails_and_dept_codes")
     def when_user_not_in_exp_spreadsheet(self, get_authorized_emails_and_dept_codes, app):
         # Given
@@ -289,7 +275,6 @@ class Returns400Test:
 
 
 class Returns403Test:
-    @pytest.mark.usefixtures("db_session")
     @override_features(WEBAPP_SIGNUP=False)
     def when_feature_is_not_active(self, app):
         # When

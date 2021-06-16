@@ -16,7 +16,6 @@ from pcapi.models.payment import Payment
 XML_NAMESPACE = {"ns": "urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"}
 
 
-@pytest.mark.usefixtures("db_session")
 class GenerateMessageFileTest:
     def test_basics(self):
         iban1, bic1 = "CF13QSDFGH456789", "QSDFGH8Z555"

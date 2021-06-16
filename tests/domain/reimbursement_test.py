@@ -2,8 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 from decimal import Decimal
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.payments.factories as payments_factories
@@ -69,7 +67,6 @@ def create_rich_user(total_deposit):
     return user
 
 
-@pytest.mark.usefixtures("db_session")
 class DigitalThingsReimbursementTest:
     def test_apply_for_booking_returns_a_reimbursed_amount(self):
         # given
@@ -132,7 +129,6 @@ class DigitalThingsReimbursementTest:
         assert not is_relevant
 
 
-@pytest.mark.usefixtures("db_session")
 class PhysicalOffersReimbursementTest:
     def test_apply_for_booking_returns_a_reimbursed_amount(self):
         # given
@@ -195,7 +191,6 @@ class PhysicalOffersReimbursementTest:
         assert is_relevant
 
 
-@pytest.mark.usefixtures("db_session")
 class ReimbursementRateByVenueBetween20000And40000Test:
     def test_apply_for_booking_returns_a_reimbursed_amount(self):
         # given
@@ -292,7 +287,6 @@ class ReimbursementRateByVenueBetween20000And40000Test:
         assert not is_relevant
 
 
-@pytest.mark.usefixtures("db_session")
 class ReimbursementRateByVenueBetween40000And150000Test:
     def test_apply_for_booking_returns_a_reimbursed_amount(self):
         # given
@@ -341,7 +335,6 @@ class ReimbursementRateByVenueBetween40000And150000Test:
         assert not is_relevant
 
 
-@pytest.mark.usefixtures("db_session")
 class ReimbursementRateByVenueAbove150000Test:
     def test_apply_for_booking_returns_a_reimbursed_amount(self):
         # given
@@ -390,7 +383,6 @@ class ReimbursementRateByVenueAbove150000Test:
         assert not is_relevant
 
 
-@pytest.mark.usefixtures("db_session")
 class ReimbursementRateForBookAbove20000Test:
     def test_apply_for_booking_returns_a_reimbursed_amount(self):
         # given
@@ -524,7 +516,6 @@ class ReimbursementRuleIsActiveTest:
         assert self.DummyRule().is_active(self.booking) is False
 
 
-@pytest.mark.usefixtures("db_session")
 class FindAllBookingsReimbursementsTest:
     def test_returns_full_reimbursement_for_all_bookings(self):
         # given
@@ -711,7 +702,6 @@ class FindAllBookingsReimbursementsTest:
         assert_degressive_reimbursement(booking_reimbursements[1], booking2, 25000)
         assert_degressive_reimbursement(booking_reimbursements[2], booking3, 27000)
 
-    @pytest.mark.usefixtures("db_session")
     def test_select_custom_reimbursement_rule_if_applicable(self):
         offer1 = offers_factories.DigitalOfferFactory()
         booking1 = bookings_factories.BookingFactory(stock__offer=offer1)

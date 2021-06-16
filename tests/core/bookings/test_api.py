@@ -65,7 +65,6 @@ class BookOfferConcurrencyTest:
         assert models.Booking.query.filter().count() == 1
         assert models.Booking.query.filter(models.Booking.isCancelled == True).count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_cancel_booking_with_concurrent_cancel(self, app):
         booking = factories.BookingFactory(stock__dnBookedQuantity=1)
         booking_id = booking.id
@@ -103,7 +102,6 @@ class BookOfferConcurrencyTest:
         assert models.Booking.query.filter(models.Booking.isCancelled == True).count() == 1
 
 
-@pytest.mark.usefixtures("db_session")
 class BookOfferTest:
     @mock.patch("pcapi.connectors.redis.add_offer_id")
     def test_create_booking(self, mocked_add_offer_id, app):
@@ -335,7 +333,6 @@ class BookOfferTest:
             }
 
 
-@pytest.mark.usefixtures("db_session")
 class CancelByBeneficiaryTest:
     def test_cancel_booking(self):
         stock = offers_factories.StockFactory(offer__bookingEmail="offerer@example.com")
@@ -455,7 +452,6 @@ class CancelByBeneficiaryTest:
         assert not booking.cancellationReason
 
 
-@pytest.mark.usefixtures("db_session")
 class CancelByOffererTest:
     def test_cancel(self):
         booking = factories.BookingFactory()
@@ -528,7 +524,6 @@ class CancelByOffererTest:
         assert cancelled_booking.cancellationReason == BookingCancellationReasons.BENEFICIARY
 
 
-@pytest.mark.usefixtures("db_session")
 class CancelForFraudTest:
     def test_cancel(self):
         booking = factories.BookingFactory()
@@ -542,7 +537,6 @@ class CancelForFraudTest:
         assert booking.cancellationReason == BookingCancellationReasons.FRAUD
 
 
-@pytest.mark.usefixtures("db_session")
 class MarkAsUsedTest:
     def test_mark_as_used(self):
         booking = factories.BookingFactory()
@@ -585,7 +579,6 @@ class MarkAsUsedTest:
         assert not booking.isUsed
 
 
-@pytest.mark.usefixtures("db_session")
 class MarkAsUnusedTest:
     def test_mark_as_unused(self):
         booking = factories.BookingFactory(isUsed=True)
@@ -668,7 +661,6 @@ class GenerateQrCodeTest:
     [datetime(2020, 7, 14, 15, 30), datetime(2020, 10, 25, 1, 45), datetime.now()],
     ids=["14 Jul", "Daylight Saving Switch", "Now"],
 )
-@pytest.mark.usefixtures("db_session")
 class ComputeConfirmationDateTest:
     def test_returns_none_if_no_event_beginning(self, booking_date):
         event_beginning = None
@@ -698,7 +690,6 @@ class ComputeConfirmationDateTest:
 
 
 @freeze_time("2020-11-17 15:00:00")
-@pytest.mark.usefixtures("db_session")
 class UpdateConfirmationDatesTest:
     def should_update_bookings_confirmation_dates_for_event_beginning_tomorrow(self):
         #  Given

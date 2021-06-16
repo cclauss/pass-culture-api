@@ -6,7 +6,6 @@ from unittest.mock import Mock
 from unittest.mock import patch
 
 from mailjet_rest import Client
-import pytest
 
 import pcapi.core.mails.testing as mails_testing
 from pcapi.core.testing import override_features
@@ -124,7 +123,6 @@ class RunTest:
         assert process_beneficiary_application.call_count == 3
 
     @patch("pcapi.scripts.beneficiary.remote_import.parse_beneficiary_information")
-    @pytest.mark.usefixtures("db_session")
     def test_an_error_status_is_saved_when_an_application_is_not_parsable(
         self, mocked_parse_beneficiary_information, app
     ):
@@ -181,7 +179,6 @@ class RunTest:
         process_beneficiary_application.assert_not_called()
 
     @patch("pcapi.scripts.beneficiary.remote_import.process_beneficiary_application")
-    @pytest.mark.usefixtures("db_session")
     def test_application_with_known_email_are_saved_as_rejected(self, process_beneficiary_application, app):
         # given
         get_all_application_ids = Mock(return_value=[123])
@@ -214,7 +211,6 @@ class RunTest:
 
     @override_features(FORCE_PHONE_VALIDATION=False)
     @patch("pcapi.scripts.beneficiary.remote_import.process_beneficiary_application")
-    @pytest.mark.usefixtures("db_session")
     def test_beneficiary_is_created_with_procedure_id(self, process_beneficiary_application, app):
         # given
         get_all_application_ids = Mock(return_value=[123])
@@ -260,7 +256,6 @@ class RunTest:
 
 class ProcessBeneficiaryApplicationTest:
     @override_features(FORCE_PHONE_VALIDATION=False)
-    @pytest.mark.usefixtures("db_session")
     def test_new_beneficiaries_are_recorded_with_deposit(self, app):
         # given
         app.mailjet_client = Mock(spec=Client)
@@ -307,7 +302,6 @@ class ProcessBeneficiaryApplicationTest:
             }
         ]
 
-    @pytest.mark.usefixtures("db_session")
     def test_an_import_status_is_saved_if_beneficiary_is_created(self, app):
         # given
         app.mailjet_client = Mock(spec=Client)
@@ -340,7 +334,6 @@ class ProcessBeneficiaryApplicationTest:
     @patch("pcapi.scripts.beneficiary.remote_import.create_beneficiary_from_application")
     @patch("pcapi.scripts.beneficiary.remote_import.repository")
     @patch("pcapi.scripts.beneficiary.remote_import.send_activation_email")
-    @pytest.mark.usefixtures("db_session")
     def test_account_activation_email_is_sent(
         self, send_activation_email, mock_repository, create_beneficiary_from_application, app
     ):
@@ -371,7 +364,6 @@ class ProcessBeneficiaryApplicationTest:
     @patch("pcapi.scripts.beneficiary.remote_import.create_beneficiary_from_application")
     @patch("pcapi.scripts.beneficiary.remote_import.repository")
     @patch("pcapi.scripts.beneficiary.remote_import.send_activation_email")
-    @pytest.mark.usefixtures("db_session")
     def test_error_is_collected_if_beneficiary_could_not_be_saved(
         self, send_activation_email, mock_repository, create_beneficiary_from_application, app
     ):
@@ -406,7 +398,6 @@ class ProcessBeneficiaryApplicationTest:
 
     @patch("pcapi.scripts.beneficiary.remote_import.repository")
     @patch("pcapi.scripts.beneficiary.remote_import.send_activation_email")
-    @pytest.mark.usefixtures("db_session")
     def test_beneficiary_is_not_created_if_duplicates_are_found(self, send_activation_email, mock_repository, app):
         # given
         information = {
@@ -437,7 +428,6 @@ class ProcessBeneficiaryApplicationTest:
         assert beneficiary_import.currentStatus == ImportStatus.DUPLICATE
 
     @patch("pcapi.scripts.beneficiary.remote_import.send_activation_email")
-    @pytest.mark.usefixtures("db_session")
     def test_beneficiary_is_created_if_duplicates_are_found_but_id_is_in_retry_list(self, send_activation_email, app):
         # given
         information = {
@@ -468,7 +458,6 @@ class ProcessBeneficiaryApplicationTest:
         assert beneficiary_import.currentStatus == ImportStatus.CREATED
 
     @patch("pcapi.scripts.beneficiary.remote_import.get_beneficiary_duplicates")
-    @pytest.mark.usefixtures("db_session")
     def test_an_import_status_is_saved_if_beneficiary_is_a_duplicate(self, mock_get_beneficiary_duplicates, app):
         # given
         information = {
@@ -647,7 +636,6 @@ class ParseBeneficiaryInformationTest:
             assert information["application_id"] == 123
 
 
-@pytest.mark.usefixtures("db_session")
 class RunIntegrationTest:
     EMAIL = "john.doe@example.com"
     BENEFICIARY_BIRTH_DATE = date.today() - timedelta(days=6752)  # ~18.5 years

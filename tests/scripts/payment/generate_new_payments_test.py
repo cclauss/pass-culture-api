@@ -1,7 +1,5 @@
 import datetime
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.payments.factories as payments_factories
@@ -34,7 +32,6 @@ def total_amount(payment_query):
 
 
 class GenerateNewPaymentsTest:
-    @pytest.mark.usefixtures("db_session")
     def test_records_new_payment_lines_in_database(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -74,7 +71,6 @@ class GenerateNewPaymentsTest:
         # Then
         assert Payment.query.count() - initial_payment_count == 2
 
-    @pytest.mark.usefixtures("db_session")
     def test_creates_pending_and_not_processable_payments(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -106,7 +102,6 @@ class GenerateNewPaymentsTest:
         assert get_pending_payments().count() == 2
         assert get_not_processable_payments().count() == 1
 
-    @pytest.mark.usefixtures("db_session")
     def test_reimburses_offerer_if_he_has_more_than_20000_euros_in_bookings_on_several_venues(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -148,7 +143,6 @@ class GenerateNewPaymentsTest:
         assert total_amount(pending) == 30000
         assert get_not_processable_payments().count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_reimburses_offerer_with_degressive_rate_for_venues_with_bookings_exceeding_20000_euros(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -190,7 +184,6 @@ class GenerateNewPaymentsTest:
         assert total_amount(pending) == 48500
         assert get_not_processable_payments().count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_full_reimburses_book_product_when_bookings_are_below_20000_euros(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -226,7 +219,6 @@ class GenerateNewPaymentsTest:
         assert total_amount(pending) == 29990
         assert get_not_processable_payments().count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_reimburses_95_percent_for_book_product_when_bookings_exceed_20000_euros(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -268,7 +260,6 @@ class GenerateNewPaymentsTest:
         assert total_amount(pending) == 48500
         assert get_not_processable_payments().count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_reimburses_95_percent_for_book_product_when_bookings_exceed_40000_euros(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -310,7 +301,6 @@ class GenerateNewPaymentsTest:
         assert total_amount(pending) == 67500
         assert get_not_processable_payments().count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_reimburses_95_percent_for_book_product_when_bookings_exceed_100000_euros(self):
         # Given
         cutoff = datetime.datetime.now()
@@ -352,7 +342,6 @@ class GenerateNewPaymentsTest:
         assert total_amount(pending) == 115000
         assert get_not_processable_payments().count() == 0
 
-    @pytest.mark.usefixtures("db_session")
     def test_use_custom_reimbursement_rule(self):
         offer = offers_factories.DigitalOfferFactory()
         offers_factories.BankInformationFactory(venue=offer.venue, iban="iban1", bic="bic1")

@@ -2,7 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 from unittest.mock import patch
 
-import pytest
 from requests.auth import _basic_auth_str
 
 from pcapi.admin.custom_views.beneficiary_user_view import BeneficiaryUserView
@@ -260,7 +259,6 @@ class BeneficiaryUserViewTest:
     @testing.override_settings(
         IS_PROD=True, SUPER_ADMIN_EMAIL_ADDRESSES=["super-admin@example.com", "boss@example.com"]
     )
-    @pytest.mark.usefixtures("db_session")
     def test_allow_suspension_and_unsuspension(self):
         basic_admin = users_factories.UserFactory(email="admin@example.com", isAdmin=True)
         assert not _allow_suspension_and_unsuspension(basic_admin)

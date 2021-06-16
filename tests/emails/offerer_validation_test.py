@@ -1,7 +1,6 @@
 import secrets
 
 from bs4 import BeautifulSoup
-import pytest
 
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
@@ -11,7 +10,6 @@ from pcapi.utils.mailing import make_validation_email_object
 from tests.utils.mailing_test import get_by_siren_stub
 
 
-@pytest.mark.usefixtures("db_session")
 def test_write_object_validation_email(app):
     # Given
     validation_token = secrets.token_urlsafe(20)
@@ -88,7 +86,6 @@ def test_write_object_validation_email(app):
     assert "etablissement_siege" in api_entreprise_data
 
 
-@pytest.mark.usefixtures("db_session")
 def test_validation_email_object_does_not_include_validation_link_if_user_offerer_is_already_validated(app):
     # Given
     offerer = create_offerer()
@@ -105,7 +102,6 @@ def test_validation_email_object_does_not_include_validation_link_if_user_offere
     assert html.select("section[data-testId='user_offerer'] h2")[0].text == "Rattachement :"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_validation_email_object_does_not_include_validation_link_if_offerer_is_already_validated(app):
     # Given
     offerer = create_offerer(idx=123)
@@ -122,7 +118,6 @@ def test_validation_email_object_does_not_include_validation_link_if_offerer_is_
     assert html.select("section[data-testId='offerer'] h2")[0].text == "Structure :"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_validation_email_should_neither_return_clearTextPassword_nor_totallysafepsswd(app):
     # Given
     offerer = create_offerer()

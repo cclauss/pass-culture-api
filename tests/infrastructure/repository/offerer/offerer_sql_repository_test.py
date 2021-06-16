@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.infrastructure.repository.offerer import offerer_domain_converter
 from pcapi.infrastructure.repository.offerer.offerer_sql_repository import OffererSQLRepository
 from pcapi.model_creators.generic_creators import create_offerer
@@ -10,7 +8,6 @@ class OffererSQLRepositoryTest:
     def setup_method(self):
         self.offerer_sql_repository = OffererSQLRepository()
 
-    @pytest.mark.usefixtures("db_session")
     def test_returns_an_offerer_when_offerer_with_siren_is_found(self, app):
         # given
         siren = "123456789"
@@ -26,7 +23,6 @@ class OffererSQLRepositoryTest:
         assert offerer.siren == expected_offerer.siren
         assert offerer.id == expected_offerer.id
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_return_an_offerer_when_no_offerer_was_found(self, app):
         # given
         siren = "123456789"

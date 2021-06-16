@@ -1,11 +1,8 @@
-import pytest
-
 from pcapi.core.offerers.models import VenueLabel
 from pcapi.scripts.venue.venue_label.create_venue_labels import save_new_venue_labels
 
 
 class SaveNewVenueLabelsTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_save_venue_labels_to_database(self):
         # Given
         venue_labels_to_create = [

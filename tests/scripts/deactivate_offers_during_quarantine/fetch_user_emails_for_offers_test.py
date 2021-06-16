@@ -2,8 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 from unittest.mock import patch
 
-import pytest
-
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_stock
 from pcapi.model_creators.generic_creators import create_user
@@ -34,7 +32,6 @@ class FetchUserEmailsForOffersTest:
         # Then
         stub_build_query.assert_called_once_with(first_day_after_quarantine, today)
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_all_user_emails(self, app):
         # Given
         first_day_after_quarantine = datetime(2020, 4, 16)
@@ -67,7 +64,6 @@ class FetchUserEmailsForOffersTest:
         assert len(pro_emails) == 2
         assert set(pro_emails) == {"john.doe@example.com", "john.rambo@example.com"}
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_only_pro_user_emails(self, app):
         # Given
         first_day_after_quarantine = datetime(2020, 4, 16)

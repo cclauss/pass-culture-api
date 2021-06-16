@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.users.factories import UserFactory
 from pcapi.emails.beneficiary_soon_to_be_expired_bookings import (
@@ -7,7 +5,6 @@ from pcapi.emails.beneficiary_soon_to_be_expired_bookings import (
 )
 
 
-@pytest.mark.usefixtures("db_session")
 class BuildSoonToBeExpiredBookingsRecapEmailDataForBeneficiaryTest:
     def test_build_soon_to_be_expired_bookings_data(self, app):
         # Given

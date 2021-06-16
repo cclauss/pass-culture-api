@@ -3,8 +3,6 @@ from datetime import timedelta
 from unittest import mock
 from urllib.parse import urlencode
 
-import pytest
-
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.payments.factories import PaymentFactory
 from pcapi.model_creators.generic_creators import create_booking
@@ -26,7 +24,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_and_regular_offer(self, app):
         # Given
         user = create_user(email="user@example.com", public_name="John Doe")
@@ -57,7 +54,6 @@ class Returns200Test:
             "venueDepartementCode": "93",
         }
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_and_regular_offer_and_token_in_lower_case(self, app):
         # Given
         user = create_user(email="user@example.com", public_name="John Doe")
@@ -89,7 +85,6 @@ class Returns200Test:
             "venueDepartementCode": "93",
         }
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_and_email_with_special_characters_url_encoded(self, app):
         # Given
         user = create_user(email="user+plus@example.com")
@@ -113,7 +108,6 @@ class Returns200Test:
 
 
 class Returns204Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_gives_right_email(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -133,7 +127,6 @@ class Returns204Test:
         # Then
         assert response.status_code == 204
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_give_right_email_and_event_offer_id(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -153,7 +146,6 @@ class Returns204Test:
         # Then
         assert response.status_code == 204
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_give_right_email_and_offer_id_thing(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -173,7 +165,6 @@ class Returns204Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_token_user_has_rights_but_token_not_found(self, app):
         # Given
         admin_user = create_user(email="admin@example.com")
@@ -187,7 +178,6 @@ class Returns404Test:
         assert response.status_code == 404
         assert response.json["global"] == ["Cette contremarque n'a pas été trouvée"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_wrong_email(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -208,7 +198,6 @@ class Returns404Test:
         assert response.status_code == 404
         assert response.json["global"] == ["Cette contremarque n'a pas été trouvée"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_right_email_and_wrong_offer(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -227,7 +216,6 @@ class Returns404Test:
         assert response.status_code == 404
         assert response.json["global"] == ["Cette contremarque n'a pas été trouvée"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_and_email_with_special_characters_not_url_encoded(self, app):
         # Given
         user = create_user(email="user+plus@example.com")
@@ -250,7 +238,6 @@ class Returns404Test:
 
 
 class Returns400Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_not_logged_in_and_doesnt_give_email(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -274,7 +261,6 @@ class Returns400Test:
             "Vous devez préciser l'email de l'utilisateur quand vous n'êtes pas connecté(e)"
         ]
 
-    @pytest.mark.usefixtures("db_session")
     def when_user_doesnt_have_rights_and_token_exists(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -298,7 +284,6 @@ class Returns400Test:
 
 class Returns403Test:
     @mock.patch("pcapi.core.bookings.validation.check_is_usable")
-    @pytest.mark.usefixtures("db_session")
     def when_booking_not_confirmed(self, mocked_check_is_usable, app):
         # Given
         next_week = datetime.utcnow() + timedelta(weeks=1)
@@ -316,7 +301,6 @@ class Returns403Test:
         assert response.status_code == 403
         assert response.json["booking"] == ["Not confirmed"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_cancelled(self, app):
         # Given
         user = create_user(email="user@example.com")
@@ -335,7 +319,6 @@ class Returns403Test:
         assert response.status_code == 403
         assert response.json["booking"] == ["Cette réservation a été annulée"]
 
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_refunded(self, app):
         # Given
         booking = BookingFactory()
@@ -353,7 +336,6 @@ class Returns403Test:
 
 
 class Returns410Test:
-    @pytest.mark.usefixtures("db_session")
     def when_booking_is_already_validated(self, app):
         # Given
         user = create_user(email="user@example.com")

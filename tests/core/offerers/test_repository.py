@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offerers.factories as offerers_factories
 from pcapi.core.offerers.repository import get_all_offerers_for_user
 from pcapi.core.offerers.repository import get_all_venue_labels
@@ -8,9 +6,7 @@ import pcapi.core.offers.factories as offers_factories
 from pcapi.core.users import factories as users_factories
 
 
-@pytest.mark.usefixtures("db_session")
 class GetAllVenueLabelsTest:
-    @pytest.mark.usefixtures("db_session")
     def test_get_all_venue_labels(self):
         label1 = offerers_factories.VenueLabelFactory()
         label2 = offerers_factories.VenueLabelFactory()
@@ -18,7 +14,6 @@ class GetAllVenueLabelsTest:
         assert set(get_all_venue_labels()) == {label1, label2}
 
 
-@pytest.mark.usefixtures("db_session")
 class GetAllVenueTypesTest:
     def test_get_all_venue_types(self):
         # Given
@@ -32,7 +27,6 @@ class GetAllVenueTypesTest:
         assert set(venue_types) == {type_1, type_2}
 
 
-@pytest.mark.usefixtures("db_session")
 class GetAllOfferersForUserTest:
     def should_return_all_offerers_for_an_admin(self) -> None:
         # Given

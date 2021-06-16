@@ -13,7 +13,6 @@ from pcapi.models import ApiErrors
 from pcapi.repository import repository
 
 
-@pytest.mark.usefixtures("db_session")
 def test_nOffers_with_one_venue_provider(app):
     # given
     provider = create_provider()
@@ -43,7 +42,6 @@ def test_nOffers_with_one_venue_provider(app):
     assert n_offers == 4
 
 
-@pytest.mark.usefixtures("db_session")
 def test_nOffers_with_two_venue_providers_from_different_providers(app):
     # given
     provider1 = create_provider(local_class="OpenAgenda")
@@ -77,7 +75,6 @@ def test_nOffers_with_two_venue_providers_from_different_providers(app):
     assert n_offers_for_venue_provider2 == 1
 
 
-@pytest.mark.usefixtures("db_session")
 def test_raise_errors_if_venue_provider_already_exists_with_same_information(app):
     # given
     provider = APIProviderFactory()
@@ -95,7 +92,6 @@ def test_raise_errors_if_venue_provider_already_exists_with_same_information(app
     assert errors.value.errors["global"] == ["Votre lieu est déjà lié à cette source"]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_have_attribute_matching_allocine_when_having_allocine_provider(app):
     # given
     provider = activate_provider("AllocineStocks")
@@ -111,7 +107,6 @@ def test_should_have_attribute_matching_allocine_when_having_allocine_provider(a
     assert allocine_venue_provider.isFromAllocineProvider
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_be_matched_has_allocine_provider_with_other_provider(app):
     # given
     provider = APIProviderFactory()

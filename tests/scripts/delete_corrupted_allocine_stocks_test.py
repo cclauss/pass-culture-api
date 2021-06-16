@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offerers.factories import ProviderFactory
 from pcapi.core.providers.repository import get_provider_by_local_class
 from pcapi.model_creators.generic_creators import create_offerer
@@ -11,7 +9,6 @@ from pcapi.repository import repository
 from pcapi.scripts.delete_corrupted_allocine_stocks import delete_corrupted_allocine_stocks
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_delete_stock_from_allocine_provider_with_specific_id_at_provider_format(app):
     # Given
     offerer = create_offerer()
@@ -33,7 +30,6 @@ def test_should_delete_stock_from_allocine_provider_with_specific_id_at_provider
     assert Stock.query.count() == 0
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_delete_stock_from_allocine_with_new_id_format(app):
     # Given
     offerer = create_offerer()
@@ -55,7 +51,6 @@ def test_should_not_delete_stock_from_allocine_with_new_id_format(app):
     assert Stock.query.count() == 1
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_delete_stock_from_other_provider_than_allocine(app):
     # Given
     offerer = create_offerer()
@@ -77,7 +72,6 @@ def test_should_not_delete_stock_from_other_provider_than_allocine(app):
     assert Stock.query.count() == 1
 
 
-@pytest.mark.usefixtures("db_session")
 def test_should_not_delete_stock_from_allocine_when_not_sof_deleted(app):
     # Given
     offerer = create_offerer()

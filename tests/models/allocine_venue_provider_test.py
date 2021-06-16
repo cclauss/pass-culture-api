@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.providers.models import AllocineVenueProvider
 from pcapi.core.providers.models import VenueProvider
 from pcapi.model_creators.generic_creators import create_allocine_venue_provider
@@ -12,7 +10,6 @@ from pcapi.repository import repository
 
 
 class AllocineVenueProviderTest:
-    @pytest.mark.usefixtures("db_session")
     def test_allocine_venue_provider_should_inherit_from_venue_provider(self, app):
         offerer = create_offerer()
         venue = create_venue(offerer)
@@ -30,7 +27,6 @@ class AllocineVenueProviderTest:
         assert allocine_vp.isDuo
         assert allocine_vp.isFromAllocineProvider
 
-    @pytest.mark.usefixtures("db_session")
     def test_query_venue_provider_load_allocine_venue_provider_attributes_when_connected_to_allocine(self, app):
         offerer = create_offerer()
         venue = create_venue(offerer)

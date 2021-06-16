@@ -1,7 +1,5 @@
 from unittest import mock
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 from pcapi.core.bookings.models import Booking
 import pcapi.core.users.factories as users_factories
@@ -9,7 +7,6 @@ import pcapi.core.users.factories as users_factories
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 @mock.patch("wtforms.csrf.session.SessionCSRF.validate_csrf_token", lambda *args, **kwargs: True)
 class BookingViewTest:
     def test_search_booking(self, app):

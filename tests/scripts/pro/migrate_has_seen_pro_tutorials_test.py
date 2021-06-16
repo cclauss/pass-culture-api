@@ -1,14 +1,11 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 import pcapi.core.users.factories as users_factories
 from pcapi.core.users.models import User
 from pcapi.scripts.pro.migrate_has_seen_pro_tutorials import migrate_has_seen_pro_tutorials
 
 
-@pytest.mark.usefixtures("db_session")
 def should_udpate_has_seen_pro_tutorials_by_batch():
     today = datetime.now()
     yesterday = datetime.now() - timedelta(days=1)

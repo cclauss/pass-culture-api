@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.domain.music_types import music_types
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.repository import repository
@@ -8,7 +6,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_list_music_types(self, app):
         # given
         user = create_user()

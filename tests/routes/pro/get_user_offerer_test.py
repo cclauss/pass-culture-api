@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
 from pcapi.model_creators.generic_creators import create_user_offerer
@@ -10,7 +8,6 @@ from tests.conftest import TestClient
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def test_get_user_offerer_should_return_only_user_offerer_from_current_user(self, app):
         # given
         user1 = create_user(email="patrick.fiori@test.com")
@@ -31,7 +28,6 @@ class Returns200Test:
         assert user_offerer_response["userId"] == humanize(user1.id)
         assert "validationToken" not in user_offerer_response
 
-    @pytest.mark.usefixtures("db_session")
     def when_offerer_id_does_not_exist(self, app):
         # given
         user1 = create_user(email="patrick.fiori@test.com")

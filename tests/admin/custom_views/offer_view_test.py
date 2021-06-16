@@ -28,7 +28,6 @@ class BeneficiaryUserViewTest:
         assert offer_view.column_searchable_list is None or len(offer_view.column_searchable_list) == 0
 
 
-@pytest.mark.usefixtures("db_session")
 class OfferValidationViewTest:
     @patch("wtforms.csrf.session.SessionCSRF.validate_csrf_token")
     @patch("pcapi.admin.custom_views.offer_view.get_offerer_legal_category")

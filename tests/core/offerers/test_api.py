@@ -8,7 +8,6 @@ from pcapi.models import api_errors
 
 
 class EditVenueTest:
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offerers.api.redis.add_venue_id")
     def when_changes_on_name_algolia_indexing_is_triggered(self, mocked_add_venue_id, app) -> None:
         # Given
@@ -25,7 +24,6 @@ class EditVenueTest:
         # Then
         assert mocked_add_venue_id.called_once()
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offerers.api.redis.add_venue_id")
     def when_changes_on_public_name_algolia_indexing_is_triggered(self, mocked_add_venue_id, app) -> None:
         # Given
@@ -42,7 +40,6 @@ class EditVenueTest:
         # Then
         assert mocked_add_venue_id.called_once()
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offerers.api.redis.add_venue_id")
     def when_changes_on_city_algolia_indexing_is_triggered(self, mocked_add_venue_id, app) -> None:
         # Given
@@ -59,7 +56,6 @@ class EditVenueTest:
         # Then
         assert mocked_add_venue_id.called_once()
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offerers.api.redis.add_venue_id")
     def when_changes_are_not_on_algolia_fields_it_should_not_trigger_indexing(self, mocked_add_venue_id, app) -> None:
         # Given
@@ -77,7 +73,6 @@ class EditVenueTest:
         # Then
         assert mocked_add_venue_id.not_called()
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offerers.api.redis.add_venue_id")
     def when_changes_in_payload_are_same_as_previous_it_should_not_trigger_indexing(
         self, mocked_add_venue_id, app
@@ -96,7 +91,6 @@ class EditVenueTest:
         # Then
         assert mocked_add_venue_id.not_called()
 
-    @pytest.mark.usefixtures("db_session")
     def test_empty_siret_is_editable(self, app) -> None:
         # Given
         venue = offers_factories.VenueFactory(
@@ -114,7 +108,6 @@ class EditVenueTest:
         # Then
         assert updated_venue.siret == venue_data["siret"]
 
-    @pytest.mark.usefixtures("db_session")
     def test_existing_siret_is_not_editable(self, app) -> None:
         # Given
         venue = offers_factories.VenueFactory()
@@ -129,7 +122,6 @@ class EditVenueTest:
         # Then
         assert error.value.errors["siret"] == ["Vous ne pouvez pas modifier le siret d'un lieu"]
 
-    @pytest.mark.usefixtures("db_session")
     def test_latitude_and_longitude_wrong_format(self, app) -> None:
         # given
         venue = offers_factories.VenueFactory(
@@ -148,7 +140,6 @@ class EditVenueTest:
         assert error.value.errors["latitude"] == ["La latitude doit être comprise entre -90.0 et +90.0"]
         assert error.value.errors["longitude"] == ["Format incorrect"]
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offerers.api.delete_venue_from_iris_venues")
     @patch("pcapi.core.offerers.api.link_valid_venue_to_irises")
     def test_edit_physical_venue_iris_process(
@@ -167,7 +158,6 @@ class EditVenueTest:
         mock_delete_venue_from_iris_venues.assert_called_once_with(updated_venue.id)
         mock_link_venue_to_iris_if_valid.assert_called_once_with(updated_venue)
 
-    @pytest.mark.usefixtures("db_session")
     @patch("pcapi.core.offerers.api.delete_venue_from_iris_venues")
     def test_edit_virtual_venue_iris_process(self, mock_delete_venue_from_iris_venues, app) -> None:
         # Given

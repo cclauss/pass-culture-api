@@ -7,7 +7,6 @@ from pcapi.repository import repository
 from pcapi.utils.token import random_token
 
 
-@pytest.mark.usefixtures("db_session")
 def test_save_api_key_raise_api_error_when_offerer_does_not_exist(app):
     # given
     offererApiKey = ApiKey()
@@ -22,7 +21,6 @@ def test_save_api_key_raise_api_error_when_offerer_does_not_exist(app):
     assert error.value.errors["offererId"] == ["Aucun objet ne correspond à cet identifiant dans notre base de données"]
 
 
-@pytest.mark.usefixtures("db_session")
 def test_save_api_key_create_relation_offerer_api_key(app):
     # given(
     offerer = create_offerer()

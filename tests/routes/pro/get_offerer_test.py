@@ -1,5 +1,3 @@
-import pytest
-
 import pcapi.core.offerers.models
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
@@ -11,7 +9,6 @@ from tests.conftest import TestClient
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_offerer_does_not_exist(self, app):
         # Given
         pro = users_factories.UserFactory(isBeneficiary=False)
@@ -26,7 +23,6 @@ class Returns404Test:
 
 
 class Returns200Test:
-    @pytest.mark.usefixtures("db_session")
     def when_user_has_rights_on_offerer(self, app):
         # given
 

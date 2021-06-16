@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.offers.models import OfferValidationStatus
 from pcapi.model_creators.generic_creators import create_bank_information
 from pcapi.model_creators.generic_creators import create_offerer
@@ -13,7 +11,6 @@ from pcapi.models.bank_information import BankInformationStatus
 from pcapi.repository import repository
 
 
-@pytest.mark.usefixtures("db_session")
 def test_nOffers(app):
     # given
     offerer = create_offerer()
@@ -36,7 +33,6 @@ def test_nOffers(app):
     assert n_offers == 5
 
 
-@pytest.mark.usefixtures("db_session")
 def test_offerer_can_have_null_address(app):
     # given
     offerer = create_offerer(address=None)
@@ -50,7 +46,6 @@ def test_offerer_can_have_null_address(app):
 
 
 class OffererBankInformationTest:
-    @pytest.mark.usefixtures("db_session")
     def test_bic_property_returns_bank_information_bic_when_offerer_has_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -63,7 +58,6 @@ class OffererBankInformationTest:
         # Then
         assert bic == "BDFEFR2LCCB"
 
-    @pytest.mark.usefixtures("db_session")
     def test_bic_property_returns_none_when_offerer_does_not_have_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -75,7 +69,6 @@ class OffererBankInformationTest:
         # Then
         assert bic is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_iban_property_returns_bank_information_iban_when_offerer_has_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -88,7 +81,6 @@ class OffererBankInformationTest:
         # Then
         assert iban == "FR7630007000111234567890144"
 
-    @pytest.mark.usefixtures("db_session")
     def test_iban_property_returns_none_when_offerer_does_not_have_bank_information(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -100,7 +92,6 @@ class OffererBankInformationTest:
         # Then
         assert iban is None
 
-    @pytest.mark.usefixtures("db_session")
     def test_demarchesSimplifieesApplicationId_returns_id_if_status_is_draft(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -115,7 +106,6 @@ class OffererBankInformationTest:
         # Then
         assert field == 12345
 
-    @pytest.mark.usefixtures("db_session")
     def test_demarchesSimplifieesApplicationId_returns_none_if_status_is_rejected(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -132,7 +122,6 @@ class OffererBankInformationTest:
 
 
 class IsValidatedTest:
-    @pytest.mark.usefixtures("db_session")
     def test_is_validated_property(self, app):
         # Given
         offerer = create_offerer(siren="123456789")
@@ -146,7 +135,6 @@ class IsValidatedTest:
         # Then
         assert isValidated is True
 
-    @pytest.mark.usefixtures("db_session")
     def test_is_validated_property_when_still_offerer_has_validation_token(self, app):
         # Given
         offerer = create_offerer(siren="123456789", validation_token="AAZRER")
@@ -184,7 +172,6 @@ class AppendUserHasAccessAttributeTest:
         # Then
         assert offerer.userHasAccess is False
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_true_when_current_user_access_to_offerer_is_validated(self, app):
         # Given
         current_user = create_user(postal_code=None)
@@ -198,7 +185,6 @@ class AppendUserHasAccessAttributeTest:
         # Then
         assert offerer.userHasAccess is True
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_current_user_access_to_offerer_is_not_validated(self, app):
         # Given
         current_user = create_user(postal_code=None)
@@ -212,7 +198,6 @@ class AppendUserHasAccessAttributeTest:
         # Then
         assert offerer.userHasAccess is False
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_false_when_current_user_has_no_access(self, app):
         # Given
         current_user = create_user(email="current@example.net", postal_code=None)
@@ -227,7 +212,6 @@ class AppendUserHasAccessAttributeTest:
         # Then
         assert offerer.userHasAccess is False
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_true_when_current_user_is_admin(self, app):
         # Given
         current_user = create_user(email="current@example.net", is_admin=True, postal_code=None)

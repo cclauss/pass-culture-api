@@ -1,7 +1,5 @@
 from unittest.mock import patch
 
-import pytest
-
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
 from pcapi.utils.human_ids import humanize
@@ -9,7 +7,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_response_serialization(app):
     user_offerer = offers_factories.UserOffererFactory(
         user__email="user.pro@test.com",
@@ -36,7 +33,6 @@ def test_response_serialization(app):
     }
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_default_call(mock_get_filtered_venues, app):
     user_offerer = offers_factories.UserOffererFactory(
@@ -60,7 +56,6 @@ def test_default_call(mock_get_filtered_venues, app):
     )
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_default_admin_call(mock_get_filtered_venues, app):
     admin_user = users_factories.UserFactory(email="admin.pro@test.com", isBeneficiary=False, isAdmin=True)
@@ -80,7 +75,6 @@ def test_default_admin_call(mock_get_filtered_venues, app):
     )
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_invalid_offerer_id(mock_get_filtered_venues, app):
     pro_user = users_factories.UserFactory(email="user.pro@test.com", isBeneficiary=False)
@@ -111,7 +105,6 @@ def test_invalid_offerer_id(mock_get_filtered_venues, app):
     assert len(response.json["venues"]) == 0
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_full_valid_call(mock_get_filtered_venues, app):
     pro_user = users_factories.UserFactory(email="user.pro@test.com", isBeneficiary=False)
@@ -140,7 +133,6 @@ def test_full_valid_call(mock_get_filtered_venues, app):
     )
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_full_valid_call_with_false(mock_get_filtered_venues, app):
     pro_user = users_factories.UserFactory(email="user.pro@test.com", isBeneficiary=False)
@@ -169,7 +161,6 @@ def test_full_valid_call_with_false(mock_get_filtered_venues, app):
     )
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_invalid_validated(mock_get_filtered_venues, app):
     pro_user = users_factories.UserFactory(email="user.pro@test.com", isBeneficiary=False)
@@ -186,7 +177,6 @@ def test_invalid_validated(mock_get_filtered_venues, app):
     mock_get_filtered_venues.assert_not_called()
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_invalid_validated_for_user(mock_get_filtered_venues, app):
     pro_user = users_factories.UserFactory(email="user.pro@test.com", isBeneficiary=False)
@@ -203,7 +193,6 @@ def test_invalid_validated_for_user(mock_get_filtered_venues, app):
     mock_get_filtered_venues.assert_not_called()
 
 
-@pytest.mark.usefixtures("db_session")
 @patch("pcapi.core.offerers.repository.get_filtered_venues")
 def test_invalid_active_offerer_only(mock_get_filtered_venues, app):
     pro_user = users_factories.UserFactory(email="user.pro@test.com", isBeneficiary=False)

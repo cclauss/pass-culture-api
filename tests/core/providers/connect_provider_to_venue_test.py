@@ -14,7 +14,6 @@ from pcapi.models import ApiErrors
 from pcapi.repository import repository
 
 
-@pytest.mark.usefixtures("db_session")
 @patch(
     "pcapi.infrastructure.repository.stock_provider.provider_api.ProviderAPI.is_siret_registered",
     return_value=True,
@@ -34,7 +33,6 @@ def test_when_venue_id_at_offer_provider_is_given(can_be_synchronized, app):
     can_be_synchronized.assert_called_once_with("id_for_remote_system")
 
 
-@pytest.mark.usefixtures("db_session")
 @patch(
     "pcapi.infrastructure.repository.stock_provider.provider_api.ProviderAPI.is_siret_registered",
     return_value=True,
@@ -57,7 +55,6 @@ class WhenProviderImplementsProviderAPITest:
     def setup_class(self):
         self.find_by_id = MagicMock()
 
-    @pytest.mark.usefixtures("db_session")
     @patch(
         "pcapi.core.providers.api._siret_can_be_synchronized",
         return_value=True,
@@ -82,7 +79,6 @@ class WhenProviderImplementsProviderAPITest:
         fnac_venue_provider = VenueProvider.query.one()
         assert fnac_venue_provider.venue == venue
 
-    @pytest.mark.usefixtures("db_session")
     @patch(
         "pcapi.core.providers.api._siret_can_be_synchronized",
         return_value=False,
@@ -108,7 +104,6 @@ class WhenProviderImplementsProviderAPITest:
             "L’importation d’offres avec FNAC n’est pas disponible pour le SIRET 12345678912345"
         ]
 
-    @pytest.mark.usefixtures("db_session")
     def should_not_connect_venue_when_venue_has_no_siret(self, app):
         # Given
         offerer = create_offerer()
@@ -133,7 +128,6 @@ class WhenProviderIsSomethingElseTest:
     def setup_class(self):
         self.find_by_id = MagicMock()
 
-    @pytest.mark.usefixtures("db_session")
     def should_raise_an_error(self, app):
         # Given
         offerer = create_offerer()

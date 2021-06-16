@@ -2,7 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 
 from freezegun import freeze_time
-import pytest
 
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
@@ -11,7 +10,6 @@ from pcapi.utils.human_ids import humanize
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 class Returns200Test:
     def test_access_by_beneficiary(self, app):
         # Given

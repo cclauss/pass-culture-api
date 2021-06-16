@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.core.testing import override_settings
 from pcapi.core.users.api import create_phone_validation_token
 from pcapi.core.users.factories import BeneficiaryImportFactory
@@ -14,7 +12,6 @@ from pcapi.notifications.sms import testing as sms_testing
 from tests.conftest import TestClient
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_phone_validation(app):
     """
     Test phone code validation.
@@ -41,7 +38,6 @@ def test_send_phone_validation(app):
     assert not user.isBeneficiary
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_phone_validation_and_become_beneficiary(app):
     """
     Test that a user with a CREATED import becomes a beneficiary once its phone
@@ -69,7 +65,6 @@ def test_send_phone_validation_and_become_beneficiary(app):
     assert user.isBeneficiary
 
 
-@pytest.mark.usefixtures("db_session")
 @override_settings(BLACKLISTED_SMS_RECIPIENTS={"+33607080900"})
 def test_send_phone_validation_blocked_number(app):
     user = UserFactory(isBeneficiary=False, isEmailValidated=True, phoneNumber="+33607080900")
@@ -84,7 +79,6 @@ def test_send_phone_validation_blocked_number(app):
     assert not Token.query.filter_by(userId=user.id).first()
 
 
-@pytest.mark.usefixtures("db_session")
 @override_settings(BLACKLISTED_SMS_RECIPIENTS={"+33607080900"})
 def test_update_phone_number_with_blocked_phone_number(app):
     user = UserFactory(isBeneficiary=False, isEmailValidated=True, phoneNumber="+33601020304")
@@ -100,7 +94,6 @@ def test_update_phone_number_with_blocked_phone_number(app):
     assert user.phoneNumber == "+33601020304"
 
 
-@pytest.mark.usefixtures("db_session")
 @override_settings(BLACKLISTED_SMS_RECIPIENTS={"+33607080900"})
 def test_validate_phone_validation_with_blocked_number(app):
     user = UserFactory(isBeneficiary=False, isEmailValidated=True, phoneNumber="+33607080900")
@@ -116,7 +109,6 @@ def test_validate_phone_validation_with_blocked_number(app):
     assert Token.query.filter_by(userId=user.id, type=TokenType.PHONE_VALIDATION).first()
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_phone_validation_with_malformed_number(app):
     # user's phone number should be in international format (E.164): +33601020304
     user = UserFactory(isEmailValidated=True, isBeneficiary=False, phoneNumber="0601020304")
@@ -132,7 +124,6 @@ def test_send_phone_validation_with_malformed_number(app):
     assert Token.query.filter_by(userId=user.id, type=TokenType.PHONE_VALIDATION).first()
 
 
-@pytest.mark.usefixtures("db_session")
 def test_validate_phone_with_non_french_number(app):
     user = UserFactory(isBeneficiary=False, isEmailValidated=True, phoneNumber="+46766123456")
 
@@ -147,7 +138,6 @@ def test_validate_phone_with_non_french_number(app):
     assert Token.query.filter_by(userId=user.id, type=TokenType.PHONE_VALIDATION).first()
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_phone_validation_with_non_french_number(app):
     user = UserFactory(isBeneficiary=False, isEmailValidated=True, phoneNumber="+46766123456")
 
@@ -160,7 +150,6 @@ def test_send_phone_validation_with_non_french_number(app):
     assert not Token.query.filter_by(userId=user.id, type="PHONE_VALIDATION").first()
 
 
-@pytest.mark.usefixtures("db_session")
 def test_update_phone_number_with_non_french_number(app):
     user = UserFactory(isBeneficiary=False, isEmailValidated=True, phoneNumber="+46766123456")
 

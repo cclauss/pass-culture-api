@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import pytest
 
 import pcapi.core.offers.factories as offers_factories
 import pcapi.core.users.factories as users_factories
@@ -8,7 +7,6 @@ from pcapi.utils.mailing import make_offer_creation_notification_email
 from pcapi.utils.mailing import make_offer_rejection_notification_email
 
 
-@pytest.mark.usefixtures("db_session")
 class MakeOfferCreationNotificationEmailTest:
     def test_with_physical_offer(self):
         author = users_factories.UserFactory()
@@ -78,7 +76,6 @@ class MakeOfferCreationNotificationEmailTest:
         assert email["Subject"] == "[Création d’offre - numérique] Les lièvres pas malins"
 
 
-@pytest.mark.usefixtures("db_session")
 class MakeOfferRejectionNotificationEmailTest:
     def test_with_physical_offer(self):
         author = users_factories.UserFactory(firstName=None)

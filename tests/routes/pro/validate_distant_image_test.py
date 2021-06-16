@@ -1,7 +1,5 @@
 from unittest import mock
 
-import pytest
-
 from pcapi.core.offers import exceptions
 from pcapi.core.users.factories import UserFactory
 
@@ -9,7 +7,6 @@ from tests.conftest import TestClient
 
 
 class ValidateDistantImageTest:
-    @pytest.mark.usefixtures("db_session")
     @mock.patch("pcapi.routes.pro.offers.get_distant_image")
     @mock.patch("pcapi.routes.pro.offers.check_image")
     def test_ok(self, mock_check_image, mock_get_distant_image, app):
@@ -29,7 +26,6 @@ class ValidateDistantImageTest:
         assert response.status_code == 200
         assert response.json == {"errors": [], "image": "data:image/png;base64,YXpl"}
 
-    @pytest.mark.usefixtures("db_session")
     @mock.patch("pcapi.routes.pro.offers.get_distant_image")
     def test_unaccessible_file(self, mock_get_distant_image, app):
         # Given
@@ -53,7 +49,6 @@ class ValidateDistantImageTest:
             "image": None,
         }
 
-    @pytest.mark.usefixtures("db_session")
     @mock.patch("pcapi.routes.pro.offers.get_distant_image")
     def test_image_size_too_large(self, mock_get_distant_image, app):
         # Given
@@ -71,7 +66,6 @@ class ValidateDistantImageTest:
         assert response.status_code == 200
         assert response.json == {"errors": ["Utilisez une image dont le poids est inférieur à 10.0 MB"], "image": None}
 
-    @pytest.mark.usefixtures("db_session")
     @mock.patch("pcapi.routes.pro.offers.get_distant_image")
     def test_image_too_small(self, mock_get_distant_image, app):
         # Given
@@ -92,7 +86,6 @@ class ValidateDistantImageTest:
             "image": None,
         }
 
-    @pytest.mark.usefixtures("db_session")
     @mock.patch("pcapi.routes.pro.offers.get_distant_image")
     def test_wrong_format(self, mock_get_distant_image, app):
         # Given

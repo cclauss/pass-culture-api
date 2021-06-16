@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_venue
 from pcapi.repository import repository
@@ -9,7 +7,6 @@ from pcapi.utils.human_ids import humanize
 
 
 class GetNonEditableVenuesTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_offerer_has_no_name(self, app):
         # given
         offerer = create_offerer(name="")
@@ -27,7 +24,6 @@ class GetNonEditableVenuesTest:
         editable_venue = venues[0]
         assert editable_venue.venueId == venue.id
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_venue_when_siret_does_not_match_offerer_siren(self, app):
         # given
         offerer = create_offerer(siren="123456788")
@@ -45,7 +41,6 @@ class GetNonEditableVenuesTest:
         editable_venue = venues[0]
         assert editable_venue.venueId == venue.id
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_venue_when_offerer_siren_is_none(self, app):
         # given
         offerer = create_offerer(siren=None)
@@ -62,7 +57,6 @@ class GetNonEditableVenuesTest:
         editable_venue = venues[0]
         assert editable_venue.venueId == venue.id
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_return_venue_when_siret_is_none_and_offerer_siren_is_none(self, app):
         # given
         offerer = create_offerer(siren=None)
@@ -82,7 +76,6 @@ class GetNonEditableVenuesTest:
 
 
 class GenerateNonEditableVenuesCsvTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_generate_non_editable_venues_csv_with_correct_header_and_correct_informations(self, app):
         # given
         offerer = create_offerer(siren="123456788")

@@ -1,5 +1,3 @@
-import pytest
-
 from pcapi.model_creators.generic_creators import create_mediation
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_user
@@ -13,7 +11,6 @@ from tests.conftest import TestClient
 
 
 class Returns400Test:
-    @pytest.mark.usefixtures("db_session")
     def when_offer_id_is_not_received(self, app):
         # Given
         user = create_user(email="test@email.com")
@@ -32,7 +29,6 @@ class Returns400Test:
 
 
 class Returns404Test:
-    @pytest.mark.usefixtures("db_session")
     def when_offer_is_not_found(self, app):
         # Given
         user = create_user(email="test@email.com")
@@ -53,7 +49,6 @@ class Returns404Test:
         # Then
         assert response.status_code == 404
 
-    @pytest.mark.usefixtures("db_session")
     def when_mediation_is_not_found(self, app):
         # Given
         user = create_user(email="test@email.com")
@@ -76,7 +71,6 @@ class Returns404Test:
 
 
 class Returns201Test:
-    @pytest.mark.usefixtures("db_session")
     def when_offer_is_added_as_favorite_for_current_user(self, app):
         # Given
         user = create_user(email="test@email.com")
@@ -102,7 +96,6 @@ class Returns201Test:
         assert favorite.mediationId == mediation.id
         assert favorite.userId == user.id
 
-    @pytest.mark.usefixtures("db_session")
     def when_mediation_id_doest_not_exist(self, app):
         # Given
         user = create_user(email="test@email.com")

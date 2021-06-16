@@ -30,7 +30,6 @@ from pcapi.scripts.payment.batch_steps import send_wallet_balances
 from pcapi.scripts.payment.batch_steps import set_not_processable_payments_with_bank_information_to_retry
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_transactions_should_not_send_an_email_if_pass_culture_iban_is_missing():
     # given
     iban = "CF13QSDFGH456789"
@@ -48,7 +47,6 @@ def test_send_transactions_should_not_send_an_email_if_pass_culture_iban_is_miss
     assert not mails_testing.outbox
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_transactions_should_not_send_an_email_if_pass_culture_bic_is_missing():
     # given
     iban = "CF13QSDFGH456789"
@@ -66,7 +64,6 @@ def test_send_transactions_should_not_send_an_email_if_pass_culture_bic_is_missi
     assert not mails_testing.outbox
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_transactions_should_not_send_an_email_if_pass_culture_id_is_missing():
     # given
     iban = "CF13QSDFGH456789"
@@ -84,7 +81,6 @@ def test_send_transactions_should_not_send_an_email_if_pass_culture_id_is_missin
     assert not mails_testing.outbox
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_transactions_should_send_an_email_with_xml_and_csv_attachments():
     # given
     iban = "CF13QSDFGH456789"
@@ -102,7 +98,6 @@ def test_send_transactions_should_send_an_email_with_xml_and_csv_attachments():
     assert len(mails_testing.outbox[0].sent_data["Attachments"]) == 2
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_transactions_creates_a_new_payment_transaction_if_email_was_sent_properly():
     # given
     iban = "CF13QSDFGH456789"
@@ -121,7 +116,6 @@ def test_send_transactions_creates_a_new_payment_transaction_if_email_was_sent_p
     assert payment_messages != {None}
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_transactions_set_status_to_sent_if_email_was_sent_properly():
     # given
     iban = "CF13QSDFGH456789"
@@ -141,7 +135,6 @@ def test_send_transactions_set_status_to_sent_if_email_was_sent_properly():
         assert payment.currentStatus.status == TransactionStatus.UNDER_REVIEW
 
 
-@pytest.mark.usefixtures("db_session")
 @override_settings(EMAIL_BACKEND="pcapi.core.mails.backends.testing.FailingBackend")
 def test_send_transactions_set_status_to_error_with_details_if_email_was_not_sent_properly():
     # given
@@ -162,7 +155,6 @@ def test_send_transactions_set_status_to_error_with_details_if_email_was_not_sen
         assert payment.currentStatus.detail == "Erreur d'envoi à MailJet"
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_transactions_with_malformed_iban_on_payments_gives_them_an_error_status_with_a_cause():
     # given
     batch_date = datetime.datetime.now()
@@ -183,7 +175,6 @@ def test_send_transactions_with_malformed_iban_on_payments_gives_them_an_error_s
     )
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_payments_details_sends_a_csv_attachment():
     # given
     iban = "CF13QSDFGH456789"
@@ -199,7 +190,6 @@ def test_send_payments_details_sends_a_csv_attachment():
     assert mails_testing.outbox[0].sent_data["Attachments"][0]["ContentType"] == "application/zip"
 
 
-@pytest.mark.usefixtures("db_session")
 @override_settings(EMAIL_BACKEND="pcapi.core.mails.backends.testing.FailingBackend")
 def test_send_payments_details_fallbacks_to_stored_csv_on_mail_error():
     iban = "CF13QSDFGH456789"
@@ -220,7 +210,6 @@ def test_send_payments_details_fallbacks_to_stored_csv_on_mail_error():
     assert header.startswith('"Libellé fournisseur","Raison sociale de la structure","SIREN"')
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_payment_details_does_not_send_anything_if_all_payment_have_error_status():
     send_payments_details(Payment.query, ["comptable@test.com"])
     assert not mails_testing.outbox
@@ -233,7 +222,6 @@ def test_send_payment_details_does_not_send_anything_if_recipients_are_missing()
     assert not mails_testing.outbox
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_wallet_balances_sends_a_csv_attachment():
     # when
     send_wallet_balances(["comptable@test.com"])
@@ -253,7 +241,6 @@ def test_send_wallet_balances_does_not_send_anything_if_recipients_are_missing()
     assert not mails_testing.outbox
 
 
-@pytest.mark.usefixtures("db_session")
 def test_send_payments_report_sends_one_csv_attachment_if_some_payments_are_not_processable():
     # given
     batch_date = datetime.datetime.now()
@@ -271,7 +258,6 @@ def test_send_payments_report_sends_one_csv_attachment_if_some_payments_are_not_
     assert mails_testing.outbox[0].sent_data["Attachments"][0]["ContentType"] == "text/csv"
 
 
-@pytest.mark.usefixtures("db_session")
 @override_settings(EMAIL_BACKEND="pcapi.core.mails.backends.testing.FailingBackend")
 def test_send_payments_report_fallbacks_to_stored_csv_on_mail_error():
     batch_date = datetime.datetime.now()
@@ -292,7 +278,6 @@ def test_send_payments_report_fallbacks_to_stored_csv_on_mail_error():
 
 
 class SetNotProcessablePaymentsWithBankInformationToRetryTest:
-    @pytest.mark.usefixtures("db_session")
     def test_should_set_not_processable_payments_to_retry_and_update_payments_bic_and_iban_using_offerer_information(
         self,
     ):
@@ -325,7 +310,6 @@ class SetNotProcessablePaymentsWithBankInformationToRetryTest:
         assert queried_not_processable_payment.currentStatus.status == TransactionStatus.RETRY
         assert queried_sent_payment.currentStatus.status == TransactionStatus.SENT
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_not_set_not_processable_payments_to_retry_when_bank_information_status_is_not_accepted(self):
         # Given
         offerer = create_offerer(name="first offerer")
@@ -357,7 +341,6 @@ class SetNotProcessablePaymentsWithBankInformationToRetryTest:
         assert queried_not_processable_payment.currentStatus.status == TransactionStatus.NOT_PROCESSABLE
         assert queried_sent_payment.currentStatus.status == TransactionStatus.SENT
 
-    @pytest.mark.usefixtures("db_session")
     def test_should_set_not_processable_payments_to_retry_and_update_payments_bic_and_iban_using_venue_information(
         self,
     ):
@@ -392,7 +375,6 @@ class SetNotProcessablePaymentsWithBankInformationToRetryTest:
         assert queried_not_processable_payment.batchDate == new_batch_date
 
 
-@pytest.mark.usefixtures("db_session")
 def test_get_venues_to_reimburse():
     cutoff = datetime.datetime.now()
     before_cutoff = cutoff - datetime.timedelta(days=1)

@@ -2,8 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 from unittest.mock import Mock
 
-import pytest
-
 from pcapi.core.users.factories import UserFactory
 from pcapi.core.users.models import User
 from pcapi.scripts.beneficiary import remote_tag_has_completed
@@ -15,7 +13,6 @@ NOW = datetime.utcnow()
 ONE_WEEK_AGO = NOW - timedelta(days=7)
 
 
-@pytest.mark.usefixtures("db_session")
 def test_tag_user_had_completed_id_check():
     # given
     recieved_beneficiary = UserFactory(hasCompletedIdCheck=False, isBeneficiary=False)

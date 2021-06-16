@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timezone
 
-import pytest
-
 import pcapi.core.bookings.factories as bookings_factories
 import pcapi.core.offers.factories as offers_factories
 from pcapi.emails.beneficiary_warning_after_pro_booking_cancellation import (
@@ -10,7 +8,6 @@ from pcapi.emails.beneficiary_warning_after_pro_booking_cancellation import (
 )
 
 
-@pytest.mark.usefixtures("db_session")
 class RetrieveDataToWarnBeneficiaryAfterProBookingCancellationTest:
     def test_should_return_event_data_when_booking_is_on_an_event(self):
         # Given
