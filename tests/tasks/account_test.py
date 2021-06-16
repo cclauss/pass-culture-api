@@ -3,7 +3,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 from flask_jwt_extended.utils import create_access_token
-import pytest
 from requests import Response
 
 from pcapi.core.testing import override_settings
@@ -11,9 +10,6 @@ from pcapi.core.users import factories as users_factories
 
 import tests
 from tests.conftest import TestClient
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 class VerifyIdentityDocumentTest:

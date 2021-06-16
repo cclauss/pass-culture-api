@@ -1,12 +1,8 @@
-import pytest
 import semver
 
 from pcapi.core.testing import override_settings
 
 from tests.conftest import TestClient
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 class CheckClientVersionTest:

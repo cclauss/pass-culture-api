@@ -2,7 +2,6 @@ from datetime import datetime
 from datetime import timedelta
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.bookings.factories import BookingFactory
 import pcapi.core.mails.testing as mails_testing
@@ -21,9 +20,6 @@ import pcapi.notifications.push.testing as notifications_testing
 from tests.conftest import TestClient
 
 from .utils import create_user_and_test_client
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 class OffersTest:

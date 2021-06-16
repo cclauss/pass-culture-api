@@ -8,9 +8,6 @@ import pcapi.core.offers.factories as offers_factories
 from tests.conftest import TestClient
 
 
-pytestmark = pytest.mark.usefixtures("db_session")
-
-
 @patch("pcapi.core.providers.api.synchronize_stocks")
 def test_accepts_request(mock_synchronize_stocks, app):
     offerer = offers_factories.OffererFactory(siren=123456789)

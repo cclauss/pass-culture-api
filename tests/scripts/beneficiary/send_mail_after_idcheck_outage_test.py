@@ -2,15 +2,11 @@ from datetime import datetime
 from datetime import timedelta
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.offers import factories as offers_factories
 from pcapi.core.testing import override_features
 from pcapi.core.users import factories
 from pcapi.scripts.beneficiary.send_mail_after_idcheck_outage import _get_eligible_users_created_between
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 class SendMailAfterIdcheckOutageTest:

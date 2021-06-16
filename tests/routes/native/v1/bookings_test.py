@@ -3,7 +3,6 @@ from datetime import timedelta
 
 from flask_jwt_extended.utils import create_access_token
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.bookings.factories import BookingFactory
 from pcapi.core.bookings.models import Booking
@@ -20,9 +19,6 @@ from pcapi.models.offer_type import ThingType
 from pcapi.utils.human_ids import humanize
 
 from tests.conftest import TestClient
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 class PostBookingTest:

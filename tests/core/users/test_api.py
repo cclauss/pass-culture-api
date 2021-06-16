@@ -59,9 +59,6 @@ from pcapi.routes.serialization.users import ProUserCreationBodyModel
 import tests
 
 
-pytestmark = pytest.mark.usefixtures("db_session")
-
-
 class GenerateAndSaveTokenTest:
     def test_generate_and_save_token(self, app):
         user = users_factories.UserFactory(email="py@test.com")

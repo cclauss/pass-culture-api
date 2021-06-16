@@ -4,7 +4,6 @@ from unittest.mock import patch
 from flask_jwt_extended import decode_token
 from flask_jwt_extended.utils import create_access_token
 from freezegun import freeze_time
-import pytest
 
 import pcapi.core.mails.testing as mails_testing
 from pcapi.core.testing import override_features
@@ -15,9 +14,6 @@ from pcapi.core.users.models import hash_password
 from pcapi.models import db
 
 from tests.conftest import TestClient
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 def test_user_logs_in_and_refreshes_token(app):

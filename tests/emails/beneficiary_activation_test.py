@@ -1,15 +1,11 @@
 from datetime import datetime
 
 from freezegun import freeze_time
-import pytest
 
 from pcapi.core.testing import override_features
 from pcapi.core.users import factories as users_factories
 from pcapi.emails import beneficiary_activation
 from pcapi.model_creators.generic_creators import create_user
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 class GetActivationEmailTest:

@@ -12,9 +12,6 @@ from pcapi.core.users.models import PhoneValidationStatusType
 from pcapi.flask_app import db
 
 
-pytestmark = pytest.mark.usefixtures("db_session")
-
-
 class JouveFraudCheckTest:
     application_id = 35
     user_email = "tour.de.passpass@example.com"

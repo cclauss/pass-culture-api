@@ -1,11 +1,6 @@
-import pytest
-
 from pcapi.core.testing import override_features
 
 from tests.conftest import TestClient
-
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 
 class SettingsTest:

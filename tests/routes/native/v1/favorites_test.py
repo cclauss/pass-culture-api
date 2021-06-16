@@ -1,8 +1,6 @@
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
-
 from pcapi.core.bookings import factories as bookings_factories
 from pcapi.core.offers import factories as offers_factories
 from pcapi.core.testing import assert_num_queries
@@ -15,8 +13,6 @@ from tests.conftest import TestClient
 
 from . import utils
 
-
-pytestmark = pytest.mark.usefixtures("db_session")
 
 FAVORITES_URL = "/native/v1/me/favorites"
 FAVORITES_COUNT_URL = "/native/v1/me/favorites/count"

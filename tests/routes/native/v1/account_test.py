@@ -41,9 +41,6 @@ from tests.connectors import user_profiling_fixtures
 from .utils import create_user_and_test_client
 
 
-pytestmark = pytest.mark.usefixtures("db_session")
-
-
 class AccountTest:
     identifier = "email@example.com"
 
