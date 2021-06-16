@@ -61,7 +61,8 @@ def book_offer(
         validation.check_stock_is_bookable(stock)
         total_amount = quantity * stock.price
         validation.check_expenses_limits(beneficiary, total_amount, stock.offer)
-        validation.check_activation_code_available(stock)
+        if is_activation_code_applicable(stock):
+            validation.check_activation_code_available(stock)
 
         # FIXME (dbaty, 2020-10-20): if we directly set relations (for
         # example with `booking.user = beneficiary`) instead of foreign keys,
@@ -85,7 +86,8 @@ def book_offer(
         booking.dateCreated = datetime.datetime.utcnow()
         booking.confirmationDate = compute_confirmation_date(stock.beginningDatetime, booking.dateCreated)
 
-        set_booking_is_used_for_digital_offers_with_activation_code(stock, booking)
+        if is_activation_code_applicable(stock):
+            set_booking_is_used_for_digital_offers_with_activation_code(stock, booking)
 
         stock.dnBookedQuantity += booking.quantity
 
@@ -120,16 +122,11 @@ def book_offer(
 
 
 def set_booking_is_used_for_digital_offers_with_activation_code(stock, booking) -> None:
-    if (
-        feature_queries.is_active(FeatureToggle.ENABLE_ACTIVATION_CODES)
-        and stock.offer.isDigital
-        and offers_repository.has_activation_codes(stock)
-    ):
-        booking.activationCode = offers_repository.get_available_activation_code(stock)
+    booking.activationCode = offers_repository.get_available_activation_code(stock)
 
-        if feature_queries.is_active(FeatureToggle.AUTO_ACTIVATE_DIGITAL_BOOKINGS):
-            booking.isUsed = True
-            booking.dateUsed = datetime.datetime.utcnow()
+    if feature_queries.is_active(FeatureToggle.AUTO_ACTIVATE_DIGITAL_BOOKINGS):
+        booking.isUsed = True
+        booking.dateUsed = datetime.datetime.utcnow()
 
 
 def _cancel_booking(booking: Booking, reason: BookingCancellationReasons) -> None:
@@ -365,3 +362,11 @@ def recompute_dnBookedQuantity(stock_ids: list[int]) -> None:
       WHERE stock.id = bookings_per_stock.stock_id
     """
     db.session.execute(query, {"stock_ids": tuple(stock_ids)})
+
+
+def is_activation_code_applicable(stock: Stock) -> bool:
+    return (
+        feature_queries.is_active(FeatureToggle.ENABLE_ACTIVATION_CODES)
+        and stock.offer.isDigital
+        and offers_repository.has_activation_codes(stock)
+    )
