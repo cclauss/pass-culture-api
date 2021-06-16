@@ -151,6 +151,11 @@ def client_fixture(app: Flask):
     return TestClient(app.test_client())
 
 
+@pytest.fixture(scope="function", autouse=True)
+def db_session_fixture(db_session):
+    pass
+
+
 class TestClient:
     WITH_DOC = False
     USER_TEST_ADMIN_EMAIL = "pctest.admin93.0@example.com"
