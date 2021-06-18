@@ -5,8 +5,6 @@ from pcapi.domain.beneficiary_pre_subscription.beneficiary_pre_subscription impo
 from pcapi.domain.beneficiary_pre_subscription.beneficiary_pre_subscription_exceptions import BeneficiaryIsADuplicate
 from pcapi.domain.beneficiary_pre_subscription.beneficiary_pre_subscription_exceptions import BeneficiaryIsNotEligible
 from pcapi.domain.beneficiary_pre_subscription.beneficiary_pre_subscription_exceptions import IdPieceNumberDuplicate
-from pcapi.models.feature import FeatureToggle
-from pcapi.repository import feature_queries
 from pcapi.repository.user_queries import find_beneficiary_by_civility
 from pcapi.repository.user_queries import find_user_by_email
 
@@ -36,16 +34,6 @@ EXCLUDED_DEPARTMENTS = {
 
 
 def _is_postal_code_eligible(code: str) -> bool:
-    # FIXME (dbaty, 2020-01-14): remove this block once we have opened
-    # to (almost) all departments.
-    # Legacy behaviour: only a few departments are eligible.
-    if not feature_queries.is_active(FeatureToggle.WHOLE_FRANCE_OPENING):
-        for department in ELIGIBLE_DEPARTMENTS:
-            if code.startswith(department):
-                return True
-        return False
-
-    # New behaviour: all departments are eligible, except a few.
     for department in EXCLUDED_DEPARTMENTS:
         if code.startswith(department):
             return False

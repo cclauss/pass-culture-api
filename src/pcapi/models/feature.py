@@ -31,7 +31,6 @@ class FeatureToggle(enum.Enum):
     WEBAPP_HOMEPAGE = "Permettre l affichage de la nouvelle page d accueil de la webapp"
     APPLY_BOOKING_LIMITS_V2 = "Permettre l affichage des nouvelles règles de génération de portefeuille des jeunes"
     ALLOW_IDCHECK_REGISTRATION = "Autoriser les utilisateurs à suivre le parcours d inscription ID Check"
-    WHOLE_FRANCE_OPENING = "Ouvre le service à la France entière"
     ENABLE_NATIVE_APP_RECAPTCHA = "Active le reCaptacha sur l'API native"
     OFFER_VALIDATION_MOCK_COMPUTATION = "Active le calcul automatique de validation d'offre depuis le nom de l'offre"
     AUTO_ACTIVATE_DIGITAL_BOOKINGS = (

@@ -8,12 +8,9 @@ from sqlalchemy.orm import Query
 
 from pcapi.core.users import constants
 from pcapi.core.users.models import User
-from pcapi.domain.beneficiary_pre_subscription.beneficiary_pre_subscription_validator import ELIGIBLE_DEPARTMENTS
 from pcapi.domain.beneficiary_pre_subscription.beneficiary_pre_subscription_validator import EXCLUDED_DEPARTMENTS
 from pcapi.domain.user_emails import send_newly_eligible_user_email
 from pcapi.models import UserOfferer
-from pcapi.models.feature import FeatureToggle
-from pcapi.repository import feature_queries
 
 
 logger = logging.getLogger(__name__)
@@ -21,10 +18,6 @@ logger = logging.getLogger(__name__)
 
 # Basically, this is _is_postal_code_eligible refactored for queries
 def _filter_by_eligible_postal_code(query: Query) -> Query:
-    if not feature_queries.is_active(FeatureToggle.WHOLE_FRANCE_OPENING):
-        eligible_departments_arg = "(%s)%%" % ("|".join(ELIGIBLE_DEPARTMENTS))
-        return query.filter(User.postalCode.op("SIMILAR TO")(eligible_departments_arg))
-
     # New behaviour: all departments are eligible, except a few.
     excluded_departments_arg = "(%s)%%" % ("|".join(EXCLUDED_DEPARTMENTS))
     return query.filter(not_(User.postalCode.op("SIMILAR TO")(excluded_departments_arg)))

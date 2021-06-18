@@ -103,8 +103,6 @@ def create_account(body: serializers.AccountRequest) -> None:
         except api_recaptcha.ReCaptchaException:
             raise ApiErrors({"token": "The given token is not invalid"})
 
-    if not feature_queries.is_active(FeatureToggle.WHOLE_FRANCE_OPENING) and not body.postal_code:
-        raise ApiErrors(errors={"postalCode": ["Ce champ est obligatoire"]})
     try:
         api.create_account(
             email=body.email,
