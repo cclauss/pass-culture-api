@@ -7,7 +7,6 @@ import redis
 
 from pcapi import settings
 import pcapi.core.offers.models as offers_models
-from pcapi.core.search import serialization
 from pcapi.core.search.backends import base
 
 
@@ -92,7 +91,7 @@ class AlgoliaBackend(base.SearchBackend):
             return 0
 
     def index_offers(self, offers: Iterable[offers_models.Offer]) -> None:
-        objects = [serialization.serialize_for_algolia(offer) for offer in offers]
+        objects = [self.serialize_offer(offer) for offer in offers]
         self.algolia_client.add_objects(objects)
         try:
             # We used to store a summary of each offer, which is why
@@ -117,3 +116,6 @@ class AlgoliaBackend(base.SearchBackend):
             self.redis_client.hdel(REDIS_HASHMAP_INDEXED_OFFERS_NAME, *offer_ids)
         except redis.exceptions.RedisError:
             logger.exception("Could not remove offers from indexed offers set", extra={"offers": offer_ids})
+
+    def serialize_offer(self, offer: offers_models.Offer) -> dict:
+        return {}  # FIXME: that won't do, I am afraid

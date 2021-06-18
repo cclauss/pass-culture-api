@@ -70,7 +70,7 @@ class AppSearchBackend(base.SearchBackend):
             return 0
 
     def index_offers(self, offers: Iterable[offers_models.Offer]) -> None:
-        objects = [serialization.serialize_for_appsearch(offer) for offer in offers]
+        objects = [self.serialize_offer(offer) for offer in offers]
         self.appsearch_client.add_objects(objects)
         offer_ids = [offer.id for offer in offers]
         try:
@@ -84,3 +84,6 @@ class AppSearchBackend(base.SearchBackend):
             self.redis_client.srem(REDIS_INDEXED_OFFER_IDS, *offer_ids)
         except redis.exceptions.RedisError:
             logger.exception("Could not remove offers from indexed offers set", extra={"offers": offer_ids})
+
+    def serialize_offer(self, offer: offers_models.Offer) -> dict:
+        return {}  # FIXME: that won't do, I am afraid
