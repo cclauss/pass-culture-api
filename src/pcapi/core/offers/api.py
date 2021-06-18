@@ -739,3 +739,11 @@ def _load_product_by_isbn_and_check_is_gcu_compatible_or_raise_error(isbn: str) 
         errors.status_code = 400
         raise errors
     return product
+
+
+def is_activation_code_applicable(stock: Stock):
+    return (
+        stock.canHaveActivationCodes
+        and feature_queries.is_active(FeatureToggle.ENABLE_ACTIVATION_CODES)
+        and db.session.query(ActivationCode.query.filter_by(stock=stock).exists()).scalar()
+    )
