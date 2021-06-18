@@ -13,7 +13,7 @@ from pcapi.model_creators.generic_creators import create_venue
 from pcapi.model_creators.specific_creators import create_stock_with_thing_offer
 from pcapi.models.payment_status import TransactionStatus
 from pcapi.repository import repository
-from pcapi.repository.reimbursement_queries import find_all_offerer_payments
+from pcapi.repository.reimbursement_queries import find_sent_offerer_payments
 
 
 class FindAllOffererPaymentsTest:
@@ -38,7 +38,7 @@ class FindAllOffererPaymentsTest:
         repository.save(payment)
 
         # When
-        payments = find_all_offerer_payments(offerer.id)
+        payments = find_sent_offerer_payments(offerer.id)
 
         # Then
         assert len(payments) == 1
@@ -87,7 +87,7 @@ class FindAllOffererPaymentsTest:
         repository.save(payment, payment_status1, payment_status2)
 
         # When
-        payments = find_all_offerer_payments(offerer.id)
+        payments = find_sent_offerer_payments(offerer.id)
 
         # Then
         assert len(payments) == 1
@@ -155,7 +155,7 @@ class FindAllOffererPaymentsTest:
         repository.save(first_status_for_payment1, first_status_for_payment2)
 
         # When
-        payments = find_all_offerer_payments(offerer.id)
+        payments = find_sent_offerer_payments(offerer.id)
 
         # Then
         assert len(payments) == 2
