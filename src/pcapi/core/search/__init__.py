@@ -135,7 +135,7 @@ def reindex_offer_ids(offer_ids):
             # without the hashmap in Redis. Check the logs and see if
             # I am right!
             logger.info(
-                "Redis 'indexed_offers' set saved use from an unnecessary request to indexation service",
+                "Redis 'indexed_offers' set avoided unnecessary request to indexation service",
                 extra={"source": "reindex_offer_ids", "offer": offer.id},
             )
 
