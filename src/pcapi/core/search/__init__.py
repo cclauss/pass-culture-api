@@ -100,12 +100,6 @@ def index_venues_in_queue():
             page += 1
         logger.info("Finished indexing offers of venue", extra={"venue": venue_id})
 
-    # FIXME (dbaty, 2021-06-18): despite the name, this function does
-    # not delete all items from the queue. With the Algolia backend,
-    # it LTRIM on a list. Since we RPUSH to add, we would not lose any
-    # venue if it was added during the loop above. Still, that looks
-    # odd. The App Search backend should rather use a set and remove
-    # only processed venues.
     backend.delete_venue_ids_from_queue(venue_ids)
 
 
