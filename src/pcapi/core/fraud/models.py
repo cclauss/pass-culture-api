@@ -155,9 +155,7 @@ class BeneficiaryFraudReview(PcObject, Model):
 
     authorId = sqlalchemy.Column(sqlalchemy.BigInteger, sqlalchemy.ForeignKey("user.id"), index=True, nullable=False)
 
-    author = sqlalchemy.orm.relationship(
-        "User", foreign_keys=[authorId], backref=sqlalchemy.orm.backref("beneficiaryFraudReviews", uselist=False)
-    )
+    author = sqlalchemy.orm.relationship("User", foreign_keys=[authorId], backref="adminFraudReviews")
 
     review = sqlalchemy.Column(sqlalchemy.Enum(FraudReviewStatus, create_constraint=False))
 
