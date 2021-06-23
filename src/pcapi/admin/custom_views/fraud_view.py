@@ -10,6 +10,7 @@ import wtforms.validators
 from pcapi.admin import base_configuration
 from pcapi.admin import templating
 import pcapi.core.fraud.models as fraud_models
+import pcapi.core.users.api as users_api
 import pcapi.core.users.models as users_models
 from pcapi.models import db
 
@@ -120,7 +121,7 @@ class FraudView(base_configuration.BaseAdminView):
             return flask.redirect(flask.url_for(".index"))
 
         if user.beneficiaryFraudReview:
-            flask.flash("Une revue manuelle a déjà été réalisée sur ce bénéficiaire")
+            flask.flash("Une revue manuelle a déjà été réalisée sur le bénéficiaire {user.firstName} {user.lastName}")
             return flask.redirect(flask.url_for(".details_view", id=user_id))
 
         review = fraud_models.BeneficiaryFraudReview(
@@ -128,5 +129,6 @@ class FraudView(base_configuration.BaseAdminView):
         )
         db.session.add(review)
         db.session.commit()
-        flask.flash("Une revue manuelle ajoutée pour ce bénéficiaire")
+        users_api.activate_beneficiary(user, "fraud_validation")
+        flask.flash(f"Une revue manuelle ajoutée pour le bénéficiaire {user.firstName} {user.lastName}")
         return flask.redirect(flask.url_for(".details_view", id=user_id))
