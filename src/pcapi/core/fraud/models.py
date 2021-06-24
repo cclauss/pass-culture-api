@@ -69,6 +69,21 @@ class JouveContent(pydantic.BaseModel):
     _parse_body_piece_number_level = validator("bodyPieceNumberLevel", pre=True, allow_reuse=True)(_parse_level)
 
 
+class DemarchesSimplifieesContent(pydantic.BaseModel):
+    last_name: str
+    first_name: str
+    civility: str
+    email: str
+    application_id: int
+    departement: str
+    birth_date: datetime.date
+    phone: str
+    postal_code: str
+    activity: str
+    address: str
+    id_piece_number: str
+
+
 class UserProfilingFraudData(pydantic.BaseModel):
     account_email: str
     account_email_first_seen: typing.Optional[datetime.date]
