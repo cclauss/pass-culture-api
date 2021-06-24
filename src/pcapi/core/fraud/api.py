@@ -1,11 +1,13 @@
 import datetime
 import logging
+import typing
 from typing import List
 from typing import Optional
 
 import sqlalchemy
 
 from pcapi.core.users.models import User
+from pcapi.models.db import db
 from pcapi.models.feature import FeatureToggle
 from pcapi.repository import feature_queries
 from pcapi.repository import repository
@@ -157,3 +159,21 @@ def _get_threshold_id_fraud_item(
         status = models.FraudStatus.SUSPICIOUS
 
     return models.FraudItem(status=status, detail=f"Le champ {key} a le score {value} (minimum {threshold})")
+
+
+def dms_fraud_check(
+    user: User,
+    dms_content: typing.Union[models.DemarchesSimplifieesContent, dict],
+):
+    if isinstance(dms_content, dict):
+        dms_content = models.DemarchesSimplifieesContent(**dms_content)
+
+    fraud_check = models.BeneficiaryFraudCheck(
+        user=user,
+        type=models.FraudCheckType.DMS,
+        thirdPartyId=str(dms_content.application_id),
+        resultContent=dms_content,
+    )
+
+    db.session.add(fraud_check)
+    db.session.commit()

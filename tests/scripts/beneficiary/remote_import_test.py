@@ -11,6 +11,7 @@ import pytest
 import pcapi.core.mails.testing as mails_testing
 from pcapi.core.testing import override_features
 from pcapi.core.users import api as users_api
+from pcapi.core.users.factories import UserFactory
 from pcapi.core.users.models import PhoneValidationStatusType
 from pcapi.core.users.models import User
 from pcapi.model_creators.generic_creators import create_user
@@ -188,9 +189,7 @@ class RunTest:
         find_applications_ids_to_retry = Mock(return_value=[])
 
         get_details = Mock(return_value=make_new_beneficiary_application_details(123, "closed"))
-        user = User()
-        user.email = "john.doe@example.com"
-        user.isBeneficiary = True
+        user = UserFactory(email="john.doe@example.com", isBeneficiary=True)
         has_already_been_imported = Mock(return_value=False)
         has_already_been_created = Mock(return_value=user)
 
