@@ -1,8 +1,11 @@
 from unittest.mock import Mock
 from unittest.mock import patch
 
+import pytest
+
 from pcapi.admin.base_configuration import BaseAdminView
 from pcapi.core.testing import override_settings
+import pcapi.core.users.factories as users_factories
 from pcapi.models import Booking
 
 
@@ -13,6 +16,7 @@ class DummyAdminView(BaseAdminView):
     pass
 
 
+@pytest.mark.usefixtures("db_session")
 class BaseAdminViewTest:
     class DefaultConfigurationTest:
         def test_model_in_admin_view_is_not_deletable(self):
@@ -43,10 +47,10 @@ class BaseAdminViewTest:
             ), "Edition from admin views is disabled by default. It can be enabled on a custom view"
 
     class IsAccessibleTest:
-        @patch("pcapi.admin.base_configuration.current_user")
-        def test_access_is_forbidden_for_anonymous_users(self, current_user):
+        @patch("flask_login.utils._get_user")
+        def test_access_is_forbidden_for_anonymous_users(self, get_user):
             # given
-            current_user.is_authenticated = False
+            get_user.return_value = users_factories.UserFactory()
 
             # when
             view = DummyAdminView(Booking, fake_db_session)
@@ -54,11 +58,10 @@ class BaseAdminViewTest:
             # then
             assert not view.is_accessible()
 
-        @patch("pcapi.admin.base_configuration.current_user")
-        def test_access_is_forbidden_for_non_admin_users(self, current_user):
+        @patch("flask_login.utils._get_user")
+        def test_access_is_forbidden_for_non_admin_users(self, get_user):
             # given
-            current_user.is_authenticated = True
-            current_user.isAdmin = False
+            get_user.return_value = users_factories.UserFactory(isAdmin=False)
 
             # when
             view = DummyAdminView(Booking, fake_db_session)
@@ -66,11 +69,10 @@ class BaseAdminViewTest:
             # then
             assert not view.is_accessible()
 
-        @patch("pcapi.admin.base_configuration.current_user")
-        def test_access_is_authorized_for_admin_users(self, current_user):
+        @patch("flask_login.utils._get_user")
+        def test_access_is_authorized_for_admin_users(self, get_user):
             # given
-            current_user.is_authenticated = True
-            current_user.isAdmin = True
+            get_user.return_value = users_factories.UserFactory(isAdmin=True)
 
             # when
             view = DummyAdminView(Booking, fake_db_session)
@@ -78,11 +80,11 @@ class BaseAdminViewTest:
             # then
             assert view.is_accessible() is True
 
-        @patch("pcapi.admin.base_configuration.current_user")
-        @override_settings(SUPER_ADMIN_EMAIL_ADDRESSES="", IS_PROD=True)
-        def test_check_super_admins_is_false_for_non_super_admin_users(self, current_user):
+        @patch("flask_login.utils._get_user")
+        @override_settings(SUPER_ADMIN_EMAIL_ADDRESSES=[], IS_PROD=True)
+        def test_check_super_admins_is_false_for_non_super_admin_users(self, get_user):
             # given
-            current_user.email = "dummy@email.com"
+            get_user.return_value = users_factories.UserFactory(email="non-superadmin@example.com", isAdmin=True)
 
             # when
             view = DummyAdminView(Booking, fake_db_session)
@@ -90,11 +92,11 @@ class BaseAdminViewTest:
             # then
             assert view.check_super_admins() is False
 
-        @patch("pcapi.admin.base_configuration.current_user")
-        @override_settings(SUPER_ADMIN_EMAIL_ADDRESSES="super@admin.user", IS_PROD=True)
-        def test_check_super_admins_is_true_for_super_admin_users(self, current_user):
+        @patch("flask_login.utils._get_user")
+        @override_settings(SUPER_ADMIN_EMAIL_ADDRESSES=["super@admin.user"], IS_PROD=True)
+        def test_check_super_admins_is_true_for_super_admin_users(self, get_user):
             # given
-            current_user.email = "super@admin.user"
+            get_user.return_value = users_factories.UserFactory(email="super@admin.user", isAdmin=True)
 
             # when
             view = DummyAdminView(Booking, fake_db_session)
@@ -102,11 +104,11 @@ class BaseAdminViewTest:
             # then
             assert view.check_super_admins() is True
 
-        @patch("pcapi.admin.base_configuration.current_user")
-        @override_settings(SUPER_ADMIN_EMAIL_ADDRESSES="")
-        def test_check_super_admins_is_deactived_in_non_prod_environments(self, current_user):
+        @patch("flask_login.utils._get_user")
+        @override_settings(SUPER_ADMIN_EMAIL_ADDRESSES=[])
+        def test_check_super_admins_is_deactived_in_non_prod_environments(self, get_user):
             # given
-            current_user.email = "dummy@email.com"
+            get_user.return_value = users_factories.UserFactory(email="non-superadmin@example.com", isAdmin=True)
 
             # when
             view = DummyAdminView(Booking, fake_db_session)

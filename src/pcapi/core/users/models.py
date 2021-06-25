@@ -236,6 +236,11 @@ class User(PcObject, Model, NeedsValidationMixin):
     def is_anonymous(self):
         return False
 
+    def is_super_admin(self):
+        if settings.IS_PROD:
+            return self.email in settings.SUPER_ADMIN_EMAIL_ADDRESSES
+        return self.isAdmin
+
     def populate_from_dict(self, data):
         super().populate_from_dict(data)
         if data.__contains__("password") and data["password"]:
