@@ -45,6 +45,13 @@ class AlgoliaBackend(base.SearchBackend):
         except redis.exceptions.RedisError:
             logger.exception("Could not add offers to error queue", extra={"offers": offer_ids})
 
+    def enqueue_venue_ids(self, venue_ids: Iterable[int]):
+        try:
+            for venue_id in venue_ids:
+                self.redis_client.rpush(REDIS_LIST_VENUE_IDS_NAME, venue_id)
+        except redis.exceptions.RedisError:
+            logger.exception("Could not add venues to indexation queue", extra={"venues": venue_ids})
+
     def pop_offer_ids_from_queue(self, count: int, from_error_queue: bool = False) -> set[int]:
         # Here we should use `LPOP` but its `count` argument has been
         # added in Redis 6.2. GCP currently has an earlier version of
@@ -88,9 +95,13 @@ class AlgoliaBackend(base.SearchBackend):
         except redis.exceptions.RedisError:
             logger.exception("Could not delete indexed venue ids from queue")
 
-    def count_offers_to_index_from_queue(self):
+    def count_offers_to_index_from_queue(self, from_error_queue: bool = False) -> int:
+        if from_error_queue:
+            redis_list_name = REDIS_LIST_OFFER_IDS_IN_ERROR_NAME
+        else:
+            redis_list_name = REDIS_LIST_OFFER_IDS_NAME
         try:
-            return self.redis_client.llen(REDIS_LIST_OFFER_IDS_NAME)
+            return self.redis_client.llen(redis_list_name)
         except redis.exceptions.RedisError:
             logger.exception("Could not count offers left to index from queue")
             return 0

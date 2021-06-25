@@ -5,7 +5,6 @@ from flask.app import current_app
 import redis
 
 import pcapi.core.offers.models as offers_models
-from pcapi.core.search import serialization
 
 from . import base
 
@@ -36,6 +35,12 @@ class AppSearchBackend(base.SearchBackend):
         except redis.exceptions.RedisError:
             logger.exception("Could not add offers to error queue", extra={"offers": offer_ids})
 
+    def enqueue_venue_ids(self, venue_ids: Iterable[int]):
+        try:
+            self.redis_client.sadd(REDIS_VENUE_IDS_TO_INDEX, *venue_ids)
+        except redis.exceptions.RedisError:
+            logger.exception("Could not add venues to indexation queue", extra={"venues": venue_ids})
+
     def pop_offer_ids_from_queue(self, count: int, from_error_queue: bool = False) -> [int]:
         if from_error_queue:
             redis_set_name = REDIS_OFFER_IDS_IN_ERROR_TO_INDEX
@@ -62,16 +67,21 @@ class AppSearchBackend(base.SearchBackend):
         except redis.exceptions.RedisError:
             logger.exception("Could not delete indexed venue ids from queue")
 
-    def count_offers_to_index_from_queue(self):
+    def count_offers_to_index_from_queue(self, from_error_queue: bool = False) -> int:
+        if from_error_queue:
+            redis_set_name = REDIS_OFFER_IDS_IN_ERROR_TO_INDEX
+        else:
+            redis_set_name = REDIS_OFFER_IDS_TO_INDEX
+
         try:
-            return self.redis_client.scard(REDIS_OFFER_IDS_TO_INDEX)
+            return self.redis_client.scard(redis_set_name)
         except redis.exceptions.RedisError:
             logger.exception("Could not count offers left to index from queue")
             return 0
 
     def index_offers(self, offers: Iterable[offers_models.Offer]) -> None:
-        objects = [self.serialize_offer(offer) for offer in offers]
-        self.appsearch_client.add_objects(objects)
+        documents = [self.serialize_offer(offer) for offer in offers]
+        self.appsearch_client.add_documents(documents)
         offer_ids = [offer.id for offer in offers]
         try:
             self.redis_client.sadd(REDIS_INDEXED_OFFER_IDS, *offer_ids)
@@ -79,7 +89,7 @@ class AppSearchBackend(base.SearchBackend):
             logger.exception("Could not add to list of indexed offers", extra={"offers": offer_ids})
 
     def unindex_offer_ids(self, offer_ids: Iterable[int]) -> None:
-        self.appsearch_client.delete_objects(offer_ids)
+        self.appsearch_client.delete_documents(offer_ids)
         try:
             self.redis_client.srem(REDIS_INDEXED_OFFER_IDS, *offer_ids)
         except redis.exceptions.RedisError:

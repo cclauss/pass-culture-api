@@ -1,9 +1,8 @@
 import logging
 from typing import Iterable
 
-from pcapi.algolia.usecase.orchestrator import _process_deleting
+from pcapi.core import search
 from pcapi.core.offers.models import Offer
-from pcapi.flask_app import app
 from pcapi.models import Product
 from pcapi.models.db import db
 from pcapi.models.feature import FeatureToggle
@@ -22,7 +21,7 @@ def process_batch(isbns: list[str], synchronize_algolia: bool) -> None:
     offers.update({"isActive": False}, synchronize_session=False)
     db.session.commit()
     if synchronize_algolia:
-        _process_deleting(app.redis_client, offer_ids)
+        search.unindex_offer_ids(offer_ids)
 
 
 def bulk_mark_incompatible_via_isbns(iterable: Iterable[str], batch_size: int) -> None:

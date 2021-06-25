@@ -3,13 +3,12 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from pcapi import settings
 from pcapi.core import search
 from pcapi.core.logging import install_logging
+import pcapi.core.offers.api as offers_api
 from pcapi.models.feature import FeatureToggle
 from pcapi.scheduled_tasks import utils
 from pcapi.scheduled_tasks.decorators import cron_context
 from pcapi.scheduled_tasks.decorators import cron_require_feature
 from pcapi.scheduled_tasks.decorators import log_cron
-from pcapi.scripts.algolia_indexing.indexing import batch_deleting_expired_offers_in_algolia
-from pcapi.scripts.algolia_indexing.indexing import batch_indexing_offers_in_algolia_by_venue
 
 
 install_logging()
@@ -28,14 +27,14 @@ def index_offers_in_algolia_by_offer(app):
 @cron_context
 @cron_require_feature(FeatureToggle.SYNCHRONIZE_ALGOLIA)
 def index_offers_in_algolia_by_venue(app):
-    batch_indexing_offers_in_algolia_by_venue(client=app.redis_client)
+    search.index_venues_in_queue()
 
 
 @log_cron
 @cron_context
 @cron_require_feature(FeatureToggle.SYNCHRONIZE_ALGOLIA)
 def delete_expired_offers_in_algolia(app):
-    batch_deleting_expired_offers_in_algolia(client=app.redis_client)
+    offers_api.unindex_expired_offers()
 
 
 @log_cron

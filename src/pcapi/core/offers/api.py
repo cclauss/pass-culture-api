@@ -3,7 +3,6 @@ import logging
 from typing import Optional
 from typing import Union
 
-from flask import current_app as app
 import pytz
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.functions import func
@@ -11,7 +10,6 @@ import yaml
 from yaml.scanner import ScannerError
 
 from pcapi import settings
-from pcapi.connectors import redis
 from pcapi.connectors.thumb_storage import create_thumb
 from pcapi.connectors.thumb_storage import remove_thumb
 from pcapi.core import search
@@ -730,3 +728,34 @@ def _load_product_by_isbn_and_check_is_gcu_compatible_or_raise_error(isbn: str) 
         errors.status_code = 400
         raise errors
     return product
+
+
+def unindex_expired_offers(process_all_expired: bool = False):
+    """Unindex offers that have expired.
+
+    By default, process offers that have expired within the last 2
+    days. For example, if run on Thursday (whatever the time), this
+    function handles offers that have expired between Tuesday 00:00
+    and Wednesday 23:59 (included).
+
+    If ``process_all_expired`` is true, process... well all expired
+    offers.
+    """
+    start_of_day = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+    interval = [start_of_day - datetime.timedelta(days=2), start_of_day]
+    if process_all_expired:
+        interval[0] = datetime.datetime(2000, 1, 1)  # arbitrary old date
+
+    page = 0
+    limit = settings.ALGOLIA_DELETING_OFFERS_CHUNK_SIZE
+    while True:
+        offers = offers_repository.get_expired_offers(interval)
+        offers = offers.offset(page * limit).limit(limit)
+        offer_ids = [offer_id for offer_id, in offers.with_entities(Offer.id)]
+
+        if not offer_ids:
+            break
+
+        logger.info("[ALGOLIA] Found %d expired offers to unindex", len(offer_ids))
+        search.unindex_offer_ids(offer_ids)
+        page += 1

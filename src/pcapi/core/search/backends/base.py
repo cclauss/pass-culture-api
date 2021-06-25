@@ -4,6 +4,9 @@ import pcapi.core.offers.models as offers_models
 
 
 class SearchBackend:
+    def __str__(self):  # useful in logs
+        return str(self.__class__.__name__)
+
     def async_index_offer_ids(self, offer_ids: Iterable[int]):
         raise NotImplementedError()
 

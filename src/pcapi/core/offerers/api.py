@@ -1,6 +1,4 @@
-from flask import current_app as app
-
-from pcapi.connectors import redis
+from pcapi.core import search
 from pcapi.core.offerers.models import Venue
 from pcapi.core.offerers.models import VenueType
 from pcapi.domain.iris import link_valid_venue_to_irises
@@ -76,7 +74,7 @@ def update_venue(
 
     if indexing_modifications_fields:
         if feature_queries.is_active(FeatureToggle.SYNCHRONIZE_ALGOLIA):
-            redis.add_venue_id(client=app.redis_client, venue_id=venue.id)
+            search.async_index_venue_ids([venue.id])
 
     return venue
 

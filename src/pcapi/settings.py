@@ -31,6 +31,31 @@ if IS_RUNNING_TESTS:
 LOG_LEVEL = int(os.environ.get("LOG_LEVEL", LOG_LEVEL_INFO))
 
 
+# Default backends
+if IS_PROD or IS_INTEGRATION:
+    _default_search_backend = "pcapi.core.search.backends.algolia.AlgoliaBackend"
+    _default_email_backend = "pcapi.core.mails.backends.mailjet.MailjetBackend"
+    _default_push_notification_backend = "pcapi.notifications.push.backends.batch.BatchBackend"
+    _default_sms_notification_backend = "pcapi.notifications.sms.backends.sendinblue.SendinblueBackend"
+elif IS_STAGING or IS_TESTING:
+    _default_search_backend = "pcapi.core.search.backends.algolia.AlgoliaBackend"
+    _default_email_backend = "pcapi.core.mails.backends.mailjet.ToDevMailjetBackend"
+    _default_push_notification_backend = "pcapi.notifications.push.backends.batch.BatchBackend"
+    _default_sms_notification_backend = "pcapi.notifications.sms.backends.sendinblue.ToDevSendinblueBackend"
+elif IS_RUNNING_TESTS:
+    _default_search_backend = "pcapi.core.search.backends.testing.TestingBackend"
+    _default_email_backend = "pcapi.core.mails.backends.testing.TestingBackend"
+    _default_push_notification_backend = "pcapi.notifications.push.backends.testing.TestingBackend"
+    _default_sms_notification_backend = "pcapi.notifications.sms.backends.testing.TestingBackend"
+elif IS_DEV:
+    _default_search_backend = "pcapi.core.search.backends.testing.LoggerBackend"
+    _default_email_backend = "pcapi.core.mails.backends.logger.LoggerBackend"
+    _default_push_notification_backend = "pcapi.notifications.push.backends.logger.LoggerBackend"
+    _default_sms_notification_backend = "pcapi.notifications.sms.backends.logger.LoggerBackend"
+else:
+    raise RuntimeError("Unknown environment")
+
+
 # API config
 API_URL = os.environ.get("API_URL")
 API_APPLICATION_NAME = os.environ.get("API_APPLICATION_NAME", None)
@@ -81,26 +106,7 @@ SENTRY_SAMPLE_RATE = float(os.environ.get("SENTRY_SAMPLE_RATE", 0))
 MAX_FAVORITES = int(os.environ.get("MAX_FAVORITES", 100))  # 0 is unlimited
 
 
-# MAILS
-if IS_PROD or IS_INTEGRATION:
-    _default_email_backend = "pcapi.core.mails.backends.mailjet.MailjetBackend"
-    _default_push_notification_backend = "pcapi.notifications.push.backends.batch.BatchBackend"
-    _default_sms_notification_backend = "pcapi.notifications.sms.backends.sendinblue.SendinblueBackend"
-elif IS_STAGING or IS_TESTING:
-    _default_email_backend = "pcapi.core.mails.backends.mailjet.ToDevMailjetBackend"
-    _default_push_notification_backend = "pcapi.notifications.push.backends.batch.BatchBackend"
-    _default_sms_notification_backend = "pcapi.notifications.sms.backends.sendinblue.ToDevSendinblueBackend"
-elif IS_RUNNING_TESTS:
-    _default_email_backend = "pcapi.core.mails.backends.testing.TestingBackend"
-    _default_push_notification_backend = "pcapi.notifications.push.backends.testing.TestingBackend"
-    _default_sms_notification_backend = "pcapi.notifications.sms.backends.testing.TestingBackend"
-elif IS_DEV:
-    _default_email_backend = "pcapi.core.mails.backends.logger.LoggerBackend"
-    _default_push_notification_backend = "pcapi.notifications.push.backends.logger.LoggerBackend"
-    _default_sms_notification_backend = "pcapi.notifications.sms.backends.logger.LoggerBackend"
-else:
-    raise RuntimeError("Unknown environment")
-
+# MAIL
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", _default_email_backend)
 SUPPORT_EMAIL_ADDRESS = os.environ.get("SUPPORT_EMAIL_ADDRESS")
 ADMINISTRATION_EMAIL_ADDRESS = os.environ.get("ADMINISTRATION_EMAIL_ADDRESS")
@@ -281,3 +287,6 @@ APPS_FLYER_IOS_ID = os.environ.get("APPS_FLYER_IOS_ID", "id1557887412")
 
 APPS_FLYER_ANDROID_API_KEY = os.environ.get("APPS_FLYER_ANDROID_API_KEY", "")
 APPS_FLYER_IOS_API_KEY = os.environ.get("APPS_FLYER_IOS_API_KEY", "")
+
+# SEARCH
+SEARCH_BACKEND = os.environ.get("SEARCH_BACKEND", _default_search_backend)

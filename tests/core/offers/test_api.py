@@ -42,6 +42,7 @@ from pcapi.core.offers.offer_validation import OfferValidationRuleItem
 from pcapi.core.offers.offer_validation import compute_offer_validation_score
 from pcapi.core.offers.offer_validation import parse_offer_validation_config
 from pcapi.core.testing import override_features
+from pcapi.core.testing import override_settings
 import pcapi.core.users.factories as users_factories
 from pcapi.models import ApiErrors
 from pcapi.models import api_errors
@@ -1781,3 +1782,41 @@ class LoadProductByIsbnAndCheckIsGCUCompatibleOrRaiseErrorTest:
             _load_product_by_isbn_and_check_is_gcu_compatible_or_raise_error(isbn)
 
         assert error.value.errors["isbn"] == ["Ce produit n’est pas éligible au pass Culture."]
+
+
+@freeze_time("2020-01-05 10:00:00")
+@pytest.mark.usefixtures("db_session")
+class UnindexExpiredOffersTest:
+    @override_settings(ALGOLIA_DELETING_OFFERS_CHUNK_SIZE=2)
+    @mock.patch("pcapi.core.search.unindex_offer_ids")
+    def test_default_run(self, mock_unindex_offer_ids):
+        # Given
+        factories.StockFactory(bookingLimitDatetime=datetime(2020, 1, 2, 12, 0))
+        stock1 = factories.StockFactory(bookingLimitDatetime=datetime(2020, 1, 3, 12, 0))
+        stock2 = factories.StockFactory(bookingLimitDatetime=datetime(2020, 1, 3, 12, 0))
+        stock3 = factories.StockFactory(bookingLimitDatetime=datetime(2020, 1, 4, 12, 0))
+        factories.StockFactory(bookingLimitDatetime=datetime(2020, 1, 5, 12, 0))
+
+        # When
+        api.unindex_expired_offers()
+
+        # Then
+        assert mock_unindex_offer_ids.mock_calls == [
+            mock.call([stock1.offerId, stock2.offerId]),
+            mock.call([stock3.offerId]),
+        ]
+
+    @mock.patch("pcapi.core.search.unindex_offer_ids")
+    def test_run_unlimited(self, mock_unindex_offer_ids):
+        # more than 2 days ago, must be processed
+        stock1 = factories.StockFactory(bookingLimitDatetime=datetime(2020, 1, 2, 12, 0))
+        # today, must be ignored
+        factories.StockFactory(bookingLimitDatetime=datetime(2020, 1, 5, 12, 0))
+
+        # When
+        api.unindex_expired_offers(process_all_expired=True)
+
+        # Then
+        assert mock_unindex_offer_ids.mock_calls == [
+            mock.call([stock1.offerId]),
+        ]

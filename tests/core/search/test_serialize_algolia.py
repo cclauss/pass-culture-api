@@ -17,7 +17,7 @@ from pcapi.repository import repository
 from pcapi.utils.human_ids import humanize
 
 
-# FIXME (dbaty, 2021-06-21): I question the usefulness of these 600 lines of test.
+# FIXME (dbaty, 2021-06-21): I question the usefulness of these 600 lines of tests.
 
 
 class BuildObjectTest:

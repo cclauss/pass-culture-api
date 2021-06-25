@@ -7,7 +7,6 @@ from unittest.mock import patch
 from algoliasearch.exceptions import AlgoliaException
 import pytest
 
-from pcapi.algolia.usecase.orchestrator import delete_expired_offers
 from pcapi.algolia.usecase.orchestrator import process_eligible_offers
 from pcapi.model_creators.generic_creators import create_offerer
 from pcapi.model_creators.generic_creators import create_stock
@@ -368,56 +367,3 @@ class ProcessEligibleOffersTest:
         mock_pipeline.execute.assert_not_called()
         mock_pipeline.reset.assert_called_once()
         assert mock_add_offer_ids_in_error.call_args_list == [call(client=client, offer_ids=[offer1.id, offer2.id])]
-
-
-class DeleteExpiredOffersTest:
-    @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
-    @patch("pcapi.algolia.usecase.orchestrator.check_offer_exists")
-    @patch("pcapi.algolia.usecase.orchestrator.delete_objects")
-    def test_should_delete_expired_offers_from_algolia_when_at_least_one_offer_id_and_offers_were_indexed(
-        self, mock_delete_objects, mock_check_offer_exists, mock_delete_indexed_offers, app
-    ):
-        # Given
-        client = MagicMock()
-        mock_check_offer_exists.side_effect = [True, True, True]
-
-        # When
-        delete_expired_offers(client=client, offer_ids=[1, 2, 3])
-
-        # Then
-        assert mock_delete_objects.call_count == 1
-        assert mock_delete_objects.call_args_list == [call(object_ids=[1, 2, 3])]
-        assert mock_delete_indexed_offers.call_count == 1
-        assert mock_delete_indexed_offers.call_args_list == [call(client=client, offer_ids=[1, 2, 3])]
-
-    @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
-    @patch("pcapi.algolia.usecase.orchestrator.delete_objects")
-    def test_should_not_delete_expired_offers_from_algolia_when_no_offer_id(
-        self, mock_delete_objects, mock_delete_indexed_offers, app
-    ):
-        # Given
-        client = MagicMock()
-
-        # When
-        delete_expired_offers(client=client, offer_ids=[])
-
-        # Then
-        assert mock_delete_objects.call_count == 0
-        assert mock_delete_indexed_offers.call_count == 0
-
-    @patch("pcapi.algolia.usecase.orchestrator.delete_indexed_offers")
-    @patch("pcapi.algolia.usecase.orchestrator.check_offer_exists")
-    @patch("pcapi.algolia.usecase.orchestrator.delete_objects")
-    def test_should_not_delete_expired_offers_from_algolia_when_at_least_one_offer_id_but_offers_were_not_indexed(
-        self, mock_delete_objects, mock_check_offer_exists, mock_delete_indexed_offers, app
-    ):
-        # Given
-        client = MagicMock()
-        mock_check_offer_exists.side_effect = [False, False, False]
-
-        # When
-        delete_expired_offers(client=client, offer_ids=[])
-
-        # Then
-        assert mock_delete_objects.call_count == 0
-        assert mock_delete_indexed_offers.call_count == 0
