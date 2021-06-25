@@ -88,14 +88,6 @@ class OfferView(BaseAdminView):
             )
         return form
 
-    def create_form(self, obj=None):
-        form_class = self.get_create_form()
-        return form_class(get_form_data(), obj=obj)
-
-    def edit_form(self, obj=None):
-        form_class = self.get_edit_form()
-        return form_class(get_form_data(), obj=obj)
-
     def on_form_prefill(self, form, id):  # pylint:disable=redefined-builtin
         if hasattr(form, "validation"):
             current_offer = self.session.query(self.model).get(id)
