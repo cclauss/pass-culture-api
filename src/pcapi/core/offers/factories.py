@@ -227,28 +227,3 @@ class BankInformationFactory(BaseFactory):
     iban = factory.LazyAttributeSequence(lambda o, n: f"FR{n:016}")
     applicationId = factory.Sequence(int)
     status = "ACCEPTED"
-
-
-class OfferCategoryFactory(BaseFactory):
-    class Meta:
-        model = models.OfferCategory
-
-    name = factory.Sequence("La {}e catégorie".format)
-    appLabel = factory.Sequence("{}e cat.".format)
-    proLabel = factory.Sequence("La {}e catégorie (avec beaucoup de caractères)".format)
-
-
-class OfferSubcategoryFactory(BaseFactory):
-    class Meta:
-        model = models.OfferSubcategory
-
-    name = factory.Sequence("La {}e sous-catégorie".format)
-    category = factory.SubFactory(OfferCategoryFactory)
-    isEvent = False
-    appLabel = factory.Sequence("{}e sous-cat.".format)
-    proLabel = factory.Sequence("La {}e souscatégorie (avec beaucoup de caractères)".format)
-    canExpire = True
-    isDigital = False
-    isDigitalDeposit = False
-    isPhysicalDeposit = True
-    canBeDuo = False

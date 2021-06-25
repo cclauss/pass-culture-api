@@ -68,7 +68,6 @@ class Returns200Test:
                     "conditions": None,
                     "dateCreated": format_into_utc_date(offer.dateCreated),
                     "dateModifiedAtLastProvider": format_into_utc_date(offer.dateModifiedAtLastProvider),
-                    "subcategoryId": None,
                     "description": None,
                     "durationMinutes": None,
                     "externalTicketOfficeUrl": None,
